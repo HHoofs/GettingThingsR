@@ -1,0 +1,4 @@
+GettingThingsR
+==============
+
+Course regarding R

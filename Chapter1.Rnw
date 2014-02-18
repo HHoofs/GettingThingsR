@@ -242,31 +242,15 @@ diamanten[,c("carat")]
 @
 
 Dat ziet er een stuk ingewikkelder uit! Maar deze methode heeft zijn winst echter liggen in de mogelijkheid tot uitbreiding. Zo is het bijvoorbeeld mogelijk om meerdere kolommen tegelijk te selecteren:
-<<settings2, include=FALSE>>=
+<<label="BrackDiamantenMultiple", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, echo=2>>=
 options(max.print=20)
-@
-
-<<label="BrackDiamantenMultiple", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
 diamanten[,c("carat","color")]
 @
 
-Waarbij de volgorde van opgave ook de volgorde is van de uitvoer in de \texttt{Console}, vergelijk bijvoorbeeld maar eens met:
-<<label="BrackDiamantenOrder", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
-diamanten[,c("color","carat")]
-@
-
 Naast het selecteren van kolommen is ook mogelijk om rijen te selecteren, zo is het mogelijk om de eerste 5 rijen te selecteren:
-<<settings3, include=FALSE>>=
+<<label="BrackDiamantenRow5", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, echo=2>>=
 options(max.print=100)
-@
-
-<<label="BrackDiamantenRow5", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
 diamanten[1:5,]
-@
-
-Of de 1\textsuperscript{e}, 10\textsuperscript{e}, 100\textsuperscript{e}, en de 1000\textsuperscript{e} rij:
-<<label="BrackDiamantenRow110", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
-diamanten[c(1,10,100,1000),]
 @
 
 Waarbij beide methode's ook gecombineerd kunnen worden:
@@ -274,6 +258,51 @@ Waarbij beide methode's ook gecombineerd kunnen worden:
 diamanten[20:25,c("color","table")]
 @
 
-Hier worden dus rij 20 t/m 25 geselecteerd voor de variabelen \texttt{color} \& \texttt{table}.
+Hier worden dus rij 20 t/m 25 geselecteerd voor de variabelen \texttt{color} \& \texttt{table}. De laatste functie die we in dit stuk bespreken is de \texttt{subset}-functie. Deze functie zorgt ervoor dat alleen de rijen (\emph{cases}) die voldoen aan een bepaalde voorwaarde worden geselecteerd. Stel dat we bijvoorbeeld alleen maar de rijen willen selecter waarvan de \texttt{cut} 'Very Good' is, dan kan dat als volgt:
+<<label="SubsetExamp", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+subset(x=diamanten, subset=cut=="Very Good")
+@
+
+Hierop zijn natuurlijk talloze variaties mogelijk, die in de \textbf{Questions Asked}-sectie verder worden toegelicht.
+
+\subsection{Beschrijvende statistiek}
+Een goede start is de \texttt{summary}-functie. Deze kan je bijvoorbeeld toepassen op het hele dataframe:
+<<label="SummaryDiamant", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, echo=-1>>=
+options(max.print=100)
+summary(diamanten)
+@
+
+Voor \term{numerieke}-variabelen wordt het minumim, 1\textsuperscript{e} kwartiel, mediaan, gemiddelde, 3\textsuperscript{e} kwartiel en maximum getoond. Voor \term{factor}- en \term{karakter}-variabelen worden de meest frequente waardes getoond.
+
+Het is natuurlijk ook mogelijk om per variabele verschillende waardes te bekijken, voor numerieke variabelen zijn er bijvoorbeeld de volgende mogelijkheden:
+<<label="NumeriekeMogelijkheden", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+mean(x=diamanten$carat, na.rm=TRUE) #Gemiddelde
+sd(x=diamanten$carat, na.rm=TRUE) #Standaard deviatie
+min(x=diamanten$carat, na.rm=TRUE) #Minimum
+max(x=diamanten$carat, na.rm=TRUE) #Maximum
+@
+
+Voor \term{factor}- en \term{karakter}-variabelen zijn behoren de volgende opties tot de mogelijkheden:
+<<label="KarakterMogelijkheden", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+table(diamanten$cut) #Frequenties van iedere waarde
+prop.table(table(diamanten$cut)) #Relatieve proporties per waarde
+prop.table(table(diamanten$cut))*100 #als percentage
+@
+
+\section{Questions Asked}
+
+Waarbij de volgorde van opgave ook de volgorde is van de uitvoer in de \texttt{Console}, vergelijk bijvoorbeeld maar eens met:
+<<label="BrackDiamantenOrder", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, echo=-1>>=
+options(max.print=20)
+diamanten[,c("color","carat")]
+@
+
+Of de 1\textsuperscript{e}, 10\textsuperscript{e}, 100\textsuperscript{e}, en de 1000\textsuperscript{e} rij:
+<<label="BrackDiamantenRow110", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, echo=-1>>=
+options(max.print=100)
+diamanten[c(1,10,100,1000),]
+@
+
+
 
 \end{document}

@@ -1,16 +1,50 @@
 \documentclass{book}
-\usepackage[framemethod=default]{mdframed}
+\usepackage[tikz]{mdframed}
 \usepackage{xcolor}
 
-\global\mdfdefinestyle{tipwindow}{linecolor=blue,linewidth=3pt,
-                       skipabove=.5cm,skipbelow=.5cm,
-                       topline=false,bottomline=false,backgroundcolor=blue!10}
-\mdtheorem[style=tipwindow]{F_Tip}{Tip}
-
-\global\mdfdefinestyle{warningwindow}{linecolor=red,linewidth=3pt,
-                       skipabove=.5cm,skipbelow=.5cm,
-                       topline=false,bottomline=false,backgroundcolor=red!10}
-\mdtheorem[style=warningwindow]{F_War}{Pas op}
+\newcounter{theo}[section]
+\newenvironment{theo}[1][]{%
+ \stepcounter{theo}%
+  \ifstrempty{#1}%
+  {\mdfsetup{%
+    frametitle={%
+       \tikz[baseline=(current bounding box.east),outer sep=0pt]
+        \node[anchor=east,rectangle,fill=blue!20]
+        {\strut TIP~};}}
+  }%
+  {\mdfsetup{%
+     frametitle={%
+       \tikz[baseline=(current bounding box.east),outer sep=0pt]
+        \node[anchor=east,rectangle,fill=blue!20]
+        {\strut TIP:~#1};}}%
+   }%
+   \mdfsetup{innertopmargin=10pt,linecolor=blue!20,%
+             linewidth=2pt,topline=true,skipabove=.5cm,skipbelow=.5cm,splittopskip=2\topsep,
+             frametitleaboveskip=\dimexpr-\ht\strutbox\relax,}
+   \begin{mdframed}[]\relax%
+   }{\end{mdframed}}
+   
+\newcounter{war}[section]
+\newenvironment{war}[1][]{%
+ \stepcounter{war}%
+  \ifstrempty{#1}%
+  {\mdfsetup{%
+    frametitle={%
+       \tikz[baseline=(current bounding box.east),outer sep=0pt]
+        \node[anchor=east,rectangle,fill=red!20]
+        {\strut Pas Op:~};}}
+  }%
+  {\mdfsetup{%
+     frametitle={%
+       \tikz[baseline=(current bounding box.east),outer sep=0pt]
+        \node[anchor=east,rectangle,fill=red!20]
+        {\strut Pas Op:~#1};}}%
+   }%
+   \mdfsetup{innertopmargin=10pt,linecolor=red!20,%
+             linewidth=2pt,topline=true,skipabove=.5cm,skipbelow=.5cm,splittopskip=2\topsep,
+             frametitleaboveskip=\dimexpr-\ht\strutbox\relax,}
+   \begin{mdframed}[]\relax%
+   }{\end{mdframed}}
 
 \renewcommand{\texttt}[2][blue]{\textcolor{#1}{\ttfamily #2}}
 \usepackage[os=win, mackeys=text]{menukeys}
@@ -27,7 +61,7 @@
 }
 \makeatother
 
-\specialterms{R,RStudio,foreign,diamanten}
+\specialterms{R,RStudio,foreign,diamanten,factor,object}
 
 <<settings, include=FALSE>>=
 options(max.print=100, width=60)
@@ -41,19 +75,19 @@ Gateway drug
 \chapter{Installeren}
 Zoals in de introductie al wordt vermeld zal dit boek gaan voor een 'hands-on-approach'. Aan de einde van ieder hoofdstuk wordt echter ieder...
 \section{No Questions Asked}
-\subsection{R}
+\subsection{\texttt[black]{R}}
 Op de site van van \term{R}, {http://cran.rstudio.com}, staat een duidelijke instructie aangaande de installatie van \term{R} voor ieder besturingssysteem. Voor Windows klik je op \texttt{Download R for Windows} om vervolgens op \texttt{install R for the first time} te klikken. Hierna klik je op \texttt{Download R 3.X.X for Windows}, waar de getallen afhankelijk zijn van het huidige versie-nummer. Download het bestand. Vervolgens open je het bestand en zal er gevraagd worden in welke taal je het programma wil installeren. 
 
-\begin{F_Tip*}[Taal Keuze]
+\begin{theo}[Taal Keuze]
 Persoonlijk adviseer ik altijd Engels omdat de meeste artikelen en oplossingen aangaande R nu eenmaal in het Engels zijn. Hierdoor wordt de kans op een bevredigend antwoord te vinden een stuk groter als je gebruik maakt van de (Engelstalige) terminologie die overeenkomt met de terminologie zoals deze op de meeste forums en website's wordt gebruikt.
-\end{F_Tip*}
+\end{theo}
 
 Vervolgens: Klik 3 maal op \menu{Next}. Bij de \texttt{Select Components} sectie selecteer de optie: \texttt{32-bit User installation} en klik op \menu{Next}. Klik vervolgens nog driemaal op \menu{Next} en tot slot op \menu{Finish}. R is nu ge\"installeerd. 
 
-\subsection{RStudio}
-Net als bij R is ook de site van \textbf{RStudio}, {http://www.rstudio.com}, zeer gebruiksvriendelijk. Klik op de home-page op de \texttt{Download Now}-knop en vervolgens op de \texttt{Download RStudio Desktop}-knop. Tot slot klik je op de link onder het kopje \texttt{Recommended For Your System}, bijv.: \texttt{RStudio 0.XX.XXX - Windows XP/Vista/7/8}. Download het bestand en open het installatiebestand.
+\subsection{\texttt[black]{RStudio}}
+Net als bij \term{R} is ook de site van \term{RStudio}, {http://www.rstudio.com}, zeer gebruiksvriendelijk. Klik op de home-page op de \texttt{Download Now}-knop en vervolgens op de \texttt{Download RStudio Desktop}-knop. Tot slot klik je op de link onder het kopje \texttt{Recommended For Your System}, bijv.: \directory{RStudio 0.XX.XXX - Windows XP/Vista/7/8}. Download het bestand en open het installatiebestand.
 
-Vervolgens: \menu{Next} (3 maal). RStudio is nu ge\"installeerd en klaar voor gebruik.
+Vervolgens: \menu{Next} (3 maal). \term{RStudio} is nu ge\"installeerd en klaar voor gebruik.
 
 \section{Question's Asked}
 \subsection{R}
@@ -61,11 +95,11 @@ De gebruikte link, {http://cran.rstudio.com}, is een mirror. Een mirror is een w
 
 Bij het installeren van R zijn de eerste twee stappen vanzelfsprekend en is er geen keuze mogelijk. Bij de Select Destination Location, valt er echter voor het eerst wat te kiezen. In de NQA-sectie wordt de gesuggereerde installatie locatie gebruikt. Het is echter ook mogelijk deze locatie aan te passen. Mocht je er dus belang aan hechten dat de installatie in een andere map (of schijf) plaatsvind dan is dat dus mogelijk. Hierbij is het echter wel aan te raden het einde van installatie locatie uitgang te laten staan (dus de installatie map altijd te laten eindigen op \texttt{\textbackslash{R}\textbackslash{R-3.X.X}}). Dit i.v.m. het gebruik van verschillende versies. In de volgende stap kan je de componenten kiezen die je wilt installeren, hierbij is een \texttt{32-bit User installation} het veiligst aangezien dit altijd werkt (zowel op een 32-Bits als 64-Bits Pc). Mocht je er echter zeker van zijn dat je een 64-bits PC hebt dan is deze optie ook bruikbaar. De keuze heeft geen invloed op de werking van R (alleen op de snelheid). Het is ook mogelijk om beide te installeren, dit kan echter verwarrend werken omdat beide versies volledig onafhankelijk van elkaar werken, en aanpassingen aan de 32-Bits versie dus niet worden overgenomen door de 64-Bits versie. Als je in de volgende stap voor \texttt{Yes (customized startup)} kiest, is het mogelijk om de interface (\texttt{MDI} vs. \texttt{SDI}) van R te veranderen, alsmede de manier waarop \textbf{Help-bestanden} worden getoond (\texttt{Plain text} vs. \texttt{HTML help}) en internet instellingen (\textbf{Standard} vs. \textbf{Internet2}). In de \texttt{Select Start Menu Folder} stap kan je R ook aan je startmenu toe voegen, dit is volledig optioneel. Als je hier geen behoefte aan hebt dan kan je de optie \texttt{Don't create a Start Menu folder} aanvinken. In de laatste stap (\texttt{Select Additional Tasks}) kan je aanvinken of je een R-pictogram op je bureaublad, respectievelijk, snelstartmenu wilt hebben. Deze twee pictogrammen zijn, gelijk aan de vorige stap, volledig optioneel. Het is wel sterk aan te bevelen om de twee \texttt{Regirstry entries} aan te vinken. De eerste keuze (\texttt{Save version number in registry}) zorgt voor een overzichtelijk versie beheer. De tweede keuze zorgt ervoor dat bestanden met een \texttt{.R} of \texttt{.RData} worden geassocieerd met R. 
 
-\subsection{RStudio}
-De opties voor de installatie van RStudio zijn een stuk minder uitgebreid. De enige keuzes dier er zijn betreffen de locatie waar je RStudio wilt installeren en het eventueel cree\"eren van een Snelkoppeling. Ook deze keuzes zijn volledig optioneel. 
-\begin{F_War*}[Alternatieve installatie locatie]
-Als je er voor hebt gekozen om bij de installatie af te wijken van de gesuggereerde locatie dan is het mogelijk dat RStudio R niet kan 'vinden'. In dit geval zal er een pop-up menu getoond worden als je RStudio opent. Kies hierbij de optie \texttt{Choose a specific version of R} en vervolgens \texttt{Browse}. Navigeer naar de locatie waar R is ge\"installeerd en kies \texttt{select folder}. RStudio zal nu onthouden waar R is ge\"installeerd en iedere volgende keer R starten vanuit deze locatie.
-\end{F_War*}
+\subsection{\texttt[black]{RStudio}}
+De opties voor de installatie van \term{RStudio} zijn een stuk minder uitgebreid. De enige keuzes dier er zijn betreffen de locatie waar je \term{RStudio} wilt installeren en het eventueel cree\"eren van een Snelkoppeling. Ook deze keuzes zijn volledig optioneel. 
+\begin{war}[Alternatieve installatie locatie]
+Als je er voor hebt gekozen om bij de installatie af te wijken van de gesuggereerde locatie dan is het mogelijk dat \term{RStudio} \term{R} niet kan 'vinden'. In dit geval zal er een pop-up menu getoond worden als je \term{RStudio} opent. Kies hierbij de optie \texttt{Choose a specific version of R} en vervolgens \texttt{Browse}. Navigeer naar de locatie waar R is ge\"installeerd en kies \texttt{select folder}. \term{RStudio} zal nu onthouden waar R is ge\"installeerd en iedere volgende keer R starten vanuit deze locatie.
+\end{war}
 
 \chapter{Data Inlezen}
 \section{No Questions Asked}
@@ -88,9 +122,9 @@ require(foreign)
 
 Het \term{foreign}-pakket is nu actief.
 
-\begin{F_Tip*}[Pakketen installeren en activeren]
-Het installeren van een pakket is slechts eenmaal nodig. Het activeren van een pakket moet echter wel iedere keer opnieuwe herhaald worden wanneer RStudio wordt opgestart. Dit activeren hoeft echter maar eenmaal binnen dezelfde sessie te worden uitegevoerd. Als je de bovengenoemde syntax nogmaals uitvoert zul je ook zien dat er geen melding meer verschijnt. Dit komt omdat het pakket al is geactiveerd!
-\end{F_Tip*}
+\begin{theo}[Pakketen installeren en activeren]
+Het installeren van een pakket is slechts eenmaal nodig. Het activeren van een pakket moet echter wel iedere keer opnieuwe herhaald worden wanneer \term{RStudio} wordt opgestart. Dit activeren hoeft echter maar eenmaal binnen dezelfde sessie te worden uitegevoerd. Als je de bovengenoemde syntax nogmaals uitvoert zul je ook zien dat er geen melding meer verschijnt. Dit komt omdat het pakket al is geactiveerd!
+\end{theo}
 
 \subsection{Werkmap}
 Voor \term{R} is het van belang om te weten in welke map de bestanden e.d. staan die je wilt gebruiken. Deze map wordt de werkmap genoemd. Alle verwijzingen naar bestanden zijn altijd relatief ten op zichte van de werkmap, zoals we later zullen zien. Eerst is het van belang om de werkmap de defineren. Klik hiervoor op \menu{Files > \dots} en navigeer naar de map waar je het SPSS bestand hebt opgeslagen en klik vervolgens op \menu{Ok}. Nu zal je onder \menu{Files} alle bestanden zien die zich in de door jouw gespecifeerde map bevinden. Dit is echter pas de helft van het verhaal, om deze map als werkmap te defineren is er nog een handeling nodig, klik hiervoor op \menu{Files > More > Set As Working Directory}. Je zal nu iets als het volgende in de \texttt{Console} te zien krijgen:
@@ -113,14 +147,14 @@ getwd()
 
 In de \texttt{Console} is nu te zien welke map als werkmap is gedifineerd. 
 
-\begin{F_Tip*}[Definering werkmap opnemen in syntax]
+\begin{theo}[Definering werkmap opnemen in syntax]
 Zoals je kunt zien hebben we het commando:
 <<label="consolesetwd2",comment=NA, echo=TRUE, eval=FALSE>>=
 setwd("D:/Users/Huub/Documents/Project/GettingThingsR")
 @
 \noindent
 niet opgenomen in de syntax. Dit is echter wel aan te bevelen. Dit komt voornamelijk omdat, net als de pakketen, je de werkmap bij iedere nieuwe \term{R} sessie opnieuw moet defineren. Nu is het natuurlijk mogelijk om dit iedere keer volgens de hierboven beschreven methode te doen, maar het is handiger om het commando zoals te zien in de \texttt{Console}, bovin je syntax te kopieren. Op deze manier is het eerste wat je doet bij het uitvoeren van je syntax het defineren van je werkmap. Omdat alle bestandlocaties t.o.v. de werkmap worden gezien is deze juiste definering van de werkmap cruciaal!
-\end{F_Tip*}
+\end{theo}
 
 \subsection{Inlezen SPSS-bestand}
 Nu het juiste pakket en de werkmap is gedefineerd kunnen we beginnen om het SPSS-bestand in te lezen. Hiervoor gebruiken we een functie uit het \term{foreign}-pakket. \textbf{Vanaf nu wordt de syntax en de bijbehorende resultaat uit de \texttt{Console} gelijkertijd weergegeven.} 
@@ -133,26 +167,112 @@ Het is mogelijk dat er een \texttt[red]{Warning message} in de \texttt{Console} 
 
 Een object kan alles zijn dus ook een databestand. Om een object te creeren gebruiken we \keys{\textless + -}. Daarnaast moet een object ook een naam hebben, welke je gebruikt om het object 'op te roepen'. Laten we het diamanten bestand linken aan een object onder de naam \term{diamanten}, door de vorige syntax aan te passen:  
 
-<<label="diamantenAssignObject", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+<<label="diamantenAssignObject", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
 diamanten <- read.spss(file="diamanten.sav", to.data.frame=TRUE)
 @
 
 Zoals je ziet is er in de \texttt{Console} nu niks anders te zien dan de syntax (en misschien een \texttt[red]{Warning message}). Maar dat betekend niet dat er niks gebeurd is! Want als je nu alleen de naam van het object typt:
 
-<<label="diamantennObject", tidy=TRUE, highlight=TRUE, warning=FALSE>>=
+<<label="diamantennObject", tidy=TRUE, highlight=TRUE, warning=FALSE, comment=NA>>=
 diamanten
 @
 
 Krijg je te zien dat het object \term{diamanten} gelijk staat aan het databestand. Doordat we objecten gebruiken is het echter handiger om niet meer over databestanden te spreken maar over dataframe's of dataobjecten. Het object \term{diamanten} is immers geen losstaand bestand maar is toegevoegd aan de \term{R}-omgeving, \texttt{Environment} genoemd in \term{RStudio}. Nu we het dataframe hebben toegevoegd aan de \texttt{Environment} kunnen we er in het volgende hoofdstuk van alles mee gaan doen!
 
-\begin{F_War*}[Hoofdlettergevoelig]
+\begin{war}[Hoofdlettergevoelig]
 \term{R} is hoofdlettergevoelig, als een object dus \term{diamanten} heet dan zal je een foutmelding krijgen als je \term{Diamanten} gebruikt:
-<<label="DiamantenObject", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+<<label="DiamantenObject", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
 Diamanten
 @
-\end{F_War*}
+\end{war}
 
 \section{Questions Asked}
 
+\chapter{Beschrijvende statistiek \& Data bewerking}
+
+\section{No Questions Asked}
+\subsection{Datastructuur}
+In eerst instantie is het vaak prettig om wat meer gevoel met het dataframe te krijgen. In tegenstelling tot SPSS bijvoorbeeld zien we niet meer direct de spreadsheet, wat in het begin toch even wennen is! De eerste methode om de data wat verder te bekijken is om onder \texttt{Environment} op \term{diamanten} te klikken. Nu zal er op de plaats waar eerst de syntax stond een soort van Excel-sheet te staan. In tegenstelling tot een Excel-sheet is het echter niet mogelijk om de getallen te bewerken, het is dus puur ter controle. Daarnaast is ook dit overzicht tot een maximum aantal lijnen beperkt. Waar zijn die onderste lijnen toch gebleven? Simpel:
+
+<<label="DiamantenTail", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+tail(x=diamanten)
+@
+
+Met deze functie is het mogelijk om de laatste vijf lijnen te zien van het dataframe. Daarnaast geven de nummers voor iedere lijn ook aan welk rijnummer de de rijen hebben t.o.v. van het totale dataframe. Een tegenovergestelde functie is ook beschikbaar:
+
+<<label="DiamantenHead", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+head(x=diamanten)
+@
+
+Nu de eerste en laatste rijen bekend zijn, zijn er nog een aantal ander functies die een overzicht geven de structuur van de data, zoals onder andere het aantal rijen, kolommen, of beide:
+
+<<label="DimensiesDiamanten", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+nrow(x=diamanten) #Aantal rijen
+ncol(x=diamanten) #Aantal kolommen
+dim(x=diamanten) #Aantal dimensies
+@
+
+Het aantal rijen en kolommen komt, zoals verwacht, overeen met het aantal van het SPSS-bestand. Een laatste handige methode om zicht te krijgen op de structuur van je data is de \texttt{str} functie:
+
+<<label="StrDiamanten", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+#Overzicht structuur
+str(object=diamanten, vec.len=2)
+@
+
+Deze functie geeft voor iedere variabele (kolom) aan wat voor een soort variabele het is en geeft een aantal unieke waardes voor iedere variabele. Zoals te zien is bijvoorbeeld de variabele \texttt{cut} een \term{factor} met 5 mogelijke waardes (waarvan twee voorbeelden worden gegegeven: ''Fair'' \& ''Good''). De variabele \texttt{depth} daarintegen is een numerieke variabele. De vorm van de variabele be\"invloedt de mogelijke bewerkingen die met de variabele mogelijk zijn. 
+
+\begin{theo}[Opmerkingen \#]
+Zoals je ziet wordt alle input na een \# genegeerd door de \texttt{Console}. Tekst naar een \# kan daarom ook gezien worden als een opmerking. Dit is uiteraard handig als je de syntax enigzins overzichtelijk wilt maken. Het maakt niet uit wat je naar het \# doet, een opmerking hoeft dus niet afgesloten te worden. Als je echter over meerdere lijnen een opmerking wilt maken is het wel van belang om iedere lijn te beginnen met een \#.
+\end{theo}
+
+\subsection{Object manipulatie}
+Een kleine introductie tot \term{object} manipulatie is onontkoombaar om \term{R} effici\"ent te gebruiken. Het is bijvoorbeeld nodig om beschrijvende statistiek te verkrijgen van een selectie van variabelen, i.p.v. alle variabelen. Daarnaast gebruik ik bewust de bewoording  ''\term{object}-manipulatie'' t.o.v. ''Dataframe-manipulatie'', omdat de manipulatie methodes niet alleen toegepast kunnen worden op dataframes maar op objecten in het algemeen. 
+
+Laten we eerst kijken naar de mogelijkheid om \'e\'en enkele variabele selecteren. Hiervoor zijn verschillende methode's waarvan we hier er twee zullen toelichten. De eerste methode maakt gebruik van het \keys{\$}-teken, dit wordt toegepast als volgt:
+<<label="DollarDiamanten", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+diamanten$carat
+@
+
+Het onderdeel met de naam vermeld na het \keys{\$}-teken wordt dus ontrokken uit het \term{object} voor het \keys{\$}-teken. Het resultaat is een vector, wat niks meer is dan een rij van waardes (in dit geval cijfers), ofwel een dataframe met slechts een kolom. 
+
+De tweede optie maakt gebruik van de \keys{\lbrack + \rbrack}-tekens. De uitwerking van de deze optie ziet er als volgt uit:
+<<label="BrackDiamanten", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+diamanten[,c("carat")]
+@
+
+Dat ziet er een stuk ingewikkelder uit! Maar deze methode heeft zijn winst echter liggen in de mogelijkheid tot uitbreiding. Zo is het bijvoorbeeld mogelijk om meerdere kolommen tegelijk te selecteren:
+<<settings2, include=FALSE>>=
+options(max.print=20)
+@
+
+<<label="BrackDiamantenMultiple", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+diamanten[,c("carat","color")]
+@
+
+Waarbij de volgorde van opgave ook de volgorde is van de uitvoer in de \texttt{Console}, vergelijk bijvoorbeeld maar eens met:
+<<label="BrackDiamantenOrder", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+diamanten[,c("color","carat")]
+@
+
+Naast het selecteren van kolommen is ook mogelijk om rijen te selecteren, zo is het mogelijk om de eerste 5 rijen te selecteren:
+<<settings3, include=FALSE>>=
+options(max.print=100)
+@
+
+<<label="BrackDiamantenRow5", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+diamanten[1:5,]
+@
+
+Of de 1\textsuperscript{e}, 10\textsuperscript{e}, 100\textsuperscript{e}, en de 1000\textsuperscript{e} rij:
+<<label="BrackDiamantenRow110", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+diamanten[c(1,10,100,1000),]
+@
+
+Waarbij beide methode's ook gecombineerd kunnen worden:
+<<label="BrackDiamantenRowKolom", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+diamanten[20:25,c("color","table")]
+@
+
+Hier worden dus rij 20 t/m 25 geselecteerd voor de variabelen \texttt{color} \& \texttt{table}.
 
 \end{document}

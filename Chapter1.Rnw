@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass{book}
 \usepackage[framemethod=default]{mdframed}
 \usepackage{xcolor}
 
@@ -12,36 +12,66 @@
                        topline=false,bottomline=false,backgroundcolor=red!10}
 \mdtheorem[style=warningwindow]{F_War}{Pas op}
 
+\renewcommand{\texttt}[2][blue]{\textcolor{#1}{\ttfamily #2}}
+\usepackage[os=mac, mackeys=text]{menukeys}
 
 \begin{document}
-
+\chapter{Installeren}
 Zoals in de introductie al wordt vermeld zal dit boek gaan voor een 'hands-on-approach'. Aan de einde van ieder hoofdstuk wordt echter ieder...
 \section{No Questions Asked}
-\subsection{Installeren}
-\subsubsection{R}
+\subsection{R}
 Op de site van van \textbf{R}, {http://cran.rstudio.com}, staat een duidelijke instructie aangaande de installatie van R voor ieder besturingssysteem. Voor Windows klik je op \texttt{Download R for Windows} om vervolgens op \texttt{install R for the first time} te klikken. Hierna klik je op \texttt{Download R 3.X.X for Windows}, waar de getallen afhankelijk zijn van het huidige versie-nummer. Download het bestand. Vervolgens open je het bestand en zal er gevraagd worden in welke taal je het programma wil installeren. 
 
 \begin{F_Tip*}[Taal Keuze]
 Persoonlijk adviseer ik altijd Engels omdat de meeste artikelen en oplossingen aangaande R nu eenmaal in het Engels zijn. Hierdoor wordt de kans op een bevredigend antwoord te vinden een stuk groter als je gebruik maakt van de (Engelstalige) terminologie die overeenkomt met de terminologie zoals deze op de meeste forums en website's wordt gebruikt.
 \end{F_Tip*}
 
-Vervolgens: Klik 3 maal op \texttt{Next}. Bij de \texttt{Select Components} sectie selecteer de optie: \texttt{32-bit User installation} en klik op \texttt{Next}. Klik vervolgens nog driemaal op \texttt{Next} en tot slot op \texttt{Finish}. R is nu ge\"installeerd. 
+Vervolgens: Klik 3 maal op \menu{Next}. Bij de \texttt{Select Components} sectie selecteer de optie: \texttt{32-bit User installation} en klik op \menu{Next}. Klik vervolgens nog driemaal op \menu{Next} en tot slot op \menu{Finish}. R is nu ge\"installeerd. 
 
-\subsubsection{RStudio}
+\subsection{RStudio}
 Net als bij R is ook de site van \textbf{RStudio}, {http://www.rstudio.com}, zeer gebruiksvriendelijk. Klik op de home-page op de \texttt{Download Now}-knop en vervolgens op de \texttt{Download RStudio Desktop}-knop. Tot slot klik je op de link onder het kopje \texttt{Recommended For Your System}, bijv.: \texttt{RStudio 0.XX.XXX - Windows XP/Vista/7/8}. Download het bestand en open het installatiebestand.
 
-Vervolgens: \texttt{Next} (3 maal).
+Vervolgens: \menu{Next} (3 maal). RStudio is nu ge\"installeerd en klaar voor gebruik.
 
 \section{Question's Asked}
-\subsection {Installatie}
-\subsubsection{R}
+\subsection{R}
 De gebruikte link, {http://cran.rstudio.com}, is een mirror. Een mirror is een website waarop bestanden zijn te downloaden. Het spiegelt als het ware de bron, en om de bron niet over te belasten, wordt er gebruik gemaakt van verschillende spiegels. Als je je eigen mirror wilt kiezen is dit uiteraard mogelijk, ga hiervoor eerst naar {http://www.r-project.org/}, en klik vervolgens onder \texttt{Download, Packages} op \texttt{CRAN}. Nu zal je een lijst met landen zien, waarbij ieder land \'e\'en of meerderen mirrors heeft. Zoals te zien is de gebruikte link in de NQA-sectie de 0-Cloud mirror, een soort overkoepelende mirror. Nederland heeft twee mirrors een van XL-Data Amsterdam, en een van Utrecht University. In de tijd van inbelinternet kon de keuze van de mirror van grote invloed zijn op de snelheid van downloaden, tegenwoordig is de invloed niet meer dan gering. 
 
 Bij het installeren van R zijn de eerste twee stappen vanzelfsprekend en is er geen keuze mogelijk. Bij de Select Destination Location, valt er echter voor het eerst wat te kiezen. In de NQA-sectie wordt de gesuggereerde installatie locatie gebruikt. Het is echter ook mogelijk deze locatie aan te passen. Mocht je er dus belang aan hechten dat de installatie in een andere map (of schijf) plaatsvind dan is dat dus mogelijk. Hierbij is het echter wel aan te raden het einde van installatie locatie uitgang te laten staan (dus de installatie map altijd te laten eindigen op \texttt{\textbackslash{R}\textbackslash{R-3.X.X}}). Dit i.v.m. het gebruik van verschillende versies. In de volgende stap kan je de componenten kiezen die je wilt installeren, hierbij is een \texttt{32-bit User installation} het veiligst aangezien dit altijd werkt (zowel op een 32-Bits als 64-Bits Pc). Mocht je er echter zeker van zijn dat je een 64-bits PC hebt dan is deze optie ook bruikbaar. De keuze heeft geen invloed op de werking van R (alleen op de snelheid). Het is ook mogelijk om beide te installeren, dit kan echter verwarrend werken omdat beide versies volledig onafhankelijk van elkaar werken, en aanpassingen aan de 32-Bits versie dus niet worden overgenomen door de 64-Bits versie. Als je in de volgende stap voor \texttt{Yes (customized startup)} kiest, is het mogelijk om de interface (\texttt{MDI} vs. \texttt{SDI}) van R te veranderen, alsmede de manier waarop \textbf{Help-bestanden} worden getoond (\texttt{Plain text} vs. \texttt{HTML help}) en internet instellingen (\textbf{Standard} vs. \textbf{Internet2}). In de \texttt{Select Start Menu Folder} stap kan je R ook aan je startmenu toe voegen, dit is volledig optioneel. Als je hier geen behoefte aan hebt dan kan je de optie \texttt{Don't create a Start Menu folder} aanvinken. In de laatste stap (\texttt{Select Additional Tasks}) kan je aanvinken of je een R-pictogram op je bureaublad, respectievelijk, snelstartmenu wilt hebben. Deze twee pictogrammen zijn, gelijk aan de vorige stap, volledig optioneel. Het is wel sterk aan te bevelen om de twee \texttt{Regirstry entries} aan te vinken. De eerste keuze (\texttt{Save version number in registry}) zorgt voor een overzichtelijk versie beheer. De tweede keuze zorgt ervoor dat bestanden met een \texttt{.R} of \texttt{.RData} worden geassocieerd met R. 
 
+\subsection{RStudio}
 De opties voor de installatie van RStudio zijn een stuk minder uitgebreid. De enige keuzes dier er zijn betreffen de locatie waar je RStudio wilt installeren en het eventueel cree\"eren van een Snelkoppeling. Ook deze keuzes zijn volledig optioneel. 
 \begin{F_War*}[Alternatieve installatie locatie]
 Als je er voor hebt gekozen om bij de installatie af te wijken van de gesuggereerde locatie dan is het mogelijk dat RStudio R niet kan 'vinden'. In dit geval zal er een pop-up menu getoond worden als je RStudio opent. Kies hierbij de optie \texttt{Choose a specific version of R} en vervolgens \texttt{Browse}. Navigeer naar de locatie waar R is ge\"installeerd en kies \texttt{select folder}. RStudio zal nu onthouden waar R is ge\"installeerd en iedere volgende keer R starten vanuit deze locatie.
 \end{F_War*}
+
+\chapter{Data Inlezen}
+\section{No Questions Asked}
+\subsection{\texttt[black]{foreign}-Pakket installeren \& activeren}
+Om data van andere statistische programma's in te lezen hebben het \texttt{foreign} pakket nodig. Eerst moeten we dit pakket installeren. Klik hiervoor op \menu{Packages > Install Packages} en type onder \menu{Packages (seperate multiple with space or comma)} \directory{foreign} en vervolgens op \menu{Install}. Het \texttt{foreign} pakket is nu ge\"installeerd.
+
+Vervolgens moet het pakket worden ingeladen, hiervoor moet we eerst een nieuw script openen van waaruit we alle commando's gaan uitvoeren. Klik hiervoor op \menu{File > New File > R Script}. Vervolgens verschijnt er een venster met als titel \texttt{Untitled1}. Vervolgens typen we in dit script onze eerste syntax.
+
+<<label="foreignsyntax",comment=NA, echo=TRUE, eval=FALSE>>=
+require(foreign)
+@
+
+Om deze regel syntax uit te voeren zijn er verschillende mogelijkheden:Zo is het mogelijk de syntax te markeren en vervolgens (i) op \menu{Run} te klikken, (ii) de toetsencombinatie \keys{\cmd + \enter} te gebruiken, of (iii) het menu \menu{Code > Run Line(s)} gebruiken. Bij deze methode zal alle gemarkeerde syntax worden uitgevoerd. Het is echter ook mogelijk om ergens op de regel te klikken en vervolgens een van de drie bovengenoemde methodes toe te passen. Deze methode voert vervolgens de syntax uit die op deze regel is gegeven. 
+
+Kies een van de bovengenoemde methodes en voer te syntax uit. Je zult nu het volgende in de \texttt{Console} zien verschijnen
+
+<<label="foreignconsole",comment=NA, echo=TRUE>>=
+require(foreign)
+@
+
+Het \texttt[black]{foreign}-pakket is nu actief.
+
+
+\begin{F_Tip*}[Pakketen installeren en activeren]
+Het installeren van een pakket is slechts eenmaal nodig. Het activeren van een pakket moet echter wel iedere keer opnieuwe herhaald worden wanneer RStudio wordt opgestart. Dit activeren hoeft echter maar eenmaal binnen dezelfde sessie te worden uitegevoerd. Als je de bovengenoemde syntax nogmaals uitvoert zul je ook zien dat er geen melding meer verschijnt. Dit komt omdat het pakket al is geactiveerd!
+\end{F_Tip*}
+
+\section{Questions Asked}
+
 
 \end{document}

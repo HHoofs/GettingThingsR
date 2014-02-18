@@ -1,6 +1,7 @@
 \documentclass{book}
 \usepackage[tikz]{mdframed}
 \usepackage{xcolor}
+\usepackage[dutch]{babel}
 
 \newcounter{theo}[section]
 \newenvironment{theo}[1][]{%

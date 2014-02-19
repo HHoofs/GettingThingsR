@@ -73,6 +73,21 @@
 
 \specialterms{R,RStudio,foreign,diamanten,factor,object}
 
+
+%%% Code to set up special func treatment
+\makeatletter
+\newcommand{\specialfunc}[1]{%
+  \@for\next:=#1\do
+    {\@namedef{specialfunc@\detokenize\expandafter{\next}}{}}%
+}
+\newcommand\func[1]{%
+  \@ifundefined{specialfunc@\detokenize{#1}}
+    {\texttt[black]{#1}}{\texttt[textblue]{#1}\index{#1@\textsl{#1}} \global\expandafter\let\csname specialfunc@\detokenize{#1}\endcsname\relax}%
+}
+\makeatother
+
+\specialfunc{require,library}
+
 <<settings, include=FALSE>>=
 require(stringr)
 options(max.print=100, width=60)
@@ -196,6 +211,21 @@ Diamanten
 \end{war}
 
 \section{Questions Asked}
+\subsection{\texttt[black]{foreign}-Pakket installeren \& activeren}
+Het is van belang om te begrijpen dat \term{R} eigenlijk niet meer is dan een programmeertaal. In tegenstelling tot de meeste andere programmeertalen kenmerkt \term{R} zich echter door een aantal voorgeschreven functies waarmee basale (statistische) bewerkingen kunnen uitvoeren worden uitgevoerd. Het is vooral deze balans die er voor zorgt dat \term{R} een stuk krachtiger en flexibeler is dan andere statistiek programma's zoals SPSS, maar tegelijkertijd toegangelijker is dan pure programmeertalen zoals \texttt{Python}. 
+
+Aangezien \term{R} echter werkt met een open-code (open-source), is het voor iedereen mogelijk toevoegingen in de vorm van pakketten te ontwerpen en deze in te dienen. Als een pakket is goedgekeurd dan wordt deze beschikbaar gesteld via het offici\"ele CRAN (Comprehensive R Archive Network) archief.\footnote{Het is echter ook mogelijk dat je pakketten op internet vind die niet via de offici\"ele manier worden aangeboden. Dit zijn meestal kleine aanpassingen op bestaande pakketten, maar ook grotere pakketen worden soms op deze manier aangeboden. Deze pakketen kunnen uiteraard prima werken, toch is de controle (vooral van de \term{R}-gemeenschap) bij dergelijke pakketten een stuk lager, dus waakzaamheid is aan te raden!} Het voordeel van deze, semi-gecontroleerde, manier van pakket-distrubutie is dat de kwaliteit gewaarborgd blijft. Daarnaast is het ook verplicht dat ieder pakket een uitgebreide handleiding heeft waarin iedere functie uitgebreid wordt beschreven. Daarnaast werken alle pakketten op hun beurt ook weer met een open-code, waardoor eventuele fouten snel kunnen worden opgespoord en hersteld.
+
+Nu het hoe en waarom van pakketen is uitgelegd, kunnen we ons concentreren op de installatie ervan. Zoals vermeld is dit eenvoudig mogelijk via \menu{Packages > Install Packages}, het is echter ook mogelijk om een installatie via de syntax uit te voeren. Deze methode is ook zichtbaar als je een pakket installeerd via de zojuist genoemde methode. Als je deze methode namelijk volgt zal je in \texttt{Console} de volgende invoer zien:
+<<label="InstallSyntaxx", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA,eval=FALSE>>=
+install.packages("ggplot2")
+@
+
+Echter, zoals vermeld staat bij de Tip aangaande het installeren van pakketten is installatie van een pakket slechts per PC slechts een keer nodig. Daarom is het voor de reproduceerbaarheid van de \texttt{syntax} geen must om het hierin op te nemen. Wat dus wel een must is voor de repoduceerbaarheid is het includeren van in de syntax van het inladen van het pakket. Naast de gebruikte functie \func{require} is het ook mogelijk de functie \func{library} te gebruiken--er zit geen enkel verschil tussen beiden.
+
+\subsection{Werkmap}
+\subsection{Inlezen SPSS-bestand}
+
 
 \chapter{Beschrijvende statistiek \& Data bewerking}
 

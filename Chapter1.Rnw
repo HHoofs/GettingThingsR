@@ -174,14 +174,14 @@ Nu het juiste pakket en de werkmap is gedefineerd kunnen we beginnen om het SPSS
 read.spss(file="diamanten.sav", to.data.frame=TRUE)
 @
 
-Het is mogelijk dat er een \texttt[red]{Warning message} in de \texttt{Console} komt, deze kan je echter negeren. Zoals je ziet krijg je de eerste regels (aantal verschilt per PC) te zien van het databestand. \term{R} laat altijd maar een beperkt aantal regels zien om de \texttt{Console} overzichtelijk te houden. Het is ons nu dus gelukt om een SPSS-bestand te lezen met behulpt van \term{R}. Er is echter \'e\'en probleem! Als we met dit databestand willen gaan werken zouden we iedere keer de zojuist gebruikte functie (\texttt{read.spss}) te gebruiken. Dit is natuurlijk erg omslachtig en hier is dan ook een zeer nuttige oplossing voor: Het cree\"eren van een \textbf{object}.
+Het is mogelijk dat er een \texttt[newred]{Warning message} in de \texttt{Console} komt, deze kan je echter negeren. Zoals je ziet krijg je de eerste regels (aantal verschilt per PC) te zien van het databestand. \term{R} laat altijd maar een beperkt aantal regels zien om de \texttt{Console} overzichtelijk te houden. Het is ons nu dus gelukt om een SPSS-bestand te lezen met behulpt van \term{R}. Er is echter \'e\'en probleem! Als we met dit databestand willen gaan werken zouden we iedere keer de zojuist gebruikte functie (\texttt{read.spss}) te gebruiken. Dit is natuurlijk erg omslachtig en hier is dan ook een zeer nuttige oplossing voor: Het cree\"eren van een \textbf{object}.
 
 Een object kan alles zijn dus ook een databestand. Om een object te creeren gebruiken we \keys{\textless + -}. Daarnaast moet een object ook een naam hebben, welke je gebruikt om het object 'op te roepen'. Laten we het diamanten bestand linken aan een object onder de naam \term{diamanten}, door de vorige syntax aan te passen:  
 <<label="diamantenAssignObject", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
 diamanten <- read.spss(file="diamanten.sav", to.data.frame=TRUE)
 @
 
-Zoals je ziet is er in de \texttt{Console} nu niks anders te zien dan de syntax (en misschien een \texttt[red]{Warning message}). Maar dat betekend niet dat er niks gebeurd is! Want als je nu alleen de naam van het object typt:
+Zoals je ziet is er in de \texttt{Console} nu niks anders te zien dan de syntax (en misschien een \texttt[newred]{Warning message}). Maar dat betekend niet dat er niks gebeurd is! Want als je nu alleen de naam van het object typt:
 <<label="diamantennObject", tidy=TRUE, highlight=TRUE, warning=FALSE, comment=NA>>=
 diamanten
 @

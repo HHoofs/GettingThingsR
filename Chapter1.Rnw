@@ -2,6 +2,8 @@
 \usepackage[tikz]{mdframed}
 \usepackage{xcolor}
 \usepackage[dutch]{babel}
+\usepackage{makeidx}
+\makeindex %http://nl.wikibooks.org/wiki/LaTeX/Index_aanmaken
 
 \newcounter{tip}[section]
 \newenvironment{tip}[1][]{%
@@ -58,7 +60,7 @@
 }
 \newcommand\term[1]{%
   \@ifundefined{specialterm@\detokenize{#1}}
-    {\texttt[black]{#1}}{\texttt{#1}\global\expandafter\let\csname specialterm@\detokenize{#1}\endcsname\relax}%
+    {\texttt[black]{#1}}{\texttt[blue]{#1}\index{#1} \global\expandafter\let\csname specialterm@\detokenize{#1}\endcsname\relax}%
 }
 \makeatother
 
@@ -313,5 +315,6 @@ diamanten[c(1,10,100,1000),]
 
 \section{Questions Asked}
 
+\printindex
 
 \end{document}

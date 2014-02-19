@@ -4,6 +4,12 @@
 \usepackage[dutch]{babel}
 \usepackage{makeidx}
 \usepackage{listings}
+\definecolor{newblue}{rgb}{.88, .92, .93}
+\definecolor{newred}{rgb}{0.749,0.012,0.012}
+\definecolor{textblue}{rgb}{0.004,0.004,0.506}
+
+
+
 \makeindex %http://nl.wikibooks.org/wiki/LaTeX/Index_aanmaken
 
 \newcounter{tip}[section]
@@ -13,16 +19,16 @@
   {\mdfsetup{%
     frametitle={%
        \tikz[baseline=(current bounding box.east),outer sep=0pt]
-        \node[anchor=east,rectangle,fill=blue!20]
+        \node[anchor=east,rectangle,fill=newblue!20,draw=newblue,line width=2pt]
         {\strut TIP~};}}
   }%
   {\mdfsetup{%
      frametitle={%
        \tikz[baseline=(current bounding box.east),outer sep=0pt]
-        \node[anchor=east,rectangle,fill=blue!20]
+        \node[anchor=east,rectangle,fill=newblue!20,draw=newblue,line width=2pt]
         {\strut TIP:~#1};}}%
    }%
-   \mdfsetup{innertopmargin=10pt,linecolor=blue!20,%
+   \mdfsetup{innertopmargin=10pt,linecolor=newblue,%
              linewidth=2pt,topline=true,skipabove=.5cm,skipbelow=.5cm,splittopskip=2\topsep,
              frametitleaboveskip=\dimexpr-\ht\strutbox\relax,}
    \begin{mdframed}[]\relax%
@@ -35,22 +41,22 @@
   {\mdfsetup{%
     frametitle={%
        \tikz[baseline=(current bounding box.east),outer sep=0pt]
-        \node[anchor=east,rectangle,fill=red!20]
+        \node[anchor=east,rectangle,fill=newred!20,draw=newred,line width=2pt]
         {\strut Pas Op:~};}}
   }%
   {\mdfsetup{%
      frametitle={%
        \tikz[baseline=(current bounding box.east),outer sep=0pt]
-        \node[anchor=east,rectangle,fill=red!20]
+        \node[anchor=east,rectangle,fill=newred!20,draw=newred,line width=2pt]
         {\strut Pas Op:~#1};}}%
    }%
-   \mdfsetup{innertopmargin=10pt,linecolor=red!20,%
+   \mdfsetup{innertopmargin=10pt,linecolor=newred,%
              linewidth=2pt,topline=true,skipabove=.5cm,skipbelow=.5cm,splittopskip=2\topsep,
              frametitleaboveskip=\dimexpr-\ht\strutbox\relax,}
    \begin{mdframed}[]\relax%
    }{\end{mdframed}}
 
-\renewcommand{\texttt}[2][blue]{\textcolor{#1}{\ttfamily #2}}
+\renewcommand{\texttt}[2][textblue]{\textcolor{#1}{\ttfamily #2}}
 \usepackage[os=win, mackeys=text]{menukeys}
 
 %%% Code to set up special term treatment
@@ -61,7 +67,7 @@
 }
 \newcommand\term[1]{%
   \@ifundefined{specialterm@\detokenize{#1}}
-    {\texttt[black]{#1}}{\texttt[blue]{#1}\index{#1} \global\expandafter\let\csname specialterm@\detokenize{#1}\endcsname\relax}%
+    {\texttt[black]{#1}}{\texttt[textblue]{#1}\index{#1} \global\expandafter\let\csname specialterm@\detokenize{#1}\endcsname\relax}%
 }
 \makeatother
 

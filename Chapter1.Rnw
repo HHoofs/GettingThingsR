@@ -3,6 +3,7 @@
 \usepackage{xcolor}
 \usepackage[dutch]{babel}
 \usepackage{makeidx}
+\usepackage{listings}
 \makeindex %http://nl.wikibooks.org/wiki/LaTeX/Index_aanmaken
 
 \newcounter{tip}[section]
@@ -67,7 +68,14 @@
 \specialterms{R,RStudio,foreign,diamanten,factor,object}
 
 <<settings, include=FALSE>>=
+require(stringr)
 options(max.print=100, width=60)
+thm <- knit_theme$get("edit-kwrite")
+# thm <- knit_theme$get("biogoo")
+# thm <- knit_theme$get("acid")
+
+
+knit_theme$set(thm)
 @
 
 \begin{document}

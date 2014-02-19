@@ -19,16 +19,16 @@
   {\mdfsetup{%
     frametitle={%
        \tikz[baseline=(current bounding box.east),outer sep=0pt]
-        \node[anchor=east,rectangle,fill=newblue!20,draw=newblue,line width=2pt]
+        \node[anchor=east,rectangle,fill=textblue!20,draw=textblue,line width=2pt]
         {\strut TIP~};}}
   }%
   {\mdfsetup{%
      frametitle={%
        \tikz[baseline=(current bounding box.east),outer sep=0pt]
-        \node[anchor=east,rectangle,fill=newblue!20,draw=newblue,line width=2pt]
+        \node[anchor=east,rectangle,fill=textblue!20,draw=textblue,line width=2pt]
         {\strut TIP:~#1};}}%
    }%
-   \mdfsetup{innertopmargin=10pt,linecolor=newblue,%
+   \mdfsetup{innertopmargin=10pt,linecolor=textblue,%
              linewidth=2pt,topline=true,skipabove=.5cm,skipbelow=.5cm,splittopskip=2\topsep,
              frametitleaboveskip=\dimexpr-\ht\strutbox\relax,}
    \begin{mdframed}[]\relax%

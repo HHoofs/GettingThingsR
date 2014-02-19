@@ -3,9 +3,9 @@
 \usepackage{xcolor}
 \usepackage[dutch]{babel}
 
-\newcounter{theo}[section]
-\newenvironment{theo}[1][]{%
- \stepcounter{theo}%
+\newcounter{tip}[section]
+\newenvironment{tip}[1][]{%
+ \stepcounter{tip}%
   \ifstrempty{#1}%
   {\mdfsetup{%
     frametitle={%
@@ -79,9 +79,9 @@ Zoals in de introductie al wordt vermeld zal dit boek gaan voor een 'hands-on-ap
 \subsection{\texttt[black]{R}}
 Op de site van van \term{R}, {http://cran.rstudio.com}, staat een duidelijke instructie aangaande de installatie van \term{R} voor ieder besturingssysteem. Voor Windows klik je op \texttt{Download R for Windows} om vervolgens op \texttt{install R for the first time} te klikken. Hierna klik je op \texttt{Download R 3.X.X for Windows}, waar de getallen afhankelijk zijn van het huidige versie-nummer. Download het bestand. Vervolgens open je het bestand en zal er gevraagd worden in welke taal je het programma wil installeren. 
 
-\begin{theo}[Taal Keuze]
+\begin{tip}[Taal Keuze]
 Persoonlijk adviseer ik altijd Engels omdat de meeste artikelen en oplossingen aangaande R nu eenmaal in het Engels zijn. Hierdoor wordt de kans op een bevredigend antwoord te vinden een stuk groter als je gebruik maakt van de (Engelstalige) terminologie die overeenkomt met de terminologie zoals deze op de meeste forums en website's wordt gebruikt.
-\end{theo}
+\end{tip}
 
 Vervolgens: Klik 3 maal op \menu{Next}. Bij de \texttt{Select Components} sectie selecteer de optie: \texttt{32-bit User installation} en klik op \menu{Next}. Klik vervolgens nog driemaal op \menu{Next} en tot slot op \menu{Finish}. R is nu ge\"installeerd. 
 
@@ -108,7 +108,6 @@ Als je er voor hebt gekozen om bij de installatie af te wijken van de gesuggeree
 Om data van andere statistische programma's in te lezen hebben het \term{foreign} pakket nodig. Eerst moeten we dit pakket installeren. Klik hiervoor op \menu{Packages > Install Packages} en type onder \menu{Packages (seperate multiple with space or comma)} \directory{foreign} en vervolgens op \menu{Install}. Het \term{foreign}-pakket is nu ge\"installeerd.
 
 Vervolgens moet het pakket worden ingeladen, hiervoor moet we eerst een nieuw script openen van waaruit we alle commando's gaan uitvoeren. Klik hiervoor op \menu{File > New File > R Script}. Vervolgens verschijnt er een venster met als titel \texttt{Untitled1}. Vervolgens typen we in dit script onze eerste syntax.
-
 <<label="foreignsyntax",comment=NA, echo=TRUE, eval=FALSE>>=
 require(foreign)
 @
@@ -116,50 +115,45 @@ require(foreign)
 Om deze regel syntax uit te voeren zijn er verschillende mogelijkheden:Zo is het mogelijk de syntax te markeren en vervolgens (i) op \menu{Run} te klikken, (ii) de toetsencombinatie \keys{ctrl + enter} te gebruiken, of (iii) het menu \menu{Code > Run Line(s)} gebruiken. Bij deze methode zal alle gemarkeerde syntax worden uitgevoerd. Het is echter ook mogelijk om ergens op de regel te klikken en vervolgens een van de drie bovengenoemde methodes toe te passen. Deze methode voert vervolgens de syntax uit die op deze regel is gegeven. 
 
 Kies een van de bovengenoemde methodes en voer te syntax uit. Je zult nu het volgende in de \texttt{Console} zien verschijnen
-
 <<label="foreignconsole",comment=NA, echo=TRUE>>=
 require(foreign)
 @
 
 Het \term{foreign}-pakket is nu actief.
 
-\begin{theo}[Pakketen installeren en activeren]
+\begin{tip}[Pakketen installeren en activeren]
 Het installeren van een pakket is slechts eenmaal nodig. Het activeren van een pakket moet echter wel iedere keer opnieuwe herhaald worden wanneer \term{RStudio} wordt opgestart. Dit activeren hoeft echter maar eenmaal binnen dezelfde sessie te worden uitegevoerd. Als je de bovengenoemde syntax nogmaals uitvoert zul je ook zien dat er geen melding meer verschijnt. Dit komt omdat het pakket al is geactiveerd!
-\end{theo}
+\end{tip}
 
 \subsection{Werkmap}
 Voor \term{R} is het van belang om te weten in welke map de bestanden e.d. staan die je wilt gebruiken. Deze map wordt de werkmap genoemd. Alle verwijzingen naar bestanden zijn altijd relatief ten op zichte van de werkmap, zoals we later zullen zien. Eerst is het van belang om de werkmap de defineren. Klik hiervoor op \menu{Files > \dots} en navigeer naar de map waar je het SPSS bestand hebt opgeslagen en klik vervolgens op \menu{Ok}. Nu zal je onder \menu{Files} alle bestanden zien die zich in de door jouw gespecifeerde map bevinden. Dit is echter pas de helft van het verhaal, om deze map als werkmap te defineren is er nog een handeling nodig, klik hiervoor op \menu{Files > More > Set As Working Directory}. Je zal nu iets als het volgende in de \texttt{Console} te zien krijgen:
-
 <<label="consolesetwd",comment=NA, echo=TRUE, eval=FALSE>>=
 setwd("D:/Users/Huub/Documents/Project/GettingThingsR")
 @
 
 Om te controleren of je werkmap inderdaad juist is gedefineerd type je het volgende in je syntax:
-
 <<label="sourcegetwd",comment=NA, echo=TRUE, eval=FALSE>>=
 getwd()
 @
 
 En voer je dit commando uit (bijv. \keys{ctrl + enter})
-
 <<label="consolegetwd",comment=NA, echo=TRUE, eval=TRUE>>=
 getwd()
 @
 
 In de \texttt{Console} is nu te zien welke map als werkmap is gedifineerd. 
 
-\begin{theo}[Definering werkmap opnemen in syntax]
+\begin{tip}[Definering werkmap opnemen in syntax]
 Zoals je kunt zien hebben we het commando:
 <<label="consolesetwd2",comment=NA, echo=TRUE, eval=FALSE>>=
 setwd("D:/Users/Huub/Documents/Project/GettingThingsR")
 @
 \noindent
 niet opgenomen in de syntax. Dit is echter wel aan te bevelen. Dit komt voornamelijk omdat, net als de pakketen, je de werkmap bij iedere nieuwe \term{R} sessie opnieuw moet defineren. Nu is het natuurlijk mogelijk om dit iedere keer volgens de hierboven beschreven methode te doen, maar het is handiger om het commando zoals te zien in de \texttt{Console}, bovin je syntax te kopieren. Op deze manier is het eerste wat je doet bij het uitvoeren van je syntax het defineren van je werkmap. Omdat alle bestandlocaties t.o.v. de werkmap worden gezien is deze juiste definering van de werkmap cruciaal!
-\end{theo}
+\end{tip}
 
 \subsection{Inlezen SPSS-bestand}
 Nu het juiste pakket en de werkmap is gedefineerd kunnen we beginnen om het SPSS-bestand in te lezen. Hiervoor gebruiken we een functie uit het \term{foreign}-pakket. \textbf{Vanaf nu wordt de syntax en de bijbehorende resultaat uit de \texttt{Console} gelijkertijd weergegeven.} 
-
 <<label="diamantenSav", tidy=TRUE, comment=NA, highlight=TRUE, warning=FALSE>>=
 read.spss(file="diamanten.sav", to.data.frame=TRUE)
 @
@@ -167,13 +161,11 @@ read.spss(file="diamanten.sav", to.data.frame=TRUE)
 Het is mogelijk dat er een \texttt[red]{Warning message} in de \texttt{Console} komt, deze kan je echter negeren. Zoals je ziet krijg je de eerste regels (aantal verschilt per PC) te zien van het databestand. \term{R} laat altijd maar een beperkt aantal regels zien om de \texttt{Console} overzichtelijk te houden. Het is ons nu dus gelukt om een SPSS-bestand te lezen met behulpt van \term{R}. Er is echter \'e\'en probleem! Als we met dit databestand willen gaan werken zouden we iedere keer de zojuist gebruikte functie (\texttt{read.spss}) te gebruiken. Dit is natuurlijk erg omslachtig en hier is dan ook een zeer nuttige oplossing voor: Het cree\"eren van een \textbf{object}.
 
 Een object kan alles zijn dus ook een databestand. Om een object te creeren gebruiken we \keys{\textless + -}. Daarnaast moet een object ook een naam hebben, welke je gebruikt om het object 'op te roepen'. Laten we het diamanten bestand linken aan een object onder de naam \term{diamanten}, door de vorige syntax aan te passen:  
-
 <<label="diamantenAssignObject", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
 diamanten <- read.spss(file="diamanten.sav", to.data.frame=TRUE)
 @
 
 Zoals je ziet is er in de \texttt{Console} nu niks anders te zien dan de syntax (en misschien een \texttt[red]{Warning message}). Maar dat betekend niet dat er niks gebeurd is! Want als je nu alleen de naam van het object typt:
-
 <<label="diamantennObject", tidy=TRUE, highlight=TRUE, warning=FALSE, comment=NA>>=
 diamanten
 @
@@ -194,19 +186,16 @@ Diamanten
 \section{No Questions Asked}
 \subsection{Datastructuur}
 In eerst instantie is het vaak prettig om wat meer gevoel met het dataframe te krijgen. In tegenstelling tot SPSS bijvoorbeeld zien we niet meer direct de spreadsheet, wat in het begin toch even wennen is! De eerste methode om de data wat verder te bekijken is om onder \texttt{Environment} op \term{diamanten} te klikken. Nu zal er op de plaats waar eerst de syntax stond een soort van Excel-sheet te staan. In tegenstelling tot een Excel-sheet is het echter niet mogelijk om de getallen te bewerken, het is dus puur ter controle. Daarnaast is ook dit overzicht tot een maximum aantal lijnen beperkt. Waar zijn die onderste lijnen toch gebleven? Simpel:
-
 <<label="DiamantenTail", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
 tail(x=diamanten)
 @
 
 Met deze functie is het mogelijk om de laatste vijf lijnen te zien van het dataframe. Daarnaast geven de nummers voor iedere lijn ook aan welk rijnummer de de rijen hebben t.o.v. van het totale dataframe. Een tegenovergestelde functie is ook beschikbaar:
-
 <<label="DiamantenHead", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
 head(x=diamanten)
 @
 
 Nu de eerste en laatste rijen bekend zijn, zijn er nog een aantal ander functies die een overzicht geven de structuur van de data, zoals onder andere het aantal rijen, kolommen, of beide:
-
 <<label="DimensiesDiamanten", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
 nrow(x=diamanten) #Aantal rijen
 ncol(x=diamanten) #Aantal kolommen
@@ -214,7 +203,6 @@ dim(x=diamanten) #Aantal dimensies
 @
 
 Het aantal rijen en kolommen komt, zoals verwacht, overeen met het aantal van het SPSS-bestand. Een laatste handige methode om zicht te krijgen op de structuur van je data is de \texttt{str} functie:
-
 <<label="StrDiamanten", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
 #Overzicht structuur
 str(object=diamanten, vec.len=2)
@@ -222,9 +210,9 @@ str(object=diamanten, vec.len=2)
 
 Deze functie geeft voor iedere variabele (kolom) aan wat voor een soort variabele het is en geeft een aantal unieke waardes voor iedere variabele. Zoals te zien is bijvoorbeeld de variabele \texttt{cut} een \term{factor} met 5 mogelijke waardes (waarvan twee voorbeelden worden gegegeven: ''Fair'' \& ''Good''). De variabele \texttt{depth} daarintegen is een numerieke variabele. De vorm van de variabele be\"invloedt de mogelijke bewerkingen die met de variabele mogelijk zijn. 
 
-\begin{theo}[Opmerkingen \#]
+\begin{tip}[Opmerkingen \#]
 Zoals je ziet wordt alle input na een \# genegeerd door de \texttt{Console}. Tekst naar een \# kan daarom ook gezien worden als een opmerking. Dit is uiteraard handig als je de syntax enigzins overzichtelijk wilt maken. Het maakt niet uit wat je naar het \# doet, een opmerking hoeft dus niet afgesloten te worden. Als je echter over meerdere lijnen een opmerking wilt maken is het wel van belang om iedere lijn te beginnen met een \#.
-\end{theo}
+\end{tip}
 
 \subsection{Object manipulatie}
 Een kleine introductie tot \term{object} manipulatie is onontkoombaar om \term{R} effici\"ent te gebruiken. Het is bijvoorbeeld nodig om beschrijvende statistiek te verkrijgen van een selectie van variabelen, i.p.v. alle variabelen. Daarnaast gebruik ik bewust de bewoording  ''\term{object}-manipulatie'' t.o.v. ''Dataframe-manipulatie'', omdat de manipulatie methodes niet alleen toegepast kunnen worden op dataframes maar op objecten in het algemeen. 
@@ -263,7 +251,7 @@ Hier worden dus rij 20 t/m 25 geselecteerd voor de variabelen \texttt{color} \& 
 subset(x=diamanten, subset=cut=="Very Good")
 @
 
-Hierop zijn natuurlijk talloze variaties mogelijk, die in de \textbf{Questions Asked}-sectie verder worden toegelicht.
+Hierop zijn natuurlijk talloze variaties mogelijk, die in de \textbf{Questions Asked}-sectie verder worden toegelicht. Wel is het benoemingswaardig dat de rijnummers worden getoond van het orginele dataframe, de eerste rij die dus voldoet aan het gekozen criteria is dus de 6\textsuperscript{e} rij. 
 
 \subsection{Beschrijvende statistiek}
 Een goede start is de \texttt{summary}-functie. Deze kan je bijvoorbeeld toepassen op het hele dataframe:
@@ -282,12 +270,28 @@ min(x=diamanten$carat, na.rm=TRUE) #Minimum
 max(x=diamanten$carat, na.rm=TRUE) #Maximum
 @
 
+\begin{war}[na.rm=TRUE]
+Waarom staat er bij de meeste simpele functie al een rare toevoeging in de vorm van \texttt{na.rm=TRUE}. In het bovenstaande geval werken de functies ook zonder deze toevoeging, echter als de variabele \'e\'en of meerdere missende waardes bevat (aangeveven met \texttt{NA}) dan is deze toevoeging wel cruciaal. De toevoeging staat namelijk voor ''Missing at random''. Als dit niet waar is, FALSE (de standaardwaarde in deze functie), is het niet mogelijk om een gemiddelde te berekenen:
+<<label="MissingMean", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+Var1 <- c(0,2,4,6,8,10,NA)
+# Vergelijk 
+mean(x=Var1, na.rm=TRUE)
+mean(x=Var1) #gelijk aan mean(x=Var1, na.rm=FALSE)  
+@
+\end{war}
+
 Voor \term{factor}- en \term{karakter}-variabelen zijn behoren de volgende opties tot de mogelijkheden:
 <<label="KarakterMogelijkheden", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
 table(diamanten$cut) #Frequenties van iedere waarde
 prop.table(table(diamanten$cut)) #Relatieve proporties per waarde
 prop.table(table(diamanten$cut))*100 #als percentage
 @
+
+Tot slot kijken we nog naar de basis functie voor de correlatie:
+<<label="CorrelatieDiamanten", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+cor(diamanten[ ,c("depth","table","price")])
+@
+Waarbij hier dus de correlatie voor de variabelen \texttt{depth}, \texttt{table}, en \texttt{price} worden gegeven. 
 
 \section{Questions Asked}
 
@@ -303,6 +307,11 @@ options(max.print=100)
 diamanten[c(1,10,100,1000),]
 @
 
+\chapter{Statistische Basis Toetsen}
+
+\section{No Questions Asked}
+
+\section{Questions Asked}
 
 
 \end{document}

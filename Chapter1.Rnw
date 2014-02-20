@@ -8,6 +8,13 @@
 \definecolor{newred}{rgb}{0.749,0.012,0.012}
 \definecolor{textblue}{rgb}{0.004,0.004,0.506}
 
+%Floats bovenaan als ze alleen zijn
+\makeatletter
+\setlength{\@fptop}{0pt}
+\setlength{\@fpbot}{0pt plus 1fil}
+\makeatother
+
+%Eigen floats en frames
 \usepackage{float}
 
 \floatstyle{plain}
@@ -75,7 +82,7 @@
 }
 \makeatother
 
-\specialterms{R,RStudio,foreign,diamanten,factor,object}
+\specialterms{R,RStudio,foreign,diamanten,factor,object,Inf}
 
 
 %%% Code to set up special func treatment
@@ -90,7 +97,7 @@
 }
 \makeatother
 
-\specialfunc{require,library}
+\specialfunc{require,library,read.spss}
 
 <<settings, include=FALSE>>=
 require(stringr)
@@ -218,18 +225,102 @@ Diamanten
 \subsection{\texttt[black]{foreign}-Pakket installeren \& activeren}
 Het is van belang om te begrijpen dat \term{R} eigenlijk niet meer is dan een programmeertaal. In tegenstelling tot de meeste andere programmeertalen kenmerkt \term{R} zich echter door een aantal voorgeschreven functies waarmee basale (statistische) bewerkingen kunnen uitvoeren worden uitgevoerd. Het is vooral deze balans die er voor zorgt dat \term{R} een stuk krachtiger en flexibeler is dan andere statistiek programma's zoals SPSS, maar tegelijkertijd toegangelijker is dan pure programmeertalen zoals \texttt{Python}. 
 
-Aangezien \term{R} echter werkt met een open-code (open-source), is het voor iedereen mogelijk toevoegingen in de vorm van pakketten te ontwerpen en deze in te dienen. Als een pakket is goedgekeurd dan wordt deze beschikbaar gesteld via het offici\"ele CRAN (Comprehensive R Archive Network) archief.\footnote{Het is echter ook mogelijk dat je pakketten op internet vind die niet via de offici\"ele manier worden aangeboden. Dit zijn meestal kleine aanpassingen op bestaande pakketten, maar ook grotere pakketen worden soms op deze manier aangeboden. Deze pakketen kunnen uiteraard prima werken, toch is de controle (vooral van de \term{R}-gemeenschap) bij dergelijke pakketten een stuk lager, dus waakzaamheid is aan te raden!} Het voordeel van deze, semi-gecontroleerde, manier van pakket-distrubutie is dat de kwaliteit gewaarborgd blijft. Daarnaast is het ook verplicht dat ieder pakket een uitgebreide handleiding heeft waarin iedere functie uitgebreid wordt beschreven. Daarnaast werken alle pakketten op hun beurt ook weer met een open-code, waardoor eventuele fouten snel kunnen worden opgespoord en hersteld.
+Aangezien \term{R} echter werkt met een open-code (open-source), is het voor iedereen mogelijk toevoegingen in de vorm van pakketten te ontwerpen en deze in te dienen. Deze pakketen bevatten meestal een verzamaling functies die de functionaliteit van \term{R} vergroten in een bepaald domeim (bijv. Survival analyses). Als een pakket is goedgekeurd dan wordt deze beschikbaar gesteld via het offici\"ele CRAN (Comprehensive R Archive Network) archief.\footnote{Het is echter ook mogelijk dat je pakketten op internet vind die niet via de offici\"ele manier worden aangeboden. Dit zijn meestal kleine aanpassingen op bestaande pakketten, maar ook grotere pakketen worden soms op deze manier aangeboden. Deze pakketen kunnen uiteraard prima werken, toch is de controle (vooral van de \term{R}-gemeenschap) bij dergelijke pakketten een stuk lager, dus waakzaamheid is aan te raden!} Het voordeel van deze, semi-gecontroleerde, manier van pakket-distrubutie is dat de kwaliteit gewaarborgd blijft. Daarnaast is het ook verplicht dat ieder pakket een uitgebreide handleiding heeft waarin iedere functie uitgebreid wordt beschreven. Daarnaast werken alle pakketten op hun beurt ook weer met een open-code, waardoor eventuele fouten snel kunnen worden opgespoord en hersteld.
 
 Nu het hoe en waarom van pakketen is uitgelegd, kunnen we ons concentreren op de installatie ervan. Zoals vermeld is dit eenvoudig mogelijk via \menu{Packages > Install Packages}, het is echter ook mogelijk om een installatie via de syntax uit te voeren. Deze methode is ook zichtbaar als je een pakket installeerd via de zojuist genoemde methode. Als je deze methode namelijk volgt zal je in \texttt{Console} de volgende invoer zien:
 <<label="InstallSyntaxx", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA,eval=FALSE>>=
 install.packages("ggplot2")
 @
 
-Echter, zoals vermeld staat bij de Tip aangaande het installeren van pakketten is installatie van een pakket slechts per PC slechts een keer nodig. Daarom is het voor de reproduceerbaarheid van de \texttt{syntax} geen must om het hierin op te nemen. Wat dus wel een must is voor de repoduceerbaarheid is het includeren van in de syntax van het inladen van het pakket. Naast de gebruikte functie \func{require} is het ook mogelijk de functie \func{library} te gebruiken--er zit geen enkel verschil tussen beiden.
+Echter, zoals vermeld staat bij de Tip aangaande het installeren van pakketten is installatie van een pakket slechts per PC slechts een keer nodig. Daarom is het voor de reproduceerbaarheid van de \texttt{syntax} geen must om het hierin op te nemen. Wat dus wel een must is voor de repoduceerbaarheid is het includeren van in de syntax van het inladen van het pakket. Naast de gebruikte functie \func{require} is het ook mogelijk de functie \func{library} te gebruiken--er zit geen enkel verschil tussen beiden. Tot slot nog een kleine waarschuwing bij het gebruik van meerdere pakketen tegelijk. Over het algemeen bevatten pakketten geen overeenkomstige fucntie benamingen. Soms komt dit echter wel voor, in een dergelijk geval wordt de functie gebruikt van het pakket dat als laatste wordt ingelezen.
 
 \subsection{Werkmap}
-\subsection{Inlezen SPSS-bestand}
+Het defineren van een werkmap is relatief eenvoudig. Zoals vermeld zal \term{R} altijd vanuit deze map werken. Als bestanden worden ingelezen of worden opgeslagen zal dat dus vanuit deze werkmap plaatsvinden. Het is echter ook mogelijk om bij dergelijke bewerkingen af te wijken van de werkmap. Het kan bijvoorbeeld voorkomen dat een databestand op een andere locatie staat en dat het van belang is dat deze locatie niet wordt veranderd. Bij een dergelijk geval zal deze locatie moeten worden vermeld bij het gebruik van een functie. Stel bijvoorbeeld dat het \term{diamanten}-bestand op een andere locatie staat dan in de werkmap dan zou de \texttt{syntax} er bijvoorbeeld als volgt uit kunnen zien:
+<<label="diamantenAssignObjectOther", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, eval=FALSE>>=
+read.spss(file="D:/Users/Huub/Documents/OverigeMap/diamanten.sav",
+          to.data.frame=TRUE)
+# i.p.v. read.spss(file="diamanten.sav",to.data.frame=TRUE)
+@
 
+Zoals je ziet is dit een stuk omslachtiger, en daarom verdient het ook de voorkeur om zoveel mogelijk vanuit de werkmap de werken. Een bijkomend voordeel is dat als de locatie van de werkmap veranderd (bijvoorbeeld naar een andere PC), alleen de werkmap opnieuw hoeft te worden gedefineerd. 
+
+\begin{war}[\textbackslash\textbackslash of /, maar niet \textbackslash]
+Een optie om de werkmap de defineren is natuurlijk de locatie te kopieren vanuit bijvoorbeeld Windows Explorer te kopi\"eren. Dat zou er dan als volgt uit zien:
+<<label="workingdirectoryW", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, eval=FALSE, error=TRUE>>=
+setwd("D:\Users\Huub\Documents\Project\GettingThingsR")
+@
+\noindent
+Error?! Maar wat is dan het verschil met de juiste invoer? Het verschil zit hem in de \textbackslash. Zoals veel programma's gebruikt \term{R} de \textbackslash als een bijzonder invoerteken. Oftewel het maakt onderdeel uit van bepaalde bewerkingen. In dit voorbeeld probeert \term{R} de bewerking \textbackslash{U}, wat geen geldige bewerking is. Het is daarom van belang altijd een van de volgende twee variaties te gebruiken:
+<<label="workingdirectoryAlt", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, eval=FALSE>>=
+setwd("D:\\Users\\Huub\\Documents\\Project\\GettingThingsR")
+setwd("D:/Users/Huub/Documents/Project/GettingThingsR")
+@
+\noindent
+Dus of een dubbele \textbackslash, of simpelweg een enkele /.
+\end{war}
+
+\subsection{Inlezen SPSS-bestand}
+Bij het inlezen van een bestand maken we eigenlijk voor het eerst echt gebruik van een functie (ook al is \func{require} ook een functie). Aangezien functies een belangrijk onderdeel vormen van \term{R} is een goed begrip van functies esssentieel. Een functie heeft altijd een bepaalde invoer nodig. Wat voor een invoer dat is ligt aan de functie. Als er een gemiddelde moet worden berekend moeten het getallen zijn, als er een databestand moet worden ingelezen moet het de naam van het bestand zijn. 
+
+De invoer van een functie kan bestaan uit meerdere elementen die allemaal een eigen functie hebben binnen de functie. Zo bestaat functie \func{read.spss} uit de volgende elementen:
+<<label="readspssFunctie", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, eval=FALSE>>=
+read.spss(file, use.value.labels = TRUE, to.data.frame = FALSE,
+          max.value.labels = Inf, trim.factor.names = FALSE,
+          trim_values = TRUE, reencode = NA, 
+          use.missings = to.data.frame)
+@
+
+Zoals je ziet zijn dit meer elementen dan dat we hebben gebruikt om het databestand in te lezen\ldots Hoe kan dit? Dit kan omdat sommige elementen een standaard waarde hebben. Zo kan je zien dat het element \texttt{use.value.labels} een standaard waarde van \texttt{TRUE}. Aangezien we de waarde voor dit element niet hebben gespecificeerd zal het dus de standaard waarde (\texttt{TRUE}) aannnemen. Het is mogelijk om het element zelf te specificeren met de standaard waarde, maar dit zal dus geen effect hebben op de werking van de functie. De enige elementen die je dus moet specificeren zijn dus elementen die geen standaard waarde hebben of elementen waar je van de standaard waarde wilt afwijken. 
+
+In de \func{read.spss} functie hebben we in het voorbeeld daarom de elementen \texttt{file} en \texttt{to.data.frame} gefineerd. Waarbij de eerste geen standaard waarde heeft en de tweede als standaard waarde \texttt{FALSE} heeft terwijl de voorkeur hier naar \texttt{TRUE} uitgaat. Als het goed is blijf je nu met twee vragen zitten. Hoe weet ik welke elementen een functie bevat, en hoe weet ik of een element een standaard waarde heeft?
+
+Om de elementen van een functie te weten te komen is het nodig om de help functie te gebruiken. Dit is redelijk eenvoudig, je zet namelijk simpelweg een \keys{?} voor de functie:
+<<label="questionReadspss", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, eval=FALSE>>=
+?read.spss
+@
+
+Nu zal je zien dat er onder \texttt{Help} een tekst komt te staan waar de functie wordt toegelicht. Het eerste kopje, \emph{Description} bevat een (korte) omschrijving van de functie. Waar het echter om gaat zijn de volgende twee kopjes, \emph{Usage} en \emph{Arguments}. Het eerste kopje geeft namelijk aan welke elementen de functie bevat en het tweede kopje geeft een toelichting op een ider van deze elementen. Zo moet het eerste element (\texttt{file}) dus bestaan uit \term{karakter}-reeks die aangeeft waar het bestand zich bevind. Het andere element dat we hebben aangepast is \texttt{to.data.frame} wat aangeeft of we een dataframe als \term{object} willen terugkrijgen of niet. 
+
+De overige kopjes geven extra informatie, die vaak erg handig kan zijn. Zo geeft \emph{Details} een gedetailleerde beschrijving van de werking van de functie. \emph{Value} Geeft aan wat voor een soort uitvoer de functie geeft. \emph{Value} betreft dus uitvoer en \emph{Arguments} invoer. De kopjes \emph{Note}, \emph{Author(s)}, en \emph{See Also} spreken voor zich. Tot slot is er het kopje \emph{Examples}, wat meestal erg verduidelijkend werkt, door voorbeelden te geven hoe de functie kan worden gebruikt. 
+
+Nu we weten hoe de functie eruit ziet en wat het doet, blijft alleen de vraag nog staan hoe we kunnen weten welk element een standaard waarde heeft en welke niet. Soms is dit vermeld onder \emph{Arguments}, maar je kan het altijd terug zien onder \term{Usage}. Hierbij heeft een element dat gevolgt wordt door een \keys{=}, een standaard waarde. De standaard waarde, je raadt het al, is de waarde achter het \keys{=}-teken. Dus het element \texttt{max.value.labels} heeft dus een standaard waarde van \term{Inf}, wat gelijk staat aan oneindig (\emph{infinite}). Als we zit combineren met de informatie die onder \emph{Arguments} staat kunnen we dus redelijk ontleden wat dit element doet, en wat er gebeurd als we het niet specificeren. Hier gaat het dus om het aantal unieke waardes dat een variabele mag hebben om te worden omgecodeerd tot een \term{factor}. Waarbij de standaard waarde oneindig betreft. 
+
+Een laaste opmerking die gemaakt dient te worden ten opzichte van een functie is dat de volgorde waarin je de elementen ordent niet uitmaakt. Het volgende is dus ook mogelijk:
+<<label="MirroredFunction", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, eval=FALSE>>=
+read.spss(to.data.frame=TRUE, file=("diamanten.sav")
+# i.p.v. read.spss(file="diamanten.sav", to.data.frame=TRUE)
+@
+
+Nu we hebben gekeken hoe we de werking en inhoud (elementen) van een functie kunnen bekijken, is het van belang om nog even kort stil te staan bij de invoer van de bestandsnaam. Zoals we hebben gezien moest \texttt{file} een \term{karakter}-reeks bevatten, wat zoveel betekend als een stuk tekst. Een \term{karakter}-reeks kan echter ook bestaan uit enkel cijfers, maar toch worden gezien als een \term{karakter}-reeks, bijvoorbeeld:
+<<label="characterNumbers", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+# Karakter-reeks
+"123"
+# Numeriek
+123
+@
+
+Het verschil zit hem dus in de \keys{''}. Alles wat tussen twee leeshaakjes wordt geplaatst is dus een \term{karakter}-reeks. Het maakt trouwens niet uit of je \keys{'} of \keys{''} gebruikt, als je de \term{karakter}-reeks maar afsluit waarmee je bent begonnen.
+
+Tot slot spelen de waardes \texttt{TRUE}/\texttt{FALSE} een belangrijke rol in \term{R}.\footnote{\texttt{TRUE}/\texttt{FALSE} moet altijd met hoofdletters worden geschreven, daarnaast is ook mogelijk om als vervanging \texttt{T}/\texttt{F} te gebruiken maar dit is niet aan te raden!} Waarbij \texttt{TRUE} als het ware goedkeuring geeft aan een element en \texttt{FALSE} het tegenovergestelde effect heeft. 
+
+\begin{tip}[Verkorte invoer functie]
+Tot nu toe worden alle functies netjes uitgeschreven. Het is in bepaalde gevallen ook mogelijk alleen de invoer te plaatsen. Dat ziet er als volgt uit:
+<<label="ShortFunction", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, eval=FALSE>>=
+read.spss("diamanten.sav", to.data.frame=TRUE)
+# i.p.v. read.spss(file="diamanten.sav", to.data.frame=TRUE)
+@
+\noindent
+Zoals je ziet wordt het stukje \texttt{file=} achterwegen gelaten, maar het stukje \texttt{to.data.frame=} niet, hoe zit dat? 
+\indent
+
+De naam van het element kan worden weggelaten als de volgorde van invoer overeenkomt met de standaard volgorde van de functie. Aangezien \texttt{''diamanten.sav''} dus het eerste stukje invoer is wordt dus dit dus automatische gelinkt aan het eerste element (\texttt{file}) van de functie (onthoud \texttt{?read.spss}). Daarom is het ook niet mogelijk om de volgende, nog kortere, variant te gebruiken:
+<<label="ToShortFunction", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, eval=FALSE>>=
+read.spss("diamanten.sav", TRUE)
+@
+Hier wordt \texttt{TRUE} namelijk toegewezen aan het tweede element (\texttt{use.value.labels}), terwijl wij het aan het derde element willen toewijzen. Als je dus van de standaard volgorde afwijkt moet je de element naam toevoegen aan de syntax van de functie. 
+
+In dit boek zullen elementnamen altijd worden vermeld in de functie. Dit heeft als voornaamste functie duidelijkheid, maar het bevorderd ook een overzichtelijke \texttt{syntax}, het is immers goed mogelijk dat je niet meer uit je hoofd weet wat ook al weer de standaard volgorde van elementen was in een functie.
+\end{tip}
 
 \chapter{Beschrijvende statistiek \& Data bewerking}
 
@@ -330,7 +421,7 @@ mean(x=Var1) #gelijk aan mean(x=Var1, na.rm=FALSE)
 @
 \end{war}
 
-Voor \term{factor}- en \term{karakter}-variabelen zijn behoren de volgende opties tot de mogelijkheden:
+Voor \term{factor}- en \term{karakter}-variabelen behoren de volgende opties tot de mogelijkheden:
 <<label="KarakterMogelijkheden", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
 table(diamanten$cut) #Frequenties van iedere waarde
 prop.table(table(diamanten$cut)) #Relatieve proporties per waarde

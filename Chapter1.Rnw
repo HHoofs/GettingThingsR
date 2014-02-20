@@ -136,7 +136,7 @@ Net als bij \term{R} is ook de site van \term{RStudio}, {http://www.rstudio.com}
 
 Vervolgens: \menu{Next} (3 maal). \term{RStudio} is nu ge\"installeerd en klaar voor gebruik.
 
-\section{Question's Asked}
+\section{Kijkje in de keuken}
 \subsection{R}
 De gebruikte link, {http://cran.rstudio.com}, is een mirror. Een mirror is een website waarop bestanden zijn te downloaden. Het spiegelt als het ware de bron, en om de bron niet over te belasten, wordt er gebruik gemaakt van verschillende spiegels. Als je je eigen mirror wilt kiezen is dit uiteraard mogelijk, ga hiervoor eerst naar {http://www.r-project.org/}, en klik vervolgens onder \texttt{Download, Packages} op \texttt{CRAN}. Nu zal je een lijst met landen zien, waarbij ieder land \'e\'en of meerderen mirrors heeft. Zoals te zien is de gebruikte link in het kookboek de \emph{0-Cloud mirror}, een soort overkoepelende mirror. Nederland heeft twee mirrors een van XL-Data Amsterdam, en een van Utrecht University. In de tijd van inbelinternet kon de keuze van de mirror van grote invloed zijn op de snelheid van downloaden, tegenwoordig is de invloed niet meer dan gering. 
 

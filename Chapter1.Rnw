@@ -102,10 +102,13 @@
 <<settings, include=FALSE>>=
 require(stringr)
 options(max.print=100, width=60)
+opts_knit$set(out.format = "latex")
 thm <- knit_theme$get("edit-kwrite")
 # thm <- knit_theme$get("biogoo")
 # thm <- knit_theme$get("acid")
 
+thm$highlight <- 
+  gsub(pattern="textcolor[rgb]{0.69,0.494,0}","textcolor[rgb]{0.47,0.27,0}",thm$highlight,fixed=TRUE)
 
 knit_theme$set(thm)
 @

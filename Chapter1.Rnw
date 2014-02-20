@@ -118,9 +118,10 @@ knit_theme$set(thm)
 \chapter*{Voorwoord}
 Gateway drug
 
+
 \chapter{Installeren}
 Zoals in de introductie al wordt vermeld zal dit boek gaan voor een 'hands-on-approach'. Aan de einde van ieder hoofdstuk wordt echter ieder...
-\section{No Questions Asked}
+\section{Kookboek}
 \subsection{\texttt[black]{R}}
 Op de site van van \term{R}, {http://cran.rstudio.com}, staat een duidelijke instructie aangaande de installatie van \term{R} voor ieder besturingssysteem. Voor Windows klik je op \texttt{Download R for Windows} om vervolgens op \texttt{install R for the first time} te klikken. Hierna klik je op \texttt{Download R 3.X.X for Windows}, waar de getallen afhankelijk zijn van het huidige versie-nummer. Download het bestand. Vervolgens open je het bestand en zal er gevraagd worden in welke taal je het programma wil installeren. 
 
@@ -137,9 +138,9 @@ Vervolgens: \menu{Next} (3 maal). \term{RStudio} is nu ge\"installeerd en klaar 
 
 \section{Question's Asked}
 \subsection{R}
-De gebruikte link, {http://cran.rstudio.com}, is een mirror. Een mirror is een website waarop bestanden zijn te downloaden. Het spiegelt als het ware de bron, en om de bron niet over te belasten, wordt er gebruik gemaakt van verschillende spiegels. Als je je eigen mirror wilt kiezen is dit uiteraard mogelijk, ga hiervoor eerst naar {http://www.r-project.org/}, en klik vervolgens onder \texttt{Download, Packages} op \texttt{CRAN}. Nu zal je een lijst met landen zien, waarbij ieder land \'e\'en of meerderen mirrors heeft. Zoals te zien is de gebruikte link in de NQA-sectie de 0-Cloud mirror, een soort overkoepelende mirror. Nederland heeft twee mirrors een van XL-Data Amsterdam, en een van Utrecht University. In de tijd van inbelinternet kon de keuze van de mirror van grote invloed zijn op de snelheid van downloaden, tegenwoordig is de invloed niet meer dan gering. 
+De gebruikte link, {http://cran.rstudio.com}, is een mirror. Een mirror is een website waarop bestanden zijn te downloaden. Het spiegelt als het ware de bron, en om de bron niet over te belasten, wordt er gebruik gemaakt van verschillende spiegels. Als je je eigen mirror wilt kiezen is dit uiteraard mogelijk, ga hiervoor eerst naar {http://www.r-project.org/}, en klik vervolgens onder \texttt{Download, Packages} op \texttt{CRAN}. Nu zal je een lijst met landen zien, waarbij ieder land \'e\'en of meerderen mirrors heeft. Zoals te zien is de gebruikte link in het kookboek de \emph{0-Cloud mirror}, een soort overkoepelende mirror. Nederland heeft twee mirrors een van XL-Data Amsterdam, en een van Utrecht University. In de tijd van inbelinternet kon de keuze van de mirror van grote invloed zijn op de snelheid van downloaden, tegenwoordig is de invloed niet meer dan gering. 
 
-Bij het installeren van R zijn de eerste twee stappen vanzelfsprekend en is er geen keuze mogelijk. Bij de Select Destination Location, valt er echter voor het eerst wat te kiezen. In de NQA-sectie wordt de gesuggereerde installatie locatie gebruikt. Het is echter ook mogelijk deze locatie aan te passen. Mocht je er dus belang aan hechten dat de installatie in een andere map (of schijf) plaatsvind dan is dat dus mogelijk. Hierbij is het echter wel aan te raden het einde van installatie locatie uitgang te laten staan (dus de installatie map altijd te laten eindigen op \texttt{\textbackslash{R}\textbackslash{R-3.X.X}}). Dit i.v.m. het gebruik van verschillende versies. In de volgende stap kan je de componenten kiezen die je wilt installeren, hierbij is een \texttt{32-bit User installation} het veiligst aangezien dit altijd werkt (zowel op een 32-Bits als 64-Bits Pc). Mocht je er echter zeker van zijn dat je een 64-bits PC hebt dan is deze optie ook bruikbaar. De keuze heeft geen invloed op de werking van R (alleen op de snelheid). Het is ook mogelijk om beide te installeren, dit kan echter verwarrend werken omdat beide versies volledig onafhankelijk van elkaar werken, en aanpassingen aan de 32-Bits versie dus niet worden overgenomen door de 64-Bits versie. Als je in de volgende stap voor \texttt{Yes (customized startup)} kiest, is het mogelijk om de interface (\texttt{MDI} vs. \texttt{SDI}) van R te veranderen, alsmede de manier waarop \textbf{Help-bestanden} worden getoond (\texttt{Plain text} vs. \texttt{HTML help}) en internet instellingen (\textbf{Standard} vs. \textbf{Internet2}). In de \texttt{Select Start Menu Folder} stap kan je R ook aan je startmenu toe voegen, dit is volledig optioneel. Als je hier geen behoefte aan hebt dan kan je de optie \texttt{Don't create a Start Menu folder} aanvinken. In de laatste stap (\texttt{Select Additional Tasks}) kan je aanvinken of je een R-pictogram op je bureaublad, respectievelijk, snelstartmenu wilt hebben. Deze twee pictogrammen zijn, gelijk aan de vorige stap, volledig optioneel. Het is wel sterk aan te bevelen om de twee \texttt{Regirstry entries} aan te vinken. De eerste keuze (\texttt{Save version number in registry}) zorgt voor een overzichtelijk versie beheer. De tweede keuze zorgt ervoor dat bestanden met een \texttt{.R} of \texttt{.RData} worden geassocieerd met R. 
+Bij het installeren van R zijn de eerste twee stappen vanzelfsprekend en is er geen keuze mogelijk. Bij de Select Destination Location, valt er echter voor het eerst wat te kiezen. In het kookboek wordt de gesuggereerde installatie locatie gebruikt. Het is echter ook mogelijk deze locatie aan te passen. Mocht je er dus belang aan hechten dat de installatie in een andere map (of schijf) plaatsvind dan is dat dus mogelijk. Hierbij is het echter wel aan te raden het einde van installatie locatie uitgang te laten staan (dus de installatie map altijd te laten eindigen op \texttt{\textbackslash{R}\textbackslash{R-3.X.X}}). Dit i.v.m. het gebruik van verschillende versies. In de volgende stap kan je de componenten kiezen die je wilt installeren, hierbij is een \texttt{32-bit User installation} het veiligst aangezien dit altijd werkt (zowel op een 32-Bits als 64-Bits Pc). Mocht je er echter zeker van zijn dat je een 64-bits PC hebt dan is deze optie ook bruikbaar. De keuze heeft geen invloed op de werking van R (alleen op de snelheid). Het is ook mogelijk om beide te installeren, dit kan echter verwarrend werken omdat beide versies volledig onafhankelijk van elkaar werken, en aanpassingen aan de 32-Bits versie dus niet worden overgenomen door de 64-Bits versie. Als je in de volgende stap voor \texttt{Yes (customized startup)} kiest, is het mogelijk om de interface (\texttt{MDI} vs. \texttt{SDI}) van R te veranderen, alsmede de manier waarop \textbf{Help-bestanden} worden getoond (\texttt{Plain text} vs. \texttt{HTML help}) en internet instellingen (\textbf{Standard} vs. \textbf{Internet2}). In de \texttt{Select Start Menu Folder} stap kan je R ook aan je startmenu toe voegen, dit is volledig optioneel. Als je hier geen behoefte aan hebt dan kan je de optie \texttt{Don't create a Start Menu folder} aanvinken. In de laatste stap (\texttt{Select Additional Tasks}) kan je aanvinken of je een R-pictogram op je bureaublad, respectievelijk, snelstartmenu wilt hebben. Deze twee pictogrammen zijn, gelijk aan de vorige stap, volledig optioneel. Het is wel sterk aan te bevelen om de twee \texttt{Regirstry entries} aan te vinken. De eerste keuze (\texttt{Save version number in registry}) zorgt voor een overzichtelijk versie beheer. De tweede keuze zorgt ervoor dat bestanden met een \texttt{.R} of \texttt{.RData} worden geassocieerd met R. 
 
 \subsection{\texttt[black]{RStudio}}
 De opties voor de installatie van \term{RStudio} zijn een stuk minder uitgebreid. De enige keuzes dier er zijn betreffen de locatie waar je \term{RStudio} wilt installeren en het eventueel cree\"eren van een Snelkoppeling. Ook deze keuzes zijn volledig optioneel. 
@@ -148,7 +149,7 @@ Als je er voor hebt gekozen om bij de installatie af te wijken van de gesuggeree
 \end{war}
 
 \chapter{Data Inlezen}
-\section{No Questions Asked}
+\section{Kookboek}
 \subsection{\texttt[black]{foreign}-Pakket installeren \& activeren}
 Om data van andere statistische programma's in te lezen hebben het \term{foreign} pakket nodig. Eerst moeten we dit pakket installeren. Klik hiervoor op \menu{Packages > Install Packages} en type onder \menu{Packages (seperate multiple with space or comma)} \directory{foreign} en vervolgens op \menu{Install}. Het \term{foreign}-pakket is nu ge\"installeerd.
 
@@ -224,7 +225,7 @@ Diamanten
 @
 \end{war}
 
-\section{Questions Asked}
+\section{Kijkje in de keuken}
 \subsection{\texttt[black]{foreign}-Pakket installeren \& activeren}
 Het is van belang om te begrijpen dat \term{R} eigenlijk niet meer is dan een programmeertaal. In tegenstelling tot de meeste andere programmeertalen kenmerkt \term{R} zich echter door een aantal voorgeschreven functies waarmee basale (statistische) bewerkingen kunnen uitvoeren worden uitgevoerd. Het is vooral deze balans die er voor zorgt dat \term{R} een stuk krachtiger en flexibeler is dan andere statistiek programma's zoals SPSS, maar tegelijkertijd toegangelijker is dan pure programmeertalen zoals \texttt{Python}. 
 
@@ -327,7 +328,7 @@ In dit boek zullen elementnamen altijd worden vermeld in de functie. Dit heeft a
 
 \chapter{Beschrijvende statistiek \& Data bewerking}
 
-\section{No Questions Asked}
+\section{Kookboek}
 \subsection{Datastructuur}
 In eerst instantie is het vaak prettig om wat meer gevoel met het dataframe te krijgen. In tegenstelling tot SPSS bijvoorbeeld zien we niet meer direct de spreadsheet, wat in het begin toch even wennen is! De eerste methode om de data wat verder te bekijken is om onder \texttt{Environment} op \term{diamanten} te klikken. Nu zal er op de plaats waar eerst de syntax stond een soort van Excel-sheet te staan. In tegenstelling tot een Excel-sheet is het echter niet mogelijk om de getallen te bewerken, het is dus puur ter controle. Daarnaast is ook dit overzicht tot een maximum aantal lijnen beperkt. Waar zijn die onderste lijnen toch gebleven? Simpel:
 <<label="DiamantenTail", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
@@ -395,7 +396,7 @@ Hier worden dus rij 20 t/m 25 geselecteerd voor de variabelen \texttt{color} \& 
 subset(x=diamanten, subset=cut=="Very Good")
 @
 
-Hierop zijn natuurlijk talloze variaties mogelijk, die in de \textbf{Questions Asked}-sectie verder worden toegelicht. Wel is het benoemingswaardig dat de rijnummers worden getoond van het orginele dataframe, de eerste rij die dus voldoet aan het gekozen criteria is dus de 6\textsuperscript{e} rij. 
+Hierop zijn natuurlijk talloze variaties mogelijk, die in het \textbf{Kijkje in de keuken} verder worden toegelicht. Wel is het benoemingswaardig dat de rijnummers worden getoond van het orginele dataframe, de eerste rij die dus voldoet aan het gekozen criteria is dus de 6\textsuperscript{e} rij. 
 
 \subsection{Beschrijvende statistiek}
 Een goede start is de \texttt{summary}-functie. Deze kan je bijvoorbeeld toepassen op het hele dataframe:
@@ -437,7 +438,7 @@ cor(diamanten[ ,c("depth","table","price")])
 @
 Waarbij hier dus de correlatie voor de variabelen \texttt{depth}, \texttt{table}, en \texttt{price} worden gegeven. 
 
-\section{Questions Asked}
+\section{Kijkje in de keuken}
 
 Waarbij de volgorde van opgave ook de volgorde is van de uitvoer in de \texttt{Console}, vergelijk bijvoorbeeld maar eens met:
 <<label="BrackDiamantenOrder", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, echo=-1>>=
@@ -453,9 +454,9 @@ diamanten[c(1,10,100,1000),]
 
 \chapter{Statistische Basis Toetsen}
 
-\section{No Questions Asked}
+\section{Kookboek}
 
-\section{Questions Asked}
+\section{Kijkje in de keuken}
 
 \printindex
 

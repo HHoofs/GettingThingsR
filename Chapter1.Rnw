@@ -8,7 +8,11 @@
 \definecolor{newred}{rgb}{0.749,0.012,0.012}
 \definecolor{textblue}{rgb}{0.004,0.004,0.506}
 
+\usepackage{float}
 
+\floatstyle{plain}
+\newfloat{program}{tb}{lop}
+\floatname{program}{Program}
 
 \makeindex %http://nl.wikibooks.org/wiki/LaTeX/Index_aanmaken
 
@@ -29,10 +33,10 @@
         {\strut TIP:~#1};}}%
    }%
    \mdfsetup{innertopmargin=10pt,linecolor=textblue,%
-             linewidth=2pt,topline=true,skipabove=.5cm,skipbelow=.5cm,splittopskip=2\topsep,
+             linewidth=2pt,topline=true,splittopskip=2\topsep,
              frametitleaboveskip=\dimexpr-\ht\strutbox\relax,}
-   \begin{mdframed}[]\relax%
-   }{\end{mdframed}}
+   \begin{program}\begin{mdframed}[]\relax%
+   }{\end{mdframed}\end{program}}
    
 \newcounter{war}[section]
 \newenvironment{war}[1][]{%
@@ -51,10 +55,10 @@
         {\strut Pas Op:~#1};}}%
    }%
    \mdfsetup{innertopmargin=10pt,linecolor=newred,%
-             linewidth=2pt,topline=true,skipabove=.5cm,skipbelow=.5cm,splittopskip=2\topsep,
+             linewidth=2pt,topline=true,splittopskip=2\topsep,
              frametitleaboveskip=\dimexpr-\ht\strutbox\relax,}
-   \begin{mdframed}[]\relax%
-   }{\end{mdframed}}
+   \begin{program}\begin{mdframed}[]\relax%
+   }{\end{mdframed}\end{program}}
 
 \renewcommand{\texttt}[2][textblue]{\textcolor{#1}{\ttfamily #2}}
 \usepackage[os=win, mackeys=text]{menukeys}

@@ -2,19 +2,14 @@
 \usepackage[tikz]{mdframed}
 \usepackage{xcolor}
 \usepackage[dutch]{babel}
-\usepackage{makeidx}
+\usepackage[makeindex]{splitidx}
 \usepackage{listings}
 \definecolor{newblue}{rgb}{.88, .92, .93}
 \definecolor{newred}{rgb}{0.749,0.012,0.012}
 \definecolor{textblue}{rgb}{0.004,0.004,0.506}
+\newindex[Tips \& Warnings]{tiw}
+\newindex[Index]{pla}
 
-%Floats bovenaan als ze alleen zijn
-\makeatletter
-\setlength{\@fptop}{0pt}
-\setlength{\@fpbot}{0pt plus 1fil}
-\makeatother
-
-%Eigen floats en frames
 \usepackage{float}
 
 \floatstyle{plain}
@@ -37,8 +32,8 @@
      frametitle={%
        \tikz[baseline=(current bounding box.east),outer sep=0pt]
         \node[anchor=east,rectangle,fill=textblue!20,draw=textblue,line width=2pt]
-        {\strut TIP:~#1};}}%
-   }%
+        {\strut \sindex[tiw]{#1}TIP:~#1};}}%
+        }%
    \mdfsetup{innertopmargin=10pt,linecolor=textblue,%
              linewidth=2pt,topline=true,splittopskip=2\topsep,
              frametitleaboveskip=\dimexpr-\ht\strutbox\relax,}
@@ -59,7 +54,7 @@
      frametitle={%
        \tikz[baseline=(current bounding box.east),outer sep=0pt]
         \node[anchor=east,rectangle,fill=newred!20,draw=newred,line width=2pt]
-        {\strut Pas Op:~#1};}}%
+        {\strut \sindex[tiw]{#1}Pas Op:~#1};}}%
    }%
    \mdfsetup{innertopmargin=10pt,linecolor=newred,%
              linewidth=2pt,topline=true,splittopskip=2\topsep,
@@ -78,11 +73,11 @@
 }
 \newcommand\term[1]{%
   \@ifundefined{specialterm@\detokenize{#1}}
-    {\texttt[black]{#1}}{\texttt[textblue]{#1}\index{#1} \global\expandafter\let\csname specialterm@\detokenize{#1}\endcsname\relax}%
+    {\texttt[black]{#1}}{\texttt[textblue]{#1}\sindex[pla]{#1} \global\expandafter\let\csname specialterm@\detokenize{#1}\endcsname\relax}%
 }
 \makeatother
 
-\specialterms{R,RStudio,foreign,diamanten,factor,object,Inf}
+\specialterms{R,RStudio,foreign,diamanten,factor,object}
 
 
 %%% Code to set up special func treatment
@@ -93,22 +88,19 @@
 }
 \newcommand\func[1]{%
   \@ifundefined{specialfunc@\detokenize{#1}}
-    {\texttt[black]{#1}}{\texttt[textblue]{#1}\index{#1@\textsl{#1}} \global\expandafter\let\csname specialfunc@\detokenize{#1}\endcsname\relax}%
+    {\texttt[black]{#1}}{\texttt[textblue]{#1}\sindex[pla]{#1@\textsl{#1}} \global\expandafter\let\csname specialfunc@\detokenize{#1}\endcsname\relax}%
 }
 \makeatother
 
-\specialfunc{require,library,read.spss}
+\specialfunc{require,library}
 
 <<settings, include=FALSE>>=
 require(stringr)
 options(max.print=100, width=60)
-opts_knit$set(out.format = "latex")
 thm <- knit_theme$get("edit-kwrite")
 # thm <- knit_theme$get("biogoo")
 # thm <- knit_theme$get("acid")
 
-thm$highlight <- 
-  gsub(pattern="textcolor[rgb]{0.69,0.494,0}","textcolor[rgb]{0.47,0.27,0}",thm$highlight,fixed=TRUE)
 
 knit_theme$set(thm)
 @
@@ -118,10 +110,9 @@ knit_theme$set(thm)
 \chapter*{Voorwoord}
 Gateway drug
 
-
 \chapter{Installeren}
 Zoals in de introductie al wordt vermeld zal dit boek gaan voor een 'hands-on-approach'. Aan de einde van ieder hoofdstuk wordt echter ieder...
-\section{Kookboek}
+\section{No Questions Asked}
 \subsection{\texttt[black]{R}}
 Op de site van van \term{R}, {http://cran.rstudio.com}, staat een duidelijke instructie aangaande de installatie van \term{R} voor ieder besturingssysteem. Voor Windows klik je op \texttt{Download R for Windows} om vervolgens op \texttt{install R for the first time} te klikken. Hierna klik je op \texttt{Download R 3.X.X for Windows}, waar de getallen afhankelijk zijn van het huidige versie-nummer. Download het bestand. Vervolgens open je het bestand en zal er gevraagd worden in welke taal je het programma wil installeren. 
 
@@ -136,11 +127,11 @@ Net als bij \term{R} is ook de site van \term{RStudio}, {http://www.rstudio.com}
 
 Vervolgens: \menu{Next} (3 maal). \term{RStudio} is nu ge\"installeerd en klaar voor gebruik.
 
-\section{Kijkje in de keuken}
+\section{Question's Asked}
 \subsection{R}
-De gebruikte link, {http://cran.rstudio.com}, is een mirror. Een mirror is een website waarop bestanden zijn te downloaden. Het spiegelt als het ware de bron, en om de bron niet over te belasten, wordt er gebruik gemaakt van verschillende spiegels. Als je je eigen mirror wilt kiezen is dit uiteraard mogelijk, ga hiervoor eerst naar {http://www.r-project.org/}, en klik vervolgens onder \texttt{Download, Packages} op \texttt{CRAN}. Nu zal je een lijst met landen zien, waarbij ieder land \'e\'en of meerderen mirrors heeft. Zoals te zien is de gebruikte link in het kookboek de \emph{0-Cloud mirror}, een soort overkoepelende mirror. Nederland heeft twee mirrors een van XL-Data Amsterdam, en een van Utrecht University. In de tijd van inbelinternet kon de keuze van de mirror van grote invloed zijn op de snelheid van downloaden, tegenwoordig is de invloed niet meer dan gering. 
+De gebruikte link, {http://cran.rstudio.com}, is een mirror. Een mirror is een website waarop bestanden zijn te downloaden. Het spiegelt als het ware de bron, en om de bron niet over te belasten, wordt er gebruik gemaakt van verschillende spiegels. Als je je eigen mirror wilt kiezen is dit uiteraard mogelijk, ga hiervoor eerst naar {http://www.r-project.org/}, en klik vervolgens onder \texttt{Download, Packages} op \texttt{CRAN}. Nu zal je een lijst met landen zien, waarbij ieder land \'e\'en of meerderen mirrors heeft. Zoals te zien is de gebruikte link in de NQA-sectie de 0-Cloud mirror, een soort overkoepelende mirror. Nederland heeft twee mirrors een van XL-Data Amsterdam, en een van Utrecht University. In de tijd van inbelinternet kon de keuze van de mirror van grote invloed zijn op de snelheid van downloaden, tegenwoordig is de invloed niet meer dan gering. 
 
-Bij het installeren van R zijn de eerste twee stappen vanzelfsprekend en is er geen keuze mogelijk. Bij de Select Destination Location, valt er echter voor het eerst wat te kiezen. In het kookboek wordt de gesuggereerde installatie locatie gebruikt. Het is echter ook mogelijk deze locatie aan te passen. Mocht je er dus belang aan hechten dat de installatie in een andere map (of schijf) plaatsvind dan is dat dus mogelijk. Hierbij is het echter wel aan te raden het einde van installatie locatie uitgang te laten staan (dus de installatie map altijd te laten eindigen op \texttt{\textbackslash{R}\textbackslash{R-3.X.X}}). Dit i.v.m. het gebruik van verschillende versies. In de volgende stap kan je de componenten kiezen die je wilt installeren, hierbij is een \texttt{32-bit User installation} het veiligst aangezien dit altijd werkt (zowel op een 32-Bits als 64-Bits Pc). Mocht je er echter zeker van zijn dat je een 64-bits PC hebt dan is deze optie ook bruikbaar. De keuze heeft geen invloed op de werking van R (alleen op de snelheid). Het is ook mogelijk om beide te installeren, dit kan echter verwarrend werken omdat beide versies volledig onafhankelijk van elkaar werken, en aanpassingen aan de 32-Bits versie dus niet worden overgenomen door de 64-Bits versie. Als je in de volgende stap voor \texttt{Yes (customized startup)} kiest, is het mogelijk om de interface (\texttt{MDI} vs. \texttt{SDI}) van R te veranderen, alsmede de manier waarop \textbf{Help-bestanden} worden getoond (\texttt{Plain text} vs. \texttt{HTML help}) en internet instellingen (\textbf{Standard} vs. \textbf{Internet2}). In de \texttt{Select Start Menu Folder} stap kan je R ook aan je startmenu toe voegen, dit is volledig optioneel. Als je hier geen behoefte aan hebt dan kan je de optie \texttt{Don't create a Start Menu folder} aanvinken. In de laatste stap (\texttt{Select Additional Tasks}) kan je aanvinken of je een R-pictogram op je bureaublad, respectievelijk, snelstartmenu wilt hebben. Deze twee pictogrammen zijn, gelijk aan de vorige stap, volledig optioneel. Het is wel sterk aan te bevelen om de twee \texttt{Regirstry entries} aan te vinken. De eerste keuze (\texttt{Save version number in registry}) zorgt voor een overzichtelijk versie beheer. De tweede keuze zorgt ervoor dat bestanden met een \texttt{.R} of \texttt{.RData} worden geassocieerd met R. 
+Bij het installeren van R zijn de eerste twee stappen vanzelfsprekend en is er geen keuze mogelijk. Bij de Select Destination Location, valt er echter voor het eerst wat te kiezen. In de NQA-sectie wordt de gesuggereerde installatie locatie gebruikt. Het is echter ook mogelijk deze locatie aan te passen. Mocht je er dus belang aan hechten dat de installatie in een andere map (of schijf) plaatsvind dan is dat dus mogelijk. Hierbij is het echter wel aan te raden het einde van installatie locatie uitgang te laten staan (dus de installatie map altijd te laten eindigen op \texttt{\textbackslash{R}\textbackslash{R-3.X.X}}). Dit i.v.m. het gebruik van verschillende versies. In de volgende stap kan je de componenten kiezen die je wilt installeren, hierbij is een \texttt{32-bit User installation} het veiligst aangezien dit altijd werkt (zowel op een 32-Bits als 64-Bits Pc). Mocht je er echter zeker van zijn dat je een 64-bits PC hebt dan is deze optie ook bruikbaar. De keuze heeft geen invloed op de werking van R (alleen op de snelheid). Het is ook mogelijk om beide te installeren, dit kan echter verwarrend werken omdat beide versies volledig onafhankelijk van elkaar werken, en aanpassingen aan de 32-Bits versie dus niet worden overgenomen door de 64-Bits versie. Als je in de volgende stap voor \texttt{Yes (customized startup)} kiest, is het mogelijk om de interface (\texttt{MDI} vs. \texttt{SDI}) van R te veranderen, alsmede de manier waarop \textbf{Help-bestanden} worden getoond (\texttt{Plain text} vs. \texttt{HTML help}) en internet instellingen (\textbf{Standard} vs. \textbf{Internet2}). In de \texttt{Select Start Menu Folder} stap kan je R ook aan je startmenu toe voegen, dit is volledig optioneel. Als je hier geen behoefte aan hebt dan kan je de optie \texttt{Don't create a Start Menu folder} aanvinken. In de laatste stap (\texttt{Select Additional Tasks}) kan je aanvinken of je een R-pictogram op je bureaublad, respectievelijk, snelstartmenu wilt hebben. Deze twee pictogrammen zijn, gelijk aan de vorige stap, volledig optioneel. Het is wel sterk aan te bevelen om de twee \texttt{Regirstry entries} aan te vinken. De eerste keuze (\texttt{Save version number in registry}) zorgt voor een overzichtelijk versie beheer. De tweede keuze zorgt ervoor dat bestanden met een \texttt{.R} of \texttt{.RData} worden geassocieerd met R. 
 
 \subsection{\texttt[black]{RStudio}}
 De opties voor de installatie van \term{RStudio} zijn een stuk minder uitgebreid. De enige keuzes dier er zijn betreffen de locatie waar je \term{RStudio} wilt installeren en het eventueel cree\"eren van een Snelkoppeling. Ook deze keuzes zijn volledig optioneel. 
@@ -149,7 +140,7 @@ Als je er voor hebt gekozen om bij de installatie af te wijken van de gesuggeree
 \end{war}
 
 \chapter{Data Inlezen}
-\section{Kookboek}
+\section{No Questions Asked}
 \subsection{\texttt[black]{foreign}-Pakket installeren \& activeren}
 Om data van andere statistische programma's in te lezen hebben het \term{foreign} pakket nodig. Eerst moeten we dit pakket installeren. Klik hiervoor op \menu{Packages > Install Packages} en type onder \menu{Packages (seperate multiple with space or comma)} \directory{foreign} en vervolgens op \menu{Install}. Het \term{foreign}-pakket is nu ge\"installeerd.
 
@@ -225,110 +216,26 @@ Diamanten
 @
 \end{war}
 
-\section{Kijkje in de keuken}
+\section{Questions Asked}
 \subsection{\texttt[black]{foreign}-Pakket installeren \& activeren}
 Het is van belang om te begrijpen dat \term{R} eigenlijk niet meer is dan een programmeertaal. In tegenstelling tot de meeste andere programmeertalen kenmerkt \term{R} zich echter door een aantal voorgeschreven functies waarmee basale (statistische) bewerkingen kunnen uitvoeren worden uitgevoerd. Het is vooral deze balans die er voor zorgt dat \term{R} een stuk krachtiger en flexibeler is dan andere statistiek programma's zoals SPSS, maar tegelijkertijd toegangelijker is dan pure programmeertalen zoals \texttt{Python}. 
 
-Aangezien \term{R} echter werkt met een open-code (open-source), is het voor iedereen mogelijk toevoegingen in de vorm van pakketten te ontwerpen en deze in te dienen. Deze pakketen bevatten meestal een verzamaling functies die de functionaliteit van \term{R} vergroten in een bepaald domeim (bijv. Survival analyses). Als een pakket is goedgekeurd dan wordt deze beschikbaar gesteld via het offici\"ele CRAN (Comprehensive R Archive Network) archief.\footnote{Het is echter ook mogelijk dat je pakketten op internet vind die niet via de offici\"ele manier worden aangeboden. Dit zijn meestal kleine aanpassingen op bestaande pakketten, maar ook grotere pakketen worden soms op deze manier aangeboden. Deze pakketen kunnen uiteraard prima werken, toch is de controle (vooral van de \term{R}-gemeenschap) bij dergelijke pakketten een stuk lager, dus waakzaamheid is aan te raden!} Het voordeel van deze, semi-gecontroleerde, manier van pakket-distrubutie is dat de kwaliteit gewaarborgd blijft. Daarnaast is het ook verplicht dat ieder pakket een uitgebreide handleiding heeft waarin iedere functie uitgebreid wordt beschreven. Daarnaast werken alle pakketten op hun beurt ook weer met een open-code, waardoor eventuele fouten snel kunnen worden opgespoord en hersteld.
+Aangezien \term{R} echter werkt met een open-code (open-source), is het voor iedereen mogelijk toevoegingen in de vorm van pakketten te ontwerpen en deze in te dienen. Als een pakket is goedgekeurd dan wordt deze beschikbaar gesteld via het offici\"ele CRAN (Comprehensive R Archive Network) archief.\footnote{Het is echter ook mogelijk dat je pakketten op internet vind die niet via de offici\"ele manier worden aangeboden. Dit zijn meestal kleine aanpassingen op bestaande pakketten, maar ook grotere pakketen worden soms op deze manier aangeboden. Deze pakketen kunnen uiteraard prima werken, toch is de controle (vooral van de \term{R}-gemeenschap) bij dergelijke pakketten een stuk lager, dus waakzaamheid is aan te raden!} Het voordeel van deze, semi-gecontroleerde, manier van pakket-distrubutie is dat de kwaliteit gewaarborgd blijft. Daarnaast is het ook verplicht dat ieder pakket een uitgebreide handleiding heeft waarin iedere functie uitgebreid wordt beschreven. Daarnaast werken alle pakketten op hun beurt ook weer met een open-code, waardoor eventuele fouten snel kunnen worden opgespoord en hersteld.
 
 Nu het hoe en waarom van pakketen is uitgelegd, kunnen we ons concentreren op de installatie ervan. Zoals vermeld is dit eenvoudig mogelijk via \menu{Packages > Install Packages}, het is echter ook mogelijk om een installatie via de syntax uit te voeren. Deze methode is ook zichtbaar als je een pakket installeerd via de zojuist genoemde methode. Als je deze methode namelijk volgt zal je in \texttt{Console} de volgende invoer zien:
 <<label="InstallSyntaxx", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA,eval=FALSE>>=
 install.packages("ggplot2")
 @
 
-Echter, zoals vermeld staat bij de Tip aangaande het installeren van pakketten is installatie van een pakket slechts per PC slechts een keer nodig. Daarom is het voor de reproduceerbaarheid van de \texttt{syntax} geen must om het hierin op te nemen. Wat dus wel een must is voor de repoduceerbaarheid is het includeren van in de syntax van het inladen van het pakket. Naast de gebruikte functie \func{require} is het ook mogelijk de functie \func{library} te gebruiken--er zit geen enkel verschil tussen beiden. Tot slot nog een kleine waarschuwing bij het gebruik van meerdere pakketen tegelijk. Over het algemeen bevatten pakketten geen overeenkomstige fucntie benamingen. Soms komt dit echter wel voor, in een dergelijk geval wordt de functie gebruikt van het pakket dat als laatste wordt ingelezen.
+Echter, zoals vermeld staat bij de Tip aangaande het installeren van pakketten is installatie van een pakket slechts per PC slechts een keer nodig. Daarom is het voor de reproduceerbaarheid van de \texttt{syntax} geen must om het hierin op te nemen. Wat dus wel een must is voor de repoduceerbaarheid is het includeren van in de syntax van het inladen van het pakket. Naast de gebruikte functie \func{require} is het ook mogelijk de functie \func{library} te gebruiken--er zit geen enkel verschil tussen beiden.
 
 \subsection{Werkmap}
-Het defineren van een werkmap is relatief eenvoudig. Zoals vermeld zal \term{R} altijd vanuit deze map werken. Als bestanden worden ingelezen of worden opgeslagen zal dat dus vanuit deze werkmap plaatsvinden. Het is echter ook mogelijk om bij dergelijke bewerkingen af te wijken van de werkmap. Het kan bijvoorbeeld voorkomen dat een databestand op een andere locatie staat en dat het van belang is dat deze locatie niet wordt veranderd. Bij een dergelijk geval zal deze locatie moeten worden vermeld bij het gebruik van een functie. Stel bijvoorbeeld dat het \term{diamanten}-bestand op een andere locatie staat dan in de werkmap dan zou de \texttt{syntax} er bijvoorbeeld als volgt uit kunnen zien:
-<<label="diamantenAssignObjectOther", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, eval=FALSE>>=
-read.spss(file="D:/Users/Huub/Documents/OverigeMap/diamanten.sav",
-          to.data.frame=TRUE)
-# i.p.v. read.spss(file="diamanten.sav",to.data.frame=TRUE)
-@
-
-Zoals je ziet is dit een stuk omslachtiger, en daarom verdient het ook de voorkeur om zoveel mogelijk vanuit de werkmap de werken. Een bijkomend voordeel is dat als de locatie van de werkmap veranderd (bijvoorbeeld naar een andere PC), alleen de werkmap opnieuw hoeft te worden gedefineerd. 
-
-\begin{war}[\textbackslash\textbackslash of /, maar niet \textbackslash]
-Een optie om de werkmap de defineren is natuurlijk de locatie te kopieren vanuit bijvoorbeeld Windows Explorer te kopi\"eren. Dat zou er dan als volgt uit zien:
-<<label="workingdirectoryW", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, eval=FALSE, error=TRUE>>=
-setwd("D:\Users\Huub\Documents\Project\GettingThingsR")
-@
-\noindent
-Error?! Maar wat is dan het verschil met de juiste invoer? Het verschil zit hem in de \textbackslash. Zoals veel programma's gebruikt \term{R} de \textbackslash als een bijzonder invoerteken. Oftewel het maakt onderdeel uit van bepaalde bewerkingen. In dit voorbeeld probeert \term{R} de bewerking \textbackslash{U}, wat geen geldige bewerking is. Het is daarom van belang altijd een van de volgende twee variaties te gebruiken:
-<<label="workingdirectoryAlt", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, eval=FALSE>>=
-setwd("D:\\Users\\Huub\\Documents\\Project\\GettingThingsR")
-setwd("D:/Users/Huub/Documents/Project/GettingThingsR")
-@
-\noindent
-Dus of een dubbele \textbackslash, of simpelweg een enkele /.
-\end{war}
-
 \subsection{Inlezen SPSS-bestand}
-Bij het inlezen van een bestand maken we eigenlijk voor het eerst echt gebruik van een functie (ook al is \func{require} ook een functie). Aangezien functies een belangrijk onderdeel vormen van \term{R} is een goed begrip van functies esssentieel. Een functie heeft altijd een bepaalde invoer nodig. Wat voor een invoer dat is ligt aan de functie. Als er een gemiddelde moet worden berekend moeten het getallen zijn, als er een databestand moet worden ingelezen moet het de naam van het bestand zijn. 
 
-De invoer van een functie kan bestaan uit meerdere elementen die allemaal een eigen functie hebben binnen de functie. Zo bestaat functie \func{read.spss} uit de volgende elementen:
-<<label="readspssFunctie", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, eval=FALSE>>=
-read.spss(file, use.value.labels = TRUE, to.data.frame = FALSE,
-          max.value.labels = Inf, trim.factor.names = FALSE,
-          trim_values = TRUE, reencode = NA, 
-          use.missings = to.data.frame)
-@
-
-Zoals je ziet zijn dit meer elementen dan dat we hebben gebruikt om het databestand in te lezen\ldots Hoe kan dit? Dit kan omdat sommige elementen een standaard waarde hebben. Zo kan je zien dat het element \texttt{use.value.labels} een standaard waarde van \texttt{TRUE}. Aangezien we de waarde voor dit element niet hebben gespecificeerd zal het dus de standaard waarde (\texttt{TRUE}) aannnemen. Het is mogelijk om het element zelf te specificeren met de standaard waarde, maar dit zal dus geen effect hebben op de werking van de functie. De enige elementen die je dus moet specificeren zijn dus elementen die geen standaard waarde hebben of elementen waar je van de standaard waarde wilt afwijken. 
-
-In de \func{read.spss} functie hebben we in het voorbeeld daarom de elementen \texttt{file} en \texttt{to.data.frame} gefineerd. Waarbij de eerste geen standaard waarde heeft en de tweede als standaard waarde \texttt{FALSE} heeft terwijl de voorkeur hier naar \texttt{TRUE} uitgaat. Als het goed is blijf je nu met twee vragen zitten. Hoe weet ik welke elementen een functie bevat, en hoe weet ik of een element een standaard waarde heeft?
-
-Om de elementen van een functie te weten te komen is het nodig om de help functie te gebruiken. Dit is redelijk eenvoudig, je zet namelijk simpelweg een \keys{?} voor de functie:
-<<label="questionReadspss", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, eval=FALSE>>=
-?read.spss
-@
-
-Nu zal je zien dat er onder \texttt{Help} een tekst komt te staan waar de functie wordt toegelicht. Het eerste kopje, \emph{Description} bevat een (korte) omschrijving van de functie. Waar het echter om gaat zijn de volgende twee kopjes, \emph{Usage} en \emph{Arguments}. Het eerste kopje geeft namelijk aan welke elementen de functie bevat en het tweede kopje geeft een toelichting op een ider van deze elementen. Zo moet het eerste element (\texttt{file}) dus bestaan uit \term{karakter}-reeks die aangeeft waar het bestand zich bevind. Het andere element dat we hebben aangepast is \texttt{to.data.frame} wat aangeeft of we een dataframe als \term{object} willen terugkrijgen of niet. 
-
-De overige kopjes geven extra informatie, die vaak erg handig kan zijn. Zo geeft \emph{Details} een gedetailleerde beschrijving van de werking van de functie. \emph{Value} Geeft aan wat voor een soort uitvoer de functie geeft. \emph{Value} betreft dus uitvoer en \emph{Arguments} invoer. De kopjes \emph{Note}, \emph{Author(s)}, en \emph{See Also} spreken voor zich. Tot slot is er het kopje \emph{Examples}, wat meestal erg verduidelijkend werkt, door voorbeelden te geven hoe de functie kan worden gebruikt. 
-
-Nu we weten hoe de functie eruit ziet en wat het doet, blijft alleen de vraag nog staan hoe we kunnen weten welk element een standaard waarde heeft en welke niet. Soms is dit vermeld onder \emph{Arguments}, maar je kan het altijd terug zien onder \term{Usage}. Hierbij heeft een element dat gevolgt wordt door een \keys{=}, een standaard waarde. De standaard waarde, je raadt het al, is de waarde achter het \keys{=}-teken. Dus het element \texttt{max.value.labels} heeft dus een standaard waarde van \term{Inf}, wat gelijk staat aan oneindig (\emph{infinite}). Als we zit combineren met de informatie die onder \emph{Arguments} staat kunnen we dus redelijk ontleden wat dit element doet, en wat er gebeurd als we het niet specificeren. Hier gaat het dus om het aantal unieke waardes dat een variabele mag hebben om te worden omgecodeerd tot een \term{factor}. Waarbij de standaard waarde oneindig betreft. 
-
-Een laaste opmerking die gemaakt dient te worden ten opzichte van een functie is dat de volgorde waarin je de elementen ordent niet uitmaakt. Het volgende is dus ook mogelijk:
-<<label="MirroredFunction", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, eval=FALSE>>=
-read.spss(to.data.frame=TRUE, file=("diamanten.sav")
-# i.p.v. read.spss(file="diamanten.sav", to.data.frame=TRUE)
-@
-
-Nu we hebben gekeken hoe we de werking en inhoud (elementen) van een functie kunnen bekijken, is het van belang om nog even kort stil te staan bij de invoer van de bestandsnaam. Zoals we hebben gezien moest \texttt{file} een \term{karakter}-reeks bevatten, wat zoveel betekend als een stuk tekst. Een \term{karakter}-reeks kan echter ook bestaan uit enkel cijfers, maar toch worden gezien als een \term{karakter}-reeks, bijvoorbeeld:
-<<label="characterNumbers", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
-# Karakter-reeks
-"123"
-# Numeriek
-123
-@
-
-Het verschil zit hem dus in de \keys{''}. Alles wat tussen twee leeshaakjes wordt geplaatst is dus een \term{karakter}-reeks. Het maakt trouwens niet uit of je \keys{'} of \keys{''} gebruikt, als je de \term{karakter}-reeks maar afsluit waarmee je bent begonnen.
-
-Tot slot spelen de waardes \texttt{TRUE}/\texttt{FALSE} een belangrijke rol in \term{R}.\footnote{\texttt{TRUE}/\texttt{FALSE} moet altijd met hoofdletters worden geschreven, daarnaast is ook mogelijk om als vervanging \texttt{T}/\texttt{F} te gebruiken maar dit is niet aan te raden!} Waarbij \texttt{TRUE} als het ware goedkeuring geeft aan een element en \texttt{FALSE} het tegenovergestelde effect heeft. 
-
-\begin{tip}[Verkorte invoer functie]
-Tot nu toe worden alle functies netjes uitgeschreven. Het is in bepaalde gevallen ook mogelijk alleen de invoer te plaatsen. Dat ziet er als volgt uit:
-<<label="ShortFunction", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, eval=FALSE>>=
-read.spss("diamanten.sav", to.data.frame=TRUE)
-# i.p.v. read.spss(file="diamanten.sav", to.data.frame=TRUE)
-@
-\noindent
-Zoals je ziet wordt het stukje \texttt{file=} achterwegen gelaten, maar het stukje \texttt{to.data.frame=} niet, hoe zit dat? 
-\indent
-
-De naam van het element kan worden weggelaten als de volgorde van invoer overeenkomt met de standaard volgorde van de functie. Aangezien \texttt{''diamanten.sav''} dus het eerste stukje invoer is wordt dus dit dus automatische gelinkt aan het eerste element (\texttt{file}) van de functie (onthoud \texttt{?read.spss}). Daarom is het ook niet mogelijk om de volgende, nog kortere, variant te gebruiken:
-<<label="ToShortFunction", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, eval=FALSE>>=
-read.spss("diamanten.sav", TRUE)
-@
-Hier wordt \texttt{TRUE} namelijk toegewezen aan het tweede element (\texttt{use.value.labels}), terwijl wij het aan het derde element willen toewijzen. Als je dus van de standaard volgorde afwijkt moet je de element naam toevoegen aan de syntax van de functie. 
-
-In dit boek zullen elementnamen altijd worden vermeld in de functie. Dit heeft als voornaamste functie duidelijkheid, maar het bevorderd ook een overzichtelijke \texttt{syntax}, het is immers goed mogelijk dat je niet meer uit je hoofd weet wat ook al weer de standaard volgorde van elementen was in een functie.
-\end{tip}
 
 \chapter{Beschrijvende statistiek \& Data bewerking}
 
-\section{Kookboek}
+\section{No Questions Asked}
 \subsection{Datastructuur}
 In eerst instantie is het vaak prettig om wat meer gevoel met het dataframe te krijgen. In tegenstelling tot SPSS bijvoorbeeld zien we niet meer direct de spreadsheet, wat in het begin toch even wennen is! De eerste methode om de data wat verder te bekijken is om onder \texttt{Environment} op \term{diamanten} te klikken. Nu zal er op de plaats waar eerst de syntax stond een soort van Excel-sheet te staan. In tegenstelling tot een Excel-sheet is het echter niet mogelijk om de getallen te bewerken, het is dus puur ter controle. Daarnaast is ook dit overzicht tot een maximum aantal lijnen beperkt. Waar zijn die onderste lijnen toch gebleven? Simpel:
 <<label="DiamantenTail", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
@@ -396,7 +303,7 @@ Hier worden dus rij 20 t/m 25 geselecteerd voor de variabelen \texttt{color} \& 
 subset(x=diamanten, subset=cut=="Very Good")
 @
 
-Hierop zijn natuurlijk talloze variaties mogelijk, die in het \textbf{Kijkje in de keuken} verder worden toegelicht. Wel is het benoemingswaardig dat de rijnummers worden getoond van het orginele dataframe, de eerste rij die dus voldoet aan het gekozen criteria is dus de 6\textsuperscript{e} rij. 
+Hierop zijn natuurlijk talloze variaties mogelijk, die in de \textbf{Questions Asked}-sectie verder worden toegelicht. Wel is het benoemingswaardig dat de rijnummers worden getoond van het orginele dataframe, de eerste rij die dus voldoet aan het gekozen criteria is dus de 6\textsuperscript{e} rij. 
 
 \subsection{Beschrijvende statistiek}
 Een goede start is de \texttt{summary}-functie. Deze kan je bijvoorbeeld toepassen op het hele dataframe:
@@ -425,7 +332,7 @@ mean(x=Var1) #gelijk aan mean(x=Var1, na.rm=FALSE)
 @
 \end{war}
 
-Voor \term{factor}- en \term{karakter}-variabelen behoren de volgende opties tot de mogelijkheden:
+Voor \term{factor}- en \term{karakter}-variabelen zijn behoren de volgende opties tot de mogelijkheden:
 <<label="KarakterMogelijkheden", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
 table(diamanten$cut) #Frequenties van iedere waarde
 prop.table(table(diamanten$cut)) #Relatieve proporties per waarde
@@ -438,7 +345,7 @@ cor(diamanten[ ,c("depth","table","price")])
 @
 Waarbij hier dus de correlatie voor de variabelen \texttt{depth}, \texttt{table}, en \texttt{price} worden gegeven. 
 
-\section{Kijkje in de keuken}
+\section{Questions Asked}
 
 Waarbij de volgorde van opgave ook de volgorde is van de uitvoer in de \texttt{Console}, vergelijk bijvoorbeeld maar eens met:
 <<label="BrackDiamantenOrder", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, echo=-1>>=
@@ -454,10 +361,10 @@ diamanten[c(1,10,100,1000),]
 
 \chapter{Statistische Basis Toetsen}
 
-\section{Kookboek}
+\section{No Questions Asked}
 
-\section{Kijkje in de keuken}
+\section{Questions Asked}
 
-\printindex
+\printindex*
 
 \end{document}

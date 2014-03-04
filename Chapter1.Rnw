@@ -1,20 +1,43 @@
 \documentclass{book}
+
+%MmdFramed package (voor de tip blokken en borders voor fiugres)
 \usepackage[tikz]{mdframed}
+\setlength{\belowcaptionskip}{5pt plus 3pt minus 2pt}
+
+%Kleuren pakket
 \usepackage{xcolor}
+
+%Letters
 \usepackage[latin1]{inputenc}
+
+%Nogmaals TIKZ (ik denk dubbelop)
 \usepackage{tikz}
-\usetikzlibrary{shapes,arrows}
+
+%Opties voor tikz
+\usetikzlibrary{shapes,arrows,matrix,positioning,calc,intersections,decorations.markings,fit}
+
+%Taalpakket Nederlands
 \usepackage[dutch]{babel}
+
+%Pakket voor verschillende indexen
 \usepackage[makeindex]{splitidx}
+
+%Opmaak ander soortige texten
 \usepackage{listings}
+
+%Kleuren defineren zodat ze overeenkomen met knitrs defaults
 \definecolor{newblue}{rgb}{.88, .92, .93}
 \definecolor{newred}{rgb}{0.749,0.012,0.012}
 \definecolor{textblue}{rgb}{0.004,0.004,0.506}
+
+%Index voor voor tips and warnings and planning
 \newindex[Tips \& Warnings]{tiw}
 \newindex[Index]{pla}
 
+%Plaatsing van H en andere float opties
 \usepackage{float}
 
+%Tips e.d. boxen in een float plaatsen
 \floatstyle{plain}
 \newfloat{program}{tb}{lop}
 \floatname{program}{Program}
@@ -103,6 +126,7 @@
 
 <<settings, include=FALSE>>=
 require(stringr)
+require(knitr)
 options(max.print=100, width=60)
 thm <- knit_theme$get("edit-kwrite")
 # thm <- knit_theme$get("biogoo")
@@ -302,12 +326,12 @@ read.spss(to.data.frame=TRUE, file=("diamanten.sav")
 # i.p.v. read.spss(file="diamanten.sav", to.data.frame=TRUE)
 @
 
-\begin{figure}
+\begin{figure}[h]
 \centering
 % Define block styles http://www.texample.net/tikz/examples/simple-flow-chart/
 \tikzstyle{block} = [rectangle, draw=textblue, fill=textblue!20, 
     text width=5em, text centered,line width=2pt, minimum height=4em] 
-\tikzstyle{line} = [draw, -latex']
+\tikzstyle{line} = [draw, -latex',line width=1pt]
     %Picture
 \begin{tikzpicture}[node distance = 2cm, auto]
     % Place nodes
@@ -323,7 +347,7 @@ read.spss(to.data.frame=TRUE, file=("diamanten.sav")
     \path [line,dashed] (func) -- node [anchor=center,fill=white,align=center] {Standaard\\waardes} (waar);
     \path [line] (waar) -- (elem);
 \end{tikzpicture}
-\caption{Schematische weergave van de werking van functies in \term{R}.}
+\caption{Schematische weergave van de werking van functies in \term{R}.} \label{fig:schemaR}
 \end{figure}
 
 Nu we hebben gekeken hoe we de werking en inhoud (elementen) van een functie kunnen bekijken, is het van belang om nog even kort stil te staan bij de invoer van de bestandsnaam. Zoals we hebben gezien moest \texttt{file} een \term{karakter}-reeks bevatten, wat zoveel betekend als een stuk tekst. Een \term{karakter}-reeks kan echter ook bestaan uit enkel cijfers, maar toch worden gezien als een \term{karakter}-reeks, bijvoorbeeld:
@@ -483,7 +507,112 @@ head(x=diamanten, n=3)
 # versimpeld; head(diamanten, 3) 
 @
 
+De fucnties \func{ncol}, \func{nrow} en \func{dim} hebben geen alternatieve elementen, en hebben dus ook geen variaties op de manier waarop ze zijn uitgevoerd in het kookboek. De functiesen \func{str} heeft daarentegen zeer veel optionele elementen, deze zijn echter niet belangrijk voor het hoofddoel van deze functie, overzicht krijgen. Mocht je toch geintreseerd zijn, dan weet je wat je moet doen: \texttt{?str}. 
 
+Een stuk intressanter zijn echter de mogelijkheden die \func{colnames} biedt. Twee aspecten zijn van belang om deze mogelijkheden te begrijpen. Het eerste aspect betreft het soort object dat deze functie als uitvoer geeft, een \term{vector}. Een \term{vector} is een reeks van \'e\'en bepaald soort waarde, in dit geval een verzameling van \term{karakter}-reeksen. Dergelijke vectoren zijn cruciaal voor het gebruik en begrijpen van \term{R}, waarmee we op het tweede komen. Het handige van een \term{vector} is namelijke dat de elementen die de reeks (\term{vector}) vormen vervangen kunnen worden. Deze bewerkingmogelijkheid zullen we gaan gebruiken om de variabele namen van ons dataframe te gaan veranderen.
+
+Voordat we echter deze mogelijkheid gaan bekijken maken we eerst een ''kopie'' van het \term{diamenten}-dataframe zodat we niet het orgineel gaan aanpassen.\footnote{Nu is het natuurlijk een kleine moeite om het dataframe opnieuw in te lezen, echter voor de overzichteloijkheid is hier niet voor gekozen}:
+<<label="DiamantenNewName", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+diamanten_kopie <- diamanten
+# Check of dataframes inderdaad gelijk zijn
+identical(x=diamanten_kopie, y=diamanten)
+@
+
+Zoals je ziet laat de functie \func{identical} zien dat we nu twee identieke dataframes hebben, waarvan we het kopie gaan bewerken. Stel nu dat we bijvoorbeeld de variabelen V1 t/m V10 willen noemen, dan kan dit als volgt:
+<<label="DiamantenNewVariableName", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+colnames(x=diamanten_kopie) <- c("V1","V2","V3","V4","V5",
+                                 "V6","V7","V8","V9","V10")
+# Controleren
+head(x=diamanten_kopie, n=2)
+@
+
+Zoals je ziet hebben de variabelen de gewenste nieuwe namen gekregen. Maar wat gebeurd er nu precies? In Figuur \ref{fig:schemaToewijzing} is dit schematisch weergegeven. De nieuwe namen zijn ten eerste ook ondergebracht in een \term{vector}. De \texttt{c} staat namelijk voor samenvoegen van waardes/elementen, en heeft een \term{vector} als resultaat. In dit geval zijn dus de \term{karakter}-reeksen \texttt{''V1''} t/m \texttt{''V10''} samengevoegd in een \term{vector}. 
+
+Er staat dus zowel aan de linkse als de rechts kant van de \texttt{<-} een \term{vector}. Waarbij aan de linkse kant de \term{vector} bestaat uit de oorspronkelijke namen, terwijl aan de rechtse kan de \term{vector} staat met de nieuwe namen, Bij de eerste stap van de bewerking wordt er gekeken naar het eerste element van de \term{vector} aan de linkse kant (de oorspronkelijke namen). In dit geval is dit de \term{karakter}-reeks met als waarde \texttt{''carat''}. Vervolgens wordt deze waarde vervangen door het eerste element van de vector aan de rechtse kant (de nieuwe namen), in dit geval \texttt{''V1''}. Deze cyclus begint hierna weer van voor af aan. Het tweede \term{element} in oorspronkelijke \term{vector} wordt dus gezocht (\texttt{''clarity''}) en vervangen met het tweede \term{element} uit de nieuwe \term{vector}. Dit proces herhaald zich net zo lang tot de alle posities van de oorspronkelijke \term{vector} zijn afgegaan. De laatste bewerking behelst dus de hercodering van \texttt{''z''} met \texttt{''V10''}.
+
+% Define block styles http://www.texample.net/tikz/examples/simple-flow-chart/
+\tikzstyle{block} = [rectangle, draw=textblue, fill=textblue!20, 
+    text centered,line width=1pt, minimum height=2em, minimum width=3em,line width=2pt] 
+\tikzstyle{line} = [draw, -latex',line width=1pt]
+    %Picture
+\begin{figure}[!h]
+\centering
+\begin{tikzpicture}[scale=2]
+      % Old variables names
+  \draw[gray, fill=gray!20] (-.5,.3) rectangle (4,-.3);
+        \node[rotate=90,anchor=south, align=center] (oldL) at (-.5,0) {Oude\\ namen};
+  \node[block,align=center] (old1)  at (0, 0) {carat};
+    	\node[block,align=center] (old2)  at (1, 0) {cut};
+    	\node[block,align=center] (old3)  at (2, 0) {clarity};
+    	\node[block,align=center] (old4)  at (3.5, 0) {z};
+    	\node[align=center] (oldp) at ($ (old3.east) !.5! (old4.west) $) {\ldots};
+	% New variables names
+	\draw[gray, fill=gray!20] (-.5,-.7) rectangle (4,-1.3);
+        \node[rotate=90,anchor=south, align=center] (newL) at (-.5,-1) {Nieuwe\\ namen};
+    	\node[block,align=center] (new1)  at (0, -1) {V1};
+    	\node[block,align=center] (new2)  at (1, -1) {V2};
+    	\node[block,align=center] (new3)  at (2, -1) {V3};
+    	\node[block,align=center] (new4)  at (3.5, -1) {V10};
+    	\node[align=center] (newp) at ($ (new3.east) !.5! (new4.west) $) {\ldots};
+	%
+	\path [line] (new1) -- (old1);
+	\path [line] (new2) -- (old2);
+	\path [line] (new3) -- (old3);
+	\path [line] (new4) -- (old4);
+\end{tikzpicture}
+\caption{Toewijzing van nieuwe variabele namen ter vervanging van de oorsprongelijke, oude, namen. Zoals te zien wordt de eerste nieuwe naam toegewezen aan de eerste oude naam, de tweede nieuwe aan de twee oude, etc.} \label{fig:schemaToewijzing}
+\end{figure}
+
+In dit voorbeeld hebben we dus alle variabelen gelijk benoemd. Stel nu eeens dat we slechts twee variabelen een nieuwe naam willen geven. Dan kunnen we gebruik maken van een bewerking die we in het kookboek bij de selectie van rijen en kolommen terug hebben gezien:
+<<label="DiamantenOneNewVariableName", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+diamanten_kopie <- diamanten
+# Geeft alleen naam van tweede variabele
+colnames(x=diamanten_kopie)[c(2,10)] 
+# Past de naam van de variabele aan
+colnames(x=diamanten_kopie)[c(2,10)]  <- c("kwaliteit","diepte")
+# Controleren
+colnames(x=diamanten_kopie)[c(2,10)]
+@
+
+Zoals je ziet hebben we \texttt{[c(2,10)]} toegevoegd, wat op zichzelf ook weer een \term{vector} is, waardoor we alleen het tweede en tiende element selecteren van het object dat door de functie \func{colnames} wordt geproduceerd. Dat ging misschien een beetje te snel, dus laten we het even stap voor stap doen. Zoals we hebben gezien produceert de functie \func{colnames} een \term{vector} van variabele namen en is het mogelijk om deze te bewerken. De \keys{[} en \keys{]} zorgen er echter voor dat we een selectie van deze \term{vector} maken. Zoals je ziet bij de tweede lijn van de syntax krijg je ook alleen deze namen te zien (\texttt{''cut''} \& \texttt{''z''}). Vervolgens is het mogelijk om deze elementen te vervangen met nieuwe variabele namen. Dit gebeurd weer d.m.v. de toevoeging van de \texttt{<-} en een vector die de nieuwe waardes bevat, in dit geval \texttt{''kwaliteit''} en \texttt{''diepte''}. De toevoeging \texttt{[c(2,10)]} zorgt eigenlijk voor een soort filter, zoals te zien in Figuur \ref{fig:schemaToewijzingFilter}. Alleen de elementen waarvan de positie overeenkomt met een van de waardes van de filter worden geselecteerd. Het eerste geselecteerde/gefilterde element is dus \texttt{''cut''} wat wordt vervangen door het eerste element van de vector aan de rechtse kant \texttt{''kwaliteit''}. Het tweede element wat door de filter komt is het tiende en laatste element \texttt{''z''} wat wordt vervangen door het tweede element van de rechtse \term{vector}, \texttt{''diepte''}. 
+
+In de loop van dit boek zullen nog vele varianten en alternatieve manieren van filteren de revu passeeren. Het doel is echter altijd gelijk, een deel van een object selecter en hier eventueel een bewerking op uitvoeren. 
+% Define block styles http://www.texample.net/tikz/examples/simple-flow-chart/
+    %Picture
+\begin{figure}[!h]
+\centering
+\begin{tikzpicture}[scale=2]
+      % Old variables names
+  \draw[gray, fill=gray!20] (-.5,.3) rectangle (4,-.3);
+        \node[rotate=90,anchor=south, align=center] (oldL) at (-.5,0) {Oude\\ namen};
+	\node[block,align=center] (old1)  at (0, 0) {carat};
+    	\node[block,align=center] (old2)  at (1, 0) {cut};
+    	\node[block,align=center] (old3)  at (2, 0) {clarity};
+    	\node[block,align=center] (old4)  at (3.5, 0) {z};
+    	\node[align=center] (oldp) at ($ (old3.east) !.5! (old4.west) $) {\ldots};
+    	% Old variables names
+  \draw[gray, fill=gray!20] (-.5,-.7) rectangle (4,-1.3);
+        \node[rotate=90,anchor=south, align=center] (oldL) at (-.5,-1) {Filter};
+	\node[block,align=center] (fil1)  at (0, -1) {X};
+    	\node[block,align=center] (fil2)  at (1, -1) {V};
+    	\node[block,align=center] (fil3)  at (2, -1) {X};
+    	\node[block,align=center] (fil4)  at (3.5, -1) {V};
+    	\node[align=center] (fillp) at ($ (fil3.east) !.5! (fil4.west) $) {\ldots};
+	% New variables names
+  \draw[gray, fill=gray!20] (-.5,-1.7) rectangle (1.5,-2.3);
+        \node[rotate=90,anchor=south, align=center] (newL) at (-.5,-2) {Nieuwe\\ namen};
+    	\node[block,align=center] (new1)  at (0, -2) {kwaliteit};
+    	\node[block,align=center] (new2)  at (1, -2) {diepte};
+	%
+	\path [line] (new1.north) -- (fil2.south);
+	\path [line] (new2.north) -- (fil4.south);
+	\path [line] (fil2) -- (old2);
+	\path [line] (fil4) -- (old4);
+	\path [line, dashed] (fil1) -- (old1);
+	\path [line, dashed] (fil3) -- (old3);
+\end{tikzpicture}
+\caption{Schematische weergave van toewijzing van nieuwe variabele namen aan een selectie van de oorspronkelijke namen. Doordat alleen de tweede en tiende variabele namen zijn geselecteerd wordt de eerste nieuwe naam toegewezen aan de twee oude naam, en de tweede nieuwe naam aan de tiende oude naam. Iedere nieuwe waarde wordt dus bij de eerst mogelijke positie van de oorspronkelijke vector gekoppeld} \label{fig:schemaToewijzingFilter}
+\end{figure}
 
 
 Waarbij de volgorde van opgave ook de volgorde is van de uitvoer in de \texttt{Console}, vergelijk bijvoorbeeld maar eens met:

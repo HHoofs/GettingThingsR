@@ -3,12 +3,18 @@
 %MmdFramed package (voor de tip blokken en borders voor fiugres)
 \usepackage[tikz]{mdframed}
 \setlength{\belowcaptionskip}{5pt plus 3pt minus 2pt}
+\usepackage[font={sf},labelfont={bf,sf}]{caption}
 
 %Kleuren pakket
 \usepackage{xcolor}
 
 %Letters
 \usepackage[latin1]{inputenc}
+
+%Checkmark
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
 
 %Nogmaals TIKZ (ik denk dubbelop)
 \usepackage{tikz}
@@ -92,7 +98,19 @@
 \renewcommand{\texttt}[2][textblue]{\textcolor{#1}{\ttfamily #2}}
 \usepackage[os=win, mackeys=text]{menukeys}
 
-%%% Schema definitie using tikz
+%%% Mdframed omgeving voor figuren
+\newenvironment{figframe}
+{\mdfsetup{
+topline=false,
+rightline=false,
+leftline=false,
+linecolor=textblue,
+linewidth=2pt
+}
+\begin{mdframed}%
+}
+{\end{mdframed}}
+
 
 
 %%% Code to set up special term treatment
@@ -328,12 +346,13 @@ read.spss(to.data.frame=TRUE, file=("diamanten.sav")
 
 \begin{figure}[h]
 \centering
+\begin{figframe}
 % Define block styles http://www.texample.net/tikz/examples/simple-flow-chart/
 \tikzstyle{block} = [rectangle, draw=textblue, fill=textblue!20, 
     text width=5em, text centered,line width=2pt, minimum height=4em] 
 \tikzstyle{line} = [draw, -latex',line width=1pt]
     %Picture
-\begin{tikzpicture}[node distance = 2cm, auto]
+\begin{tikzpicture}[node distance = 2cm, auto, font=\sffamily]
     % Place nodes
     \node [block] (pak) {Pakketten};
     \node [block, below of=pak, node distance=3.5cm] (func) {Functies};
@@ -348,6 +367,7 @@ read.spss(to.data.frame=TRUE, file=("diamanten.sav")
     \path [line] (waar) -- (elem);
 \end{tikzpicture}
 \caption{Schematische weergave van de werking van functies in \term{R}.} \label{fig:schemaR}
+\end{figframe}
 \end{figure}
 
 Nu we hebben gekeken hoe we de werking en inhoud (elementen) van een functie kunnen bekijken, is het van belang om nog even kort stil te staan bij de invoer van de bestandsnaam. Zoals we hebben gezien moest \texttt{file} een \term{karakter}-reeks bevatten, wat zoveel betekend als een stuk tekst. Een \term{karakter}-reeks kan echter ook bestaan uit enkel cijfers, maar toch worden gezien als een \term{karakter}-reeks, bijvoorbeeld:
@@ -537,7 +557,8 @@ Er staat dus zowel aan de linkse als de rechts kant van de \texttt{<-} een \term
     %Picture
 \begin{figure}[!h]
 \centering
-\begin{tikzpicture}[scale=2]
+\begin{figframe}
+\begin{tikzpicture}[scale=2, font=\sffamily]
       % Old variables names
   \draw[gray, fill=gray!20] (-.5,.3) rectangle (4,-.3);
         \node[rotate=90,anchor=south, align=center] (oldL) at (-.5,0) {Oude\\ namen};
@@ -561,6 +582,7 @@ Er staat dus zowel aan de linkse als de rechts kant van de \texttt{<-} een \term
 	\path [line] (new4) -- (old4);
 \end{tikzpicture}
 \caption{Toewijzing van nieuwe variabele namen ter vervanging van de oorsprongelijke, oude, namen. Zoals te zien wordt de eerste nieuwe naam toegewezen aan de eerste oude naam, de tweede nieuwe aan de twee oude, etc.} \label{fig:schemaToewijzing}
+\end{figframe}
 \end{figure}
 
 In dit voorbeeld hebben we dus alle variabelen gelijk benoemd. Stel nu eeens dat we slechts twee variabelen een nieuwe naam willen geven. Dan kunnen we gebruik maken van een bewerking die we in het kookboek bij de selectie van rijen en kolommen terug hebben gezien:
@@ -576,12 +598,13 @@ colnames(x=diamanten_kopie)[c(2,10)]
 
 Zoals je ziet hebben we \texttt{[c(2,10)]} toegevoegd, wat op zichzelf ook weer een \term{vector} is, waardoor we alleen het tweede en tiende element selecteren van het object dat door de functie \func{colnames} wordt geproduceerd. Dat ging misschien een beetje te snel, dus laten we het even stap voor stap doen. Zoals we hebben gezien produceert de functie \func{colnames} een \term{vector} van variabele namen en is het mogelijk om deze te bewerken. De \keys{[} en \keys{]} zorgen er echter voor dat we een selectie van deze \term{vector} maken. Zoals je ziet bij de tweede lijn van de syntax krijg je ook alleen deze namen te zien (\texttt{''cut''} \& \texttt{''z''}). Vervolgens is het mogelijk om deze elementen te vervangen met nieuwe variabele namen. Dit gebeurd weer d.m.v. de toevoeging van de \texttt{<-} en een vector die de nieuwe waardes bevat, in dit geval \texttt{''kwaliteit''} en \texttt{''diepte''}. De toevoeging \texttt{[c(2,10)]} zorgt eigenlijk voor een soort filter, zoals te zien in Figuur \ref{fig:schemaToewijzingFilter}. Alleen de elementen waarvan de positie overeenkomt met een van de waardes van de filter worden geselecteerd. Het eerste geselecteerde/gefilterde element is dus \texttt{''cut''} wat wordt vervangen door het eerste element van de vector aan de rechtse kant \texttt{''kwaliteit''}. Het tweede element wat door de filter komt is het tiende en laatste element \texttt{''z''} wat wordt vervangen door het tweede element van de rechtse \term{vector}, \texttt{''diepte''}. 
 
-In de loop van dit boek zullen nog vele varianten en alternatieve manieren van filteren de revu passeeren. Het doel is echter altijd gelijk, een deel van een object selecter en hier eventueel een bewerking op uitvoeren. 
+In de loop van dit boek zullen nog vele varianten en alternatieve manieren van filteren de revu passeeren. Het doel is echter altijd gelijk; een deel van een object selecteren. 
 % Define block styles http://www.texample.net/tikz/examples/simple-flow-chart/
     %Picture
 \begin{figure}[!h]
+\begin{figframe}
 \centering
-\begin{tikzpicture}[scale=2]
+\begin{tikzpicture}[scale=2, font=\sffamily]
       % Old variables names
   \draw[gray, fill=gray!20] (-.5,.3) rectangle (4,-.3);
         \node[rotate=90,anchor=south, align=center] (oldL) at (-.5,0) {Oude\\ namen};
@@ -593,10 +616,10 @@ In de loop van dit boek zullen nog vele varianten en alternatieve manieren van f
     	% Old variables names
   \draw[gray, fill=gray!20] (-.5,-.7) rectangle (4,-1.3);
         \node[rotate=90,anchor=south, align=center] (oldL) at (-.5,-1) {Filter};
-	\node[block,align=center] (fil1)  at (0, -1) {X};
-    	\node[block,align=center] (fil2)  at (1, -1) {V};
-    	\node[block,align=center] (fil3)  at (2, -1) {X};
-    	\node[block,align=center] (fil4)  at (3.5, -1) {V};
+	\node[block,align=center] (fil1)  at (0, -1) {\xmark};
+    	\node[block,align=center] (fil2)  at (1, -1) {\cmark};
+    	\node[block,align=center] (fil3)  at (2, -1) {\xmark};
+    	\node[block,align=center] (fil4)  at (3.5, -1) {\cmark};
     	\node[align=center] (fillp) at ($ (fil3.east) !.5! (fil4.west) $) {\ldots};
 	% New variables names
   \draw[gray, fill=gray!20] (-.5,-1.7) rectangle (1.5,-2.3);
@@ -611,8 +634,79 @@ In de loop van dit boek zullen nog vele varianten en alternatieve manieren van f
 	\path [line, dashed] (fil1) -- (old1);
 	\path [line, dashed] (fil3) -- (old3);
 \end{tikzpicture}
-\caption{Schematische weergave van toewijzing van nieuwe variabele namen aan een selectie van de oorspronkelijke namen. Doordat alleen de tweede en tiende variabele namen zijn geselecteerd wordt de eerste nieuwe naam toegewezen aan de twee oude naam, en de tweede nieuwe naam aan de tiende oude naam. Iedere nieuwe waarde wordt dus bij de eerst mogelijke positie van de oorspronkelijke vector gekoppeld} \label{fig:schemaToewijzingFilter}
+\caption{Schematische weergave van toewijzing van nieuwe variabele namen aan een selectie van de oorspronkelijke namen. Doordat alleen de tweede en tiende variabele namen zijn geselecteerd wordt de eerste nieuwe naam toegewezen aan de twee oude naam, en de tweede nieuwe naam aan de tiende oude naam. Iedere nieuwe waarde wordt dus bij de eerst mogelijke positie van de oorspronkelijke vector gekoppeld.} \label{fig:schemaToewijzingFilter}
+\end{figframe}
 \end{figure}
+
+\subsection{Object manipulatie}
+% Define block styles http://www.texample.net/tikz/examples/simple-flow-chart/
+\tikzstyle{block} = [rectangle, draw=black, fill=textblue!20, 
+    text centered,line width=1pt, minimum height=2em, minimum width=2em] 
+\tikzstyle{fblock} = [rectangle, draw=black, fill=textblue!10, 
+    text centered,line width=1pt, minimum height=2em, minimum width=2em,text=black!50,draw=black!50] 
+\tikzstyle{line} = [draw, -latex']
+    %Picture
+\begin{figure}[!h]
+\begin{figframe}
+\centering
+\begin{tikzpicture}[scale=2]
+      % Old variables names
+	\node[block,align=center] (X11)  at (0, 0) {$X_{1,1}$};
+	\node[block,align=center] (X12)  at (.5, 0) {$X_{1,2}$};
+	\node[block,align=center] (X13)  at (1, 0) {$X_{1,3}$};
+	\node[block,align=center] (X1j)  at (1.75, 0) {$X_{1,j}$};
+    	\node[align=center] (X1jdot) at ($ (X13.east) !.5! (X1j.west) $) {\ldots};
+	\node[block,align=center] (X21)  at (0, -.5) {$X_{2,1}$};
+	\node[block,align=center] (X22)  at (.5, -.5) {$X_{2,2}$};
+	\node[block,align=center] (X23)  at (1, -.5) {$X_{2,3}$};
+	\node[block,align=center] (X2j)  at (1.75, -.5) {$X_{2,j}$};
+    	\node[align=center] (X2jdot) at ($ (X23.east) !.5! (X2j.west) $) {\ldots};
+	\node[block,align=center] (X31)  at (0, -1) {$X_{3,1}$};
+	\node[block,align=center] (X32)  at (.5, -1) {$X_{3,2}$};
+	\node[block,align=center] (X33)  at (1, -1) {$X_{3,3}$};
+	\node[block,align=center] (X3j)  at (1.75, -1) {$X_{3,j}$};
+    	\node[align=center] (X3jdot) at ($ (X33.east) !.5! (X3j.west) $) {\ldots};
+	\node[block,align=center] (Xi1)  at (0, -1.75) {$X_{i,1}$};
+	\node[block,align=center] (Xi2)  at (.5, -1.75) {$X_{i,2}$};
+	\node[block,align=center] (Xi3)  at (1, -1.75) {$X_{i,3}$};
+	\node[block,align=center] (Xij)  at (1.75, -1.75) {$X_{i,j}$};
+    	\node[align=center] (Xijdot) at ($ (Xi3.east) !.5! (Xij.west) $) {\ldots};
+    	\node[align=center, rotate =90] (Vdot1) at ($ (Xi1.north) !.5! (X31.south) $) {\ldots};
+    	\node[align=center, rotate =90] (Vdot2) at ($ (Xi2.north) !.5! (X32.south) $) {\ldots};
+    	\node[align=center, rotate =90] (Vdot3) at ($ (Xi3.north) !.5! (X33.south) $) {\ldots};
+    	\node[align=center, rotate =90] (Vdot4) at ($ (Xij.north) !.5! (X3j.south) $) {\ldots};
+    	% Old variables names
+	\node[fblock,align=center] (aX11)  at (2.75, 0) {$X_{1,1}$};
+	\node[fblock,align=center] (aX12)  at (3.25, 0) {$X_{1,2}$};
+	\node[block,align=center] (aX13)  at (3.75, 0) {$X_{1,3}$};
+	\node[fblock,align=center] (aX1j)  at (4.5, 0) {$X_{1,j}$};
+    	\node[align=center] (aX1jdot) at ($ (aX13.east) !.5! (aX1j.west) $) {\ldots};
+	\node[fblock,align=center] (aX21)  at (2.75, -.5) {$X_{2,1}$};
+	\node[fblock,align=center] (aX22)  at (3.25, -.5) {$X_{2,2}$};
+	\node[block,align=center] (aX23)  at (3.75, -.5) {$X_{2,3}$};
+	\node[fblock,align=center] (aX2j)  at (4.5, -.5) {$X_{2,j}$};
+    	\node[align=center] (aX2jdot) at ($ (aX23.east) !.5! (aX2j.west) $) {\ldots};
+	\node[fblock,align=center] (aX31)  at (2.75, -1) {$X_{3,1}$};
+	\node[fblock,align=center] (aX32)  at (3.25, -1) {$X_{3,2}$};
+	\node[block,align=center] (aX33)  at (3.75, -1) {$X_{3,3}$};
+	\node[fblock,align=center] (aX3j)  at (4.5, -1) {$X_{3,j}$};
+    	\node[align=center] (aX3jdot) at ($ (aX33.east) !.5! (aX3j.west) $) {\ldots};
+	\node[fblock,align=center] (aXi1)  at (2.75, -1.75) {$X_{i,1}$};
+	\node[fblock,align=center] (aXi2)  at (3.25, -1.75) {$X_{i,2}$};
+	\node[block,align=center] (aXi3)  at (3.75, -1.75) {$X_{i,3}$};
+	\node[fblock,align=center] (aXij)  at (4.5, -1.75) {$X_{i,j}$};
+    	\node[align=center] (aXijdot) at ($ (aXi3.east) !.5! (aXij.west) $) {\ldots};
+    	\node[align=center, rotate =90] (aVdot1) at ($ (aXi1.north) !.5! (aX31.south) $) {\ldots};
+    	\node[align=center, rotate =90] (aVdot2) at ($ (aXi2.north) !.5! (aX32.south) $) {\ldots};
+    	\node[align=center, rotate =90] (aVdot3) at ($ (aXi3.north) !.5! (aX33.south) $) {\ldots};
+    	\node[align=center, rotate =90] (aVdot4) at ($ (aXij.north) !.5! (aX3j.south) $) {\ldots};
+	%line
+	\draw[line width=1pt, dashed] (2.25,.25) -- node [anchor=center, fill=white,align=center,rotate=90] {Filter = [ , 3]} (2.25,-2) ;
+\end{tikzpicture}
+\caption{Planning and workflow} \label{fig:schemaFilterFrame}
+\end{figframe}
+\end{figure}
+
 
 
 Waarbij de volgorde van opgave ook de volgorde is van de uitvoer in de \texttt{Console}, vergelijk bijvoorbeeld maar eens met:
@@ -627,7 +721,10 @@ options(max.print=100)
 diamanten[c(1,10,100,1000),]
 @
 
-\chapter{Statistische Basis Toetsen}
+\subsection{Beschrijvende statistiek}
+
+
+\chapter{Elementaire Statistische Toetsen}
 
 \section{Kookboek}
 

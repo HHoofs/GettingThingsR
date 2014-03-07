@@ -1,5 +1,9 @@
 \documentclass[a4paper]{book}
 
+%Title
+\title{Aan de slag met \texttt{R}: Een kookboek en een kijkje in de keuken}
+\author{Huub Hoofs}
+
 %MmdFramed package (voor de tip blokken en borders voor fiugres)
 \usepackage[tikz]{mdframed}
 \setlength{\belowcaptionskip}{5pt plus 3pt minus 2pt}
@@ -42,6 +46,24 @@
 
 %Plaatsing van H en andere float opties
 \usepackage{float}
+
+%Fancyhdr
+%\renewcommand{\sectionmark}[1]{\markright{#1}}
+%\renewcommand{\sectionmark}[1]{\markright{#1}}
+
+\usepackage{emptypage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\chaptermark}[1]%
+{\markboth{\ #1}{}}
+\renewcommand{\sectionmark}[1]%
+{\markright{\ #1}}
+\fancyhead{}
+\fancyfoot{}
+\fancyhead[RE] {\rightmark\hspace{15pt}\thepage}
+\fancyhead[LO] {\thepage\hspace{15pt}\leftmark}
+
+
 
 %Hyperref
 \usepackage[breaklinks]{hyperref}
@@ -175,6 +197,7 @@ knit_theme$set(thm)
 @
 
 \begin{document}
+\maketitle
 
 \chapter*{Voorwoord}
 Gateway drug

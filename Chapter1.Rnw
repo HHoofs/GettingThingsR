@@ -1,4 +1,4 @@
-\documentclass{book}
+\documentclass[a4paper]{book}
 
 %MmdFramed package (voor de tip blokken en borders voor fiugres)
 \usepackage[tikz]{mdframed}
@@ -43,12 +43,32 @@
 %Plaatsing van H en andere float opties
 \usepackage{float}
 
+%Hyperref
+\usepackage[breaklinks]{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=textblue,
+    filecolor=black,
+    linkcolor=textblue,
+    urlcolor=textblue
+    }
+\usepackage{url}
+
 %Tips e.d. boxen in een float plaatsen
 \floatstyle{plain}
 \newfloat{program}{tb}{lop}
 \floatname{program}{Program}
 
-\makeindex %http://nl.wikibooks.org/wiki/LaTeX/Index_aanmaken
+\makeindex %https://mirror.hmc.edu/ctan/macros/latex/contrib/splitindex/splitidx.pdf
+% $ latex Chapter1.tex
+% $ splitindex Chapter1.idx
+% $ makeindex Chappter1-pla.idx
+% $ makeindex Chappter1-tiw.idx
+% $ latex Chapter1.tex
+% $ latex Chapter1.tex
+% $ pdflatex Chapter1.tex
+
+
 
 %%% Frames voor zowel tips als warnings door gberuik van tikz
 \newcounter{tip}[section]
@@ -125,7 +145,7 @@ linewidth=2pt
 }
 \makeatother
 
-\specialterms{R,RStudio,foreign,diamanten,factor,object}
+\specialterms{R,RStudio,foreign,diamanten,Diamanten,karakter,object,Usage,Inf,factor,numerieke,vector,diamenten,element,logisische constanten}
 
 
 %%% Code to set up special func treatment
@@ -140,7 +160,7 @@ linewidth=2pt
 }
 \makeatother
 
-\specialfunc{require,library, head}
+\specialfunc{require,library,read.spss,head,tail,ncol,nrow,dim,str,colnames,identical,subset}
 
 <<settings, include=FALSE>>=
 require(stringr)
@@ -159,14 +179,9 @@ knit_theme$set(thm)
 \chapter*{Voorwoord}
 Gateway drug
 
+\tableofcontents
+
 \chapter{Installeren}
-
-
-
-
-
-
-
 Zoals in de introductie al wordt vermeld zal dit boek gaan voor een 'hands-on-approach'. Aan de einde van ieder hoofdstuk wordt echter ieder...
 \section{Kookboek}
 \subsection{\texttt[black]{R}}
@@ -184,7 +199,7 @@ Net als bij \term{R} is ook de site van \term{RStudio}, {http://www.rstudio.com}
 Vervolgens: \menu{Next} (3 maal). \term{RStudio} is nu ge\"installeerd en klaar voor gebruik.
 
 \section{Kijkje in de keuken}
-\subsection{R}
+\subsection{\texttt[black]{R}}
 De gebruikte link, {http://cran.rstudio.com}, is een mirror. Een mirror is een website waarop bestanden zijn te downloaden. Het spiegelt als het ware de bron, en om de bron niet over te belasten, wordt er gebruik gemaakt van verschillende spiegels. Als je je eigen mirror wilt kiezen is dit uiteraard mogelijk, ga hiervoor eerst naar {http://www.r-project.org/}, en klik vervolgens onder \texttt{Download, Packages} op \texttt{CRAN}. Nu zal je een lijst met landen zien, waarbij ieder land \'e\'en of meerderen mirrors heeft. Zoals te zien is de gebruikte link in de \texttt{kookboek}-sectie de 0-Cloud mirror, een soort overkoepelende mirror. Nederland heeft twee mirrors een van XL-Data Amsterdam, en een van Utrecht University. In de tijd van inbelinternet kon de keuze van de mirror van grote invloed zijn op de snelheid van downloaden, tegenwoordig is de invloed niet meer dan gering. 
 
 Bij het installeren van R zijn de eerste twee stappen vanzelfsprekend en is er geen keuze mogelijk. Bij de Select Destination Location, valt er echter voor het eerst wat te kiezen. In de \texttt{kookboek}-sectie wordt de gesuggereerde installatie locatie gebruikt. Het is echter ook mogelijk deze locatie aan te passen. Mocht je er dus belang aan hechten dat de installatie in een andere map (of schijf) plaatsvind dan is dat dus mogelijk. Hierbij is het echter wel aan te raden het einde van installatie locatie uitgang te laten staan (dus de installatie map altijd te laten eindigen op \texttt{\textbackslash{R}\textbackslash{R-3.X.X}}). Dit i.v.m. het gebruik van verschillende versies. In de volgende stap kan je de componenten kiezen die je wilt installeren, hierbij is een \texttt{32-bit User installation} het veiligst aangezien dit altijd werkt (zowel op een 32-Bits als 64-Bits Pc). Mocht je er echter zeker van zijn dat je een 64-bits PC hebt dan is deze optie ook bruikbaar. De keuze heeft geen invloed op de werking van R (alleen op de snelheid). Het is ook mogelijk om beide te installeren, dit kan echter verwarrend werken omdat beide versies volledig onafhankelijk van elkaar werken, en aanpassingen aan de 32-Bits versie dus niet worden overgenomen door de 64-Bits versie. Als je in de volgende stap voor \texttt{Yes (customized startup)} kiest, is het mogelijk om de interface (\texttt{MDI} vs. \texttt{SDI}) van R te veranderen, alsmede de manier waarop \textbf{Help-bestanden} worden getoond (\texttt{Plain text} vs. \texttt{HTML help}) en internet instellingen (\textbf{Standard} vs. \textbf{Internet2}). In de \texttt{Select Start Menu Folder} stap kan je R ook aan je startmenu toe voegen, dit is volledig optioneel. Als je hier geen behoefte aan hebt dan kan je de optie \texttt{Don't create a Start Menu folder} aanvinken. In de laatste stap (\texttt{Select Additional Tasks}) kan je aanvinken of je een R-pictogram op je bureaublad, respectievelijk, snelstartmenu wilt hebben. Deze twee pictogrammen zijn, gelijk aan de vorige stap, volledig optioneel. Het is wel sterk aan te bevelen om de twee \texttt{Regirstry entries} aan te vinken. De eerste keuze (\texttt{Save version number in registry}) zorgt voor een overzichtelijk versie beheer. De tweede keuze zorgt ervoor dat bestanden met een \texttt{.R} of \texttt{.RData} worden geassocieerd met R. 
@@ -270,6 +285,7 @@ Krijg je te zien dat het object \term{diamanten} gelijk staat aan het databestan
 <<label="DiamantenObject", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
 Diamanten
 @
+Dit telt voor alle bewerkingen in \term{R}, functies, locaties van databestanden, waardes, etc.
 \end{war}
 
 \section{Kijkje in de keuken}
@@ -345,8 +361,8 @@ read.spss(to.data.frame=TRUE, file=("diamanten.sav")
 @
 
 \begin{figure}[h]
-\centering
 \begin{figframe}
+\centering
 % Define block styles http://www.texample.net/tikz/examples/simple-flow-chart/
 \tikzstyle{block} = [rectangle, draw=textblue, fill=textblue!20, 
     text width=5em, text centered,line width=2pt, minimum height=4em] 
@@ -391,7 +407,7 @@ read.spss("diamanten.sav", to.data.frame=TRUE)
 \noindent
 Zoals je ziet wordt het stukje \texttt{file=} achterwegen gelaten, maar het stukje \texttt{to.data.frame=} niet, hoe zit dat? 
 \indent
-De naam van het element kan worden weggelaten als de volgorde van invoer overeenkomt met de standaard volgorde van de functie. Aangezien \texttt{''diamanten.sav''} dus het eerste stukje invoer is wordt dus dit dus automatische gelinkt aan het eerste element (\texttt{file}) van de functie (onthoud \texttt{?read.spss}). Daarom is het ook niet mogelijk om de volgende, nog kortere, variant te gebruiken:
+De naam van het element kan worden weggelaten als de volgorde van invoer overeenkomt met de standaard volgorde van de functie. Aangezien \texttt{\char`\"diamanten.sav\char`\"} dus het eerste stukje invoer is wordt dus dit dus automatische gelinkt aan het eerste element (\texttt{file}) van de functie (onthoud \texttt{?read.spss}). Daarom is het ook niet mogelijk om de volgende, nog kortere, variant te gebruiken:
 <<label="ToShortFunction", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, eval=FALSE>>=
 read.spss("diamanten.sav", TRUE)
 @
@@ -556,8 +572,8 @@ Er staat dus zowel aan de linkse als de rechts kant van de \texttt{<-} een \term
 \tikzstyle{line} = [draw, -latex',line width=1pt]
     %Picture
 \begin{figure}[!h]
-\centering
 \begin{figframe}
+\centering
 \begin{tikzpicture}[scale=2, font=\sffamily]
       % Old variables names
   \draw[gray, fill=gray!20] (-.5,.3) rectangle (4,-.3);
@@ -647,8 +663,7 @@ options(max.print=20)
 diamanten[,2]
 @
 
-In principe is dit ook wat \term{R} daadwerkelijk doet. Het kijkt welke positie de genoemde variabele in het dataframe heeft, en selecteerd de overeenkomstige kolom. In Figuur \ref{fig:schemaFilterFrame} is te schematisch weergegeven hoe zojuist beschreven filter werkt. 
-
+In principe is dit ook wat \term{R} daadwerkelijk doet. Het kijkt welke positie de genoemde variabele in het dataframe heeft, en selecteerd de overeenkomstige kolom. In Figuur \ref{fig:schemaFilterFrame} is te schematisch weergegeven hoe de zojuist beschreven filter werkt. 
 % Define block styles http://www.texample.net/tikz/examples/simple-flow-chart/
 \tikzstyle{block} = [rectangle, draw=black, fill=textblue!20, 
     text centered,line width=1pt, minimum height=2em, minimum width=2em] 
@@ -717,19 +732,92 @@ In principe is dit ook wat \term{R} daadwerkelijk doet. Het kijkt welke positie 
 \end{figframe}
 \end{figure}
 
+Als er slechts een kolom hoeft te worden gefilterd is het niet nodig om de variabele-naam of kolom-nummer tussen \keys{(+)} te plaatsen. Dus \texttt{diamanten[\allowbreak,c(''carat'')]} staat gelijk aan \texttt{diamanten[,\allowbreak''carat'']}. Echter als er meerde variabelen worden geselecteerd is dit wel nodig. Als er immers geens \keys{(+)} worden gebruikt dan is het voor \term{R} niet duidelijk welke invoer waarvoor bestemd is. Als we bijvoorbeeld naar het tweede voorbeeld kijken uit het kookboek, \texttt{diamanten[,c("carat","color")]}, dan zou het fout gaan als we de variabele-namen niet in een vector zouden plaatsen:
+<<label="BrackDiamantenMultipleFout", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, echo=-1>>=
+options(max.print=20)
+diamanten[,"carat","color"]
+@
 
+Zoals je ziet krijg je een error. Dit komt omdat je voor teveel dimensies informatie geeft. Daarom is het dus van belang om de filters voor de rijen respectievelijk de kolommen in een \term{vector} te plaatsen. Waarbij de \term{vector} voor de \keys{,} dus de filter aangeeft voor de rijen en de \term{vector} na de \keys{,} voor de kolommen. Maar hoe zit het dan met het de \keys{:} zoals in bijvoorbeeld \texttt{diamanten[1:5,]
+}~? De bewerking is mogelijk omdat het gebruik van een \keys{:} resulteert in een \term{vector}:
+<<label="Vector1to5", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+1:5
+# Is gelijk aan
+c(1,2,3,4,5)
+@
 
-Waarbij de volgorde van opgave ook de volgorde is van de uitvoer in de \texttt{Console}, vergelijk bijvoorbeeld maar eens met:
+En aangezien een \term{vector} gebruikt kan worden als vector is het mogelijk om op deze manier de eerste tot en met de vijfde rij te selecteren.
+
+Het gaat er dus om dat er de invoer na en voor de \keys{,} een \term{vector} is die gebruikt kan worden als een filter. Hierbij is het bijvoorbeeld niet van belang wat de volgorde is van de filter.
 <<label="BrackDiamantenOrder", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, echo=-1>>=
 options(max.print=20)
 diamanten[,c("color","carat")]
 @
 
-Of de 1\textsuperscript{e}, 10\textsuperscript{e}, 100\textsuperscript{e}, en de 1000\textsuperscript{e} rij:
+Zoals je ziet worden nog steeds dezelfde variabelen gefiltert. Echter, let op! De volgorde van de variabelen in het nieuwe, gefilterde, dataframe is wel veranderd. Het neemt de volgorde aan zoals deze in de filter is gegeven. Tot slot nog een voorbeeld waarin we de 1\textsuperscript{e}, 10\textsuperscript{e}, 100\textsuperscript{e}, en de 1000\textsuperscript{e} rij filteren:
 <<label="BrackDiamantenRow110", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, echo=-1>>=
 options(max.print=100)
 diamanten[c(1,10,100,1000),]
 @
+
+Naast het gebruik van variabele namen, kolom- en rijnummers, als filters is echter nog een andere methode. Deze maakt ook gebruik van vectors, alleen ditmaal zijn de elementen geen cijfers of namen maar \term{logisische constanten}.\footnote{Engels = Logical constants} Deze term is misschien nieuw, de elementen niet. Dit gaat namelijk om de elementen \texttt{TRUE} en \texttt{FALSE} welke ook al zijn behandeld in relatie tot het gebruik van functies. Hierbij werd aangegeven dat deze toestemming geven (of niet) aan het uitvoeren van bepaalde elementen in een functie. De werking van deze \term{logisische constanten} bij het filteren van een dataframe is in principe hetzelfde:
+<<label="BrackDiamantenLogical", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, echo=-1>>=
+options(max.print=20)
+diamanten[,c(FALSE,TRUE,FALSE,FALSE,FALSE,
+             TRUE,FALSE,FALSE,FALSE,FALSE)]
+@
+
+Zoals je ziet worden nu de alleen de tweede en zesde kolom geselecteerd. Het lastige van deze methode is echter dat je voor iedere kolom moet aangeven of deze al dan niet gefilterd moet worden. In dit geval is nog te overzien maar stel nu dat al we rij 1 t/m 10 willen selecteren. Dan zouden we een vector van \term{logisische constanten} nodig hebben met \Sexpr{nrow(diamanten)} elementen. Dit is natuurlijk absurd, en op deze manier heeft deze manier van filteren ook weinig zin. Het heeft echter wel nut als we rijen willen selecteren die aan een bepaalde voorwaarde voldoen. Stel nu eens dat we alleen maar de rijen willen met diamanten die als kleur \texttt{''E''} hebben. Dan kan dat als volgt:
+<<label="BrackDiamantenLogicalRow", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, echo=-1>>=
+options(max.print=100)
+diamanten[diamanten$color=="I",]
+@
+
+Dit gaat misschien een beetje snel, dus daarom gaan we even stap voor stap bekijken wat hier nu precies gebeurd. Eerst kunnen we vaststellen dat we rijen gaan filteren omdat we informatie invoeren voor de \keys{,}. De kolommen laten we onaangetast aangezien we na de \keys{,} geen informatie invoeren. Daarna gaan we kijken wat we precies voor een vector invoeren:
+<<label="BrackDiamantenLogicalRowBreak1", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+diamanten$color=="I"
+@
+
+Voor het \texttt{==}-teken staat een vector, namelijk de \texttt{color}-kolom van het dataframe. Dit is dus een \term{vector} met een lengte van \Sexpr{nrow(diamanten)} waarin de waardes voor iedere rij op de variabele \texttt{color} zijn gegeven:
+<<label="BrackDiamantenLogicalRowBreak1a", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+diamanten$color
+@
+
+Het \texttt{==}-teken bekijkt of de elementen voor het teken gelijk zijn aan de elementen (in dit geval \'e\'en  element) na het teken. In dit geval wordt dus voor alle \Sexpr{nrow(diamanten)} waardes gekeken of deze gelijk is aan \texttt{''I''}. Zoals we kunnen zien zijn de eerste drie waardes niet gelijk aan \texttt{''I''}, de uitkomst is immers \texttt{FALSE}. De vierde waarde is echter wel gelijk aan \texttt{''I''}. Deze informatie wordt samengevoegd in een \term{vector} waarin er dus voor iedere rij controleerd of de kleur van de diamant gelijk is aan een door ons gespecifeerde kleur. Deze \term{vector} kan dan dus dienst doen als filter aangezien het voor iedere rij specifieerd of deze rij in het dataframe moet blijven, of niet.
+
+Aangezien deze methode nogal lastig is (zeker als er meerdere filters moeten worden toegepast), is er ook de \func{subset}-functie.\footnote{Het ongelukkige aan deze functie vind ik zelf dat zowel een element als de functie zelf de naam \emph{subset} hebben. Dit kan soms verwarrend werken.} Deze functie is al kort toegelicht in het kookboek (\texttt{subset(x=diamanten,\allowbreak subset=cut==''Very Good'')}). De werking van deze functie is ook gebasseerd op \term{logisische constanten}, alleen de notatie is wat overzichtelijker. De zojuist gebruikte filter, \texttt{diamanten\allowbreak [diamanten\$color==\allowbreak ''I'',]}, kan namelijk eenvoudig als volgt worden genoteerd:
+<<label="BrackDiamantenSubsetEqual", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+subset(x=diamanten, subset=color=="I")
+@
+
+Dit resulteert in precies hetzelfde dataframe, het is maar net waar je voorkeur ligt! De \func{subset}-functie heeft als voordeel dat waneer er meerdere filters moeten worden teogepast het nog steeds redelijk overzichtelijk blijft.
+<<label="BrackDiamantenSubsetMultiple", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+# Zowel kleur "I" als kwaliteit "Premium"
+subset(x=diamanten, subset= color=="I" & cut=="Premium")
+# OF kleur "I" OF kwaliteit "Premium" (of "toevallig" beide)
+subset(x=diamanten, subset= color=="I" | cut=="Premium")
+@
+
+Hierbij defineert een \keys{\&} \emph{zowel}, en een \keys{\textbar} \emph{of}. Het kan natuurlijk zo complex als je maar wilt, dit gaat echter het doel van dit boek te buiten. Een goed advies is altijd om complexere filters in meerdere stappen uit tevoeren, om op deze manier het overzicht te bewaren.
+
+\begin{tip}[Waarom \term{R} geweldig is]
+In het begin kan het cre\"eeren van bepaalde subsets van je data erg lastig zijn, als je het echter onder de knie krijgt zal je merken dat \term{R} eindeloze mogelijkheden biedt. Stel bijvoorbeeld dat we maar diamanten willen selecter die een een karaat-gehalte boven het gemiddelde hebben. Dan zouden we eerst kunnen kijken naar het gemiddelde, om dit vervolgens in de filter te gebruiken:
+<<label="RisGreat", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA,echo=-1>>=
+options(max.print=20)
+mean(diamanten$carat, na.rm=TRUE)
+subset(x=diamanten, subset= carat>0.7979397)
+@
+
+Stel nu echter dat de dataset veranderd, omdat er bijvoorbeeld nieuwe data beschikbaar. In dit geval zouden we opnieuw het gemiddelde moeten uitrekenen en het oude gemiddelde hiermee vervangen. Het kan echter eenvoudiger:
+<<label="RisGreat2", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+subset(x=diamanten, 
+       subset= carat>mean(diamanten$carat, na.rm=TRUE))
+@
+
+Het gemiddelde wordt dus eerste berekend en vervolgens gebruikt als waarde waartegen het karaat-gehalte van iedere diamant tegen wordt afgezet. Vergelijking die wordt gemaakt is dus niet langer statisch, maar dynamisch geworden. Als het gemiddelde door wat voor een reden veranderd, zal het filter namelijk nog steeds dezelfde werking hebben. 
+
+Door handig gebruik te maken van dit soort eigenschappen van \term{R} wordt het een stuk eenvoudiger om analyses te herhalen op nieuwe, of bewerkte, data.
+\end{tip}
 
 \subsection{Beschrijvende statistiek}
 

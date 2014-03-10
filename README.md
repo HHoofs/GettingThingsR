@@ -9,6 +9,7 @@ In dit hoofdstuk gaat het vooral om
 
 Hoofdstuk 2
 --------------
++Toevoegen uitleg dat er eigenlijk geen verschil zit tussen syntax en handmatig invoeren in console!
 
 Misc
 ==============

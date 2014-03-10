@@ -239,14 +239,14 @@ Als je er voor hebt gekozen om bij de installatie af te wijken van de gesuggeree
 Om data van andere statistische programma's in te lezen hebben het \term{foreign} pakket nodig. Eerst moeten we dit pakket installeren. Klik hiervoor op \menu{Packages > Install Packages} en type onder \menu{Packages (seperate multiple with space or comma)} \directory{foreign} en vervolgens op \menu{Install}. Het \term{foreign}-pakket is nu ge\"installeerd.
 
 Vervolgens moet het pakket worden ingeladen, hiervoor moet we eerst een nieuw script openen van waaruit we alle commando's gaan uitvoeren. Klik hiervoor op \menu{File > New File > R Script}. Vervolgens verschijnt er een venster met als titel \texttt{Untitled1}. Vervolgens typen we in dit script onze eerste syntax.
-<<label="foreignsyntax",comment=NA, echo=TRUE, eval=FALSE>>=
+<<label="foreignsyntax",  echo=TRUE, eval=FALSE>>=
 require(foreign)
 @
 
 Om deze regel syntax uit te voeren zijn er verschillende mogelijkheden:Zo is het mogelijk de syntax te markeren en vervolgens (i) op \menu{Run} te klikken, (ii) de toetsencombinatie \keys{ctrl + enter} te gebruiken, of (iii) het menu \menu{Code > Run Line(s)} gebruiken. Bij deze methode zal alle gemarkeerde syntax worden uitgevoerd. Het is echter ook mogelijk om ergens op de regel te klikken en vervolgens een van de drie bovengenoemde methodes toe te passen. Deze methode voert vervolgens de syntax uit die op deze regel is gegeven. 
 
 Kies een van de bovengenoemde methodes en voer te syntax uit. Je zult nu het volgende in de \texttt{Console} zien verschijnen
-<<label="foreignconsole",comment=NA, echo=TRUE>>=
+<<label="foreignconsole",  echo=TRUE>>=
 require(foreign)
 @
 
@@ -258,17 +258,17 @@ Het installeren van een pakket is slechts eenmaal nodig. Het activeren van een p
 
 \subsection{Werkmap}
 Voor \term{R} is het van belang om te weten in welke map de bestanden e.d. staan die je wilt gebruiken. Deze map wordt de werkmap genoemd. Alle verwijzingen naar bestanden zijn altijd relatief ten op zichte van de werkmap, zoals we later zullen zien. Eerst is het van belang om de werkmap de defineren. Klik hiervoor op \menu{Files > \dots} en navigeer naar de map waar je het SPSS bestand hebt opgeslagen en klik vervolgens op \menu{Ok}. Nu zal je onder \menu{Files} alle bestanden zien die zich in de door jouw gespecifeerde map bevinden. Dit is echter pas de helft van het verhaal, om deze map als werkmap te defineren is er nog een handeling nodig, klik hiervoor op \menu{Files > More > Set As Working Directory}. Je zal nu iets als het volgende in de \texttt{Console} te zien krijgen:
-<<label="consolesetwd",comment=NA, echo=TRUE, eval=FALSE>>=
+<<label="consolesetwd",  echo=TRUE, eval=FALSE>>=
 setwd("D:/Users/Huub/Documents/Project/GettingThingsR")
 @
 
 Om te controleren of je werkmap inderdaad juist is gedefineerd type je het volgende in je syntax:
-<<label="sourcegetwd",comment=NA, echo=TRUE, eval=FALSE>>=
+<<label="sourcegetwd",  echo=TRUE, eval=FALSE>>=
 getwd()
 @
 
 En voer je dit commando uit (bijv. \keys{ctrl + enter})
-<<label="consolegetwd",comment=NA, echo=TRUE, eval=TRUE>>=
+<<label="consolegetwd",  echo=TRUE, eval=TRUE>>=
 getwd()
 @
 
@@ -276,7 +276,7 @@ In de \texttt{Console} is nu te zien welke map als werkmap is gedifineerd.
 
 \begin{tip}[Definering werkmap opnemen in syntax]
 Zoals je kunt zien hebben we het commando:
-<<label="consolesetwd2",comment=NA, echo=TRUE, eval=FALSE>>=
+<<label="consolesetwd2",  echo=TRUE, eval=FALSE>>=
 setwd("D:/Users/Huub/Documents/Project/GettingThingsR")
 @
 \noindent
@@ -285,19 +285,19 @@ niet opgenomen in de syntax. Dit is echter wel aan te bevelen. Dit komt voorname
 
 \subsection{Inlezen SPSS-bestand}
 Nu het juiste pakket en de werkmap is gedefineerd kunnen we beginnen om het SPSS-bestand in te lezen. Hiervoor gebruiken we een functie uit het \term{foreign}-pakket. \textbf{Vanaf nu wordt de syntax en de bijbehorende resultaat uit de \texttt{Console} gelijkertijd weergegeven.} 
-<<label="diamantenSav", tidy=TRUE, comment=NA, highlight=TRUE, warning=FALSE>>=
+<<label="diamantenSav", tidy=TRUE,   highlight=TRUE, warning=FALSE>>=
 read.spss(file="diamanten.sav", to.data.frame=TRUE)
 @
 
 Het is mogelijk dat er een \texttt[newred]{Warning message} in de \texttt{Console} komt, deze kan je echter negeren. Zoals je ziet krijg je de eerste regels (aantal verschilt per PC) te zien van het databestand. \term{R} laat altijd maar een beperkt aantal regels zien om de \texttt{Console} overzichtelijk te houden. Het is ons nu dus gelukt om een SPSS-bestand te lezen met behulpt van \term{R}. Er is echter \'e\'en probleem! Als we met dit databestand willen gaan werken zouden we iedere keer de zojuist gebruikte functie (\texttt{read.spss}) te gebruiken. Dit is natuurlijk erg omslachtig en hier is dan ook een zeer nuttige oplossing voor: Het cree\"eren van een \textbf{object}.
 
 Een object kan alles zijn dus ook een databestand. Om een object te creeren gebruiken we \keys{\textless + -}. Daarnaast moet een object ook een naam hebben, welke je gebruikt om het object 'op te roepen'. Laten we het diamanten bestand linken aan een object onder de naam \term{diamanten}, door de vorige syntax aan te passen:  
-<<label="diamantenAssignObject", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="diamantenAssignObject", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 diamanten <- read.spss(file="diamanten.sav", to.data.frame=TRUE)
 @
 
 Zoals je ziet is er in de \texttt{Console} nu niks anders te zien dan de syntax (en misschien een \texttt[newred]{Warning message}). Maar dat betekend niet dat er niks gebeurd is! Want als je nu alleen de naam van het object typt:
-<<label="diamantennObject", tidy=TRUE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="diamantennObject", tidy=TRUE, highlight=TRUE, warning=FALSE>>=
 diamanten
 @
 
@@ -305,7 +305,7 @@ Krijg je te zien dat het object \term{diamanten} gelijk staat aan het databestan
 
 \begin{war}[Hoofdlettergevoelig]
 \term{R} is hoofdlettergevoelig, als een object dus \term{diamanten} heet dan zal je een foutmelding krijgen als je \term{Diamanten} gebruikt:
-<<label="DiamantenObject", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="DiamantenObject", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 Diamanten
 @
 Dit telt voor alle bewerkingen in \term{R}, functies, locaties van databestanden, waardes, etc.
@@ -318,7 +318,7 @@ Het is van belang om te begrijpen dat \term{R} eigenlijk niet meer is dan een pr
 Aangezien \term{R} echter werkt met een open-code (open-source), is het voor iedereen mogelijk toevoegingen in de vorm van pakketten te ontwerpen en deze in te dienen. Als een pakket is goedgekeurd dan wordt deze beschikbaar gesteld via het offici\"ele CRAN (Comprehensive R Archive Network) archief.\footnote{Het is echter ook mogelijk dat je pakketten op internet vind die niet via de offici\"ele manier worden aangeboden. Dit zijn meestal kleine aanpassingen op bestaande pakketten, maar ook grotere pakketen worden soms op deze manier aangeboden. Deze pakketen kunnen uiteraard prima werken, toch is de controle (vooral van de \term{R}-gemeenschap) bij dergelijke pakketten een stuk lager, dus waakzaamheid is aan te raden!} Het voordeel van deze, semi-gecontroleerde, manier van pakket-distrubutie is dat de kwaliteit gewaarborgd blijft. Daarnaast is het ook verplicht dat ieder pakket een uitgebreide handleiding heeft waarin iedere functie uitgebreid wordt beschreven. Daarnaast werken alle pakketten op hun beurt ook weer met een open-code, waardoor eventuele fouten snel kunnen worden opgespoord en hersteld.
 
 Nu het hoe en waarom van pakketen is uitgelegd, kunnen we ons concentreren op de installatie ervan. Zoals vermeld is dit eenvoudig mogelijk via \menu{Packages > Install Packages}, het is echter ook mogelijk om een installatie via de syntax uit te voeren. Deze methode is ook zichtbaar als je een pakket installeerd via de zojuist genoemde methode. Als je deze methode namelijk volgt zal je in \texttt{Console} de volgende invoer zien:
-<<label="InstallSyntaxx", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA,eval=FALSE>>=
+<<label="InstallSyntaxx", tidy=FALSE, highlight=TRUE, warning=FALSE,  eval=FALSE>>=
 install.packages("ggplot2")
 @
 
@@ -328,7 +328,7 @@ Echter, zoals vermeld staat bij de Tip aangaande het installeren van pakketten i
 
 Het defineren van een werkmap is relatief eenvoudig. Zoals vermeld zal \term{R} altijd vanuit deze map werken. Als bestanden worden ingelezen of worden opgeslagen zal dat dus vanuit deze werkmap plaatsvinden. Het is echter ook mogelijk om bij dergelijke bewerkingen af te wijken van de werkmap. Het kan bijvoorbeeld voorkomen dat een databestand op een andere locatie staat en dat het van belang is dat deze locatie niet wordt veranderd. Bij een dergelijk geval zal deze locatie moeten worden vermeld bij het gebruik van een functie. Stel bijvoorbeeld dat het \term{diamanten}-bestand op een andere locatie staat dan in de werkmap dan zou de \texttt{syntax} er bijvoorbeeld als volgt uit kunnen zien:
 
-<<label="diamantenAssignObjectOther", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, eval=FALSE>>=
+<<label="diamantenAssignObjectOther", tidy=FALSE, highlight=TRUE, warning=FALSE,   eval=FALSE>>=
 read.spss(file="D:/Users/Huub/Documents/OverigeMap/diamanten.sav",
           to.data.frame=TRUE)
 # i.p.v. read.spss(file="diamanten.sav",to.data.frame=TRUE)
@@ -338,12 +338,12 @@ Zoals je ziet is dit een stuk omslachtiger, en daarom verdient het ook de voorke
 
 \begin{war}[\textbackslash\textbackslash of /, maar niet \textbackslash]
 Een optie om de werkmap de defineren is natuurlijk de locatie te kopieren vanuit bijvoorbeeld Windows Explorer te kopi\"eren. Dat zou er dan als volgt uit zien:
-<<label="workingdirectoryW", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, eval=FALSE, error=TRUE>>=
+<<label="workingdirectoryW", tidy=FALSE, highlight=TRUE, warning=FALSE,   eval=FALSE, error=TRUE>>=
 setwd("D:\Users\Huub\Documents\Project\GettingThingsR")
 @
 \noindent
 Error?! Maar wat is dan het verschil met de juiste invoer? Het verschil zit hem in de \textbackslash. Zoals veel programma's gebruikt \term{R} de \textbackslash als een bijzonder invoerteken. Oftewel het maakt onderdeel uit van bepaalde bewerkingen. In dit voorbeeld probeert \term{R} de bewerking \textbackslash{U}, wat geen geldige bewerking is. Het is daarom van belang altijd een van de volgende twee variaties te gebruiken:
-<<label="workingdirectoryAlt", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, eval=FALSE>>=
+<<label="workingdirectoryAlt", tidy=FALSE, highlight=TRUE, warning=FALSE,   eval=FALSE>>=
 setwd("D:\\Users\\Huub\\Documents\\Project\\GettingThingsR")
 setwd("D:/Users/Huub/Documents/Project/GettingThingsR")
 @
@@ -355,7 +355,7 @@ Dus of een dubbele \textbackslash, of simpelweg een enkele /.
 Bij het inlezen van een bestand maken we eigenlijk voor het eerst echt gebruik van een functie (ook al is \func{require} ook een functie). Aangezien functies een belangrijk onderdeel vormen van \term{R} is een goed begrip van functies esssentieel. Een functie heeft altijd een bepaalde invoer nodig. Wat voor een invoer dat is ligt aan de functie. Als er een gemiddelde moet worden berekend moeten het getallen zijn, als er een databestand moet worden ingelezen moet het de naam van het bestand zijn. 
 
 De invoer van een functie kan bestaan uit meerdere elementen die allemaal een eigen functie hebben binnen de functie. Zo bestaat functie \func{read.spss} uit de volgende elementen:
-<<label="readspssFunctie", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, eval=FALSE>>=
+<<label="readspssFunctie", tidy=FALSE, highlight=TRUE, warning=FALSE,   eval=FALSE>>=
 read.spss(file, use.value.labels = TRUE, to.data.frame = FALSE,
           max.value.labels = Inf, trim.factor.names = FALSE,
           trim_values = TRUE, reencode = NA, 
@@ -367,7 +367,7 @@ Zoals je ziet zijn dit meer elementen dan dat we hebben gebruikt om het databest
 In de \func{read.spss} functie hebben we in het voorbeeld daarom de elementen \texttt{file} en \texttt{to.data.frame} gefineerd. Waarbij de eerste geen standaard waarde heeft en de tweede als standaard waarde \texttt{FALSE} heeft terwijl de voorkeur hier naar \texttt{TRUE} uitgaat. Als het goed is blijf je nu met twee vragen zitten. Hoe weet ik welke elementen een functie bevat, en hoe weet ik of een element een standaard waarde heeft?
 
 Om de elementen van een functie te weten te komen is het nodig om de help functie te gebruiken. Dit is redelijk eenvoudig, je zet namelijk simpelweg een \keys{?} voor de functie:
-<<label="questionReadspss", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, eval=FALSE>>=
+<<label="questionReadspss", tidy=FALSE, highlight=TRUE, warning=FALSE,   eval=FALSE>>=
 ?read.spss
 @
 
@@ -378,7 +378,7 @@ De overige kopjes geven extra informatie, die vaak erg handig kan zijn. Zo geeft
 Nu we weten hoe de functie eruit ziet en wat het doet, blijft alleen de vraag nog staan hoe we kunnen weten welk element een standaard waarde heeft en welke niet. Soms is dit vermeld onder \emph{Arguments}, maar je kan het altijd terug zien onder \term{Usage}. Hierbij heeft een element dat gevolgt wordt door een \keys{=}, een standaard waarde. De standaard waarde, je raadt het al, is de waarde achter het \keys{=}-teken. Dus het element \texttt{max.value.labels} heeft dus een standaard waarde van \term{Inf}, wat gelijk staat aan oneindig (\emph{infinite}). Als we zit combineren met de informatie die onder \emph{Arguments} staat kunnen we dus redelijk ontleden wat dit element doet, en wat er gebeurd als we het niet specificeren. Hier gaat het dus om het aantal unieke waardes dat een variabele mag hebben om te worden omgecodeerd tot een \term{factor}. Waarbij de standaard waarde oneindig betreft. 
 
 Een laaste opmerking die gemaakt dient te worden ten opzichte van een functie is dat de volgorde waarin je de elementen ordent niet uitmaakt. Het volgende is dus ook mogelijk:
-<<label="MirroredFunction", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, eval=FALSE>>=
+<<label="MirroredFunction", tidy=FALSE, highlight=TRUE, warning=FALSE,   eval=FALSE>>=
 read.spss(to.data.frame=TRUE, file=("diamanten.sav")
 # i.p.v. read.spss(file="diamanten.sav", to.data.frame=TRUE)
 @
@@ -410,7 +410,7 @@ read.spss(to.data.frame=TRUE, file=("diamanten.sav")
 \end{figure}
 
 Nu we hebben gekeken hoe we de werking en inhoud (elementen) van een functie kunnen bekijken, is het van belang om nog even kort stil te staan bij de invoer van de bestandsnaam. Zoals we hebben gezien moest \texttt{file} een \term{karakter}-reeks bevatten, wat zoveel betekend als een stuk tekst. Een \term{karakter}-reeks kan echter ook bestaan uit enkel cijfers, maar toch worden gezien als een \term{karakter}-reeks, bijvoorbeeld:
-<<label="characterNumbers", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="characterNumbers", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 # Karakter-reeks
 "123"
 # Numeriek
@@ -423,7 +423,7 @@ Tot slot spelen de waardes \texttt{TRUE}/\texttt{FALSE} een belangrijke rol in \
 
 \begin{tip}[Verkorte invoer functie]
 Tot nu toe worden alle functies netjes uitgeschreven. Het is in bepaalde gevallen ook mogelijk alleen de invoer te plaatsen. Dat ziet er als volgt uit:
-<<label="ShortFunction", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, eval=FALSE>>=
+<<label="ShortFunction", tidy=FALSE, highlight=TRUE, warning=FALSE,   eval=FALSE>>=
 read.spss("diamanten.sav", to.data.frame=TRUE)
 # i.p.v. read.spss(file="diamanten.sav", to.data.frame=TRUE)
 @
@@ -431,7 +431,7 @@ read.spss("diamanten.sav", to.data.frame=TRUE)
 Zoals je ziet wordt het stukje \texttt{file=} achterwegen gelaten, maar het stukje \texttt{to.data.frame=} niet, hoe zit dat? 
 \indent
 De naam van het element kan worden weggelaten als de volgorde van invoer overeenkomt met de standaard volgorde van de functie. Aangezien \texttt{\char`\"diamanten.sav\char`\"} dus het eerste stukje invoer is wordt dus dit dus automatische gelinkt aan het eerste element (\texttt{file}) van de functie (onthoud \texttt{?read.spss}). Daarom is het ook niet mogelijk om de volgende, nog kortere, variant te gebruiken:
-<<label="ToShortFunction", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, eval=FALSE>>=
+<<label="ToShortFunction", tidy=FALSE, highlight=TRUE, warning=FALSE,   eval=FALSE>>=
 read.spss("diamanten.sav", TRUE)
 @
 
@@ -445,24 +445,24 @@ In dit boek zullen elementnamen altijd worden vermeld in de functie. Dit heeft a
 \section{Kookboek}
 \subsection{Datastructuur}
 In eerst instantie is het vaak prettig om wat meer gevoel met het dataframe te krijgen. In tegenstelling tot SPSS bijvoorbeeld zien we niet meer direct de spreadsheet, wat in het begin toch even wennen is! De eerste methode om de data wat verder te bekijken is om onder \texttt{Environment} op \term{diamanten} te klikken. Nu zal er op de plaats waar eerst de syntax stond een soort van Excel-sheet te staan. In tegenstelling tot een Excel-sheet is het echter niet mogelijk om de getallen te bewerken, het is dus puur ter controle. Daarnaast is ook dit overzicht tot een maximum aantal lijnen beperkt. Waar zijn die onderste lijnen toch gebleven? Simpel:
-<<label="DiamantenTail", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="DiamantenTail", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 tail(x=diamanten)
 @
 
 Met deze functie is het mogelijk om de laatste vijf lijnen te zien van het dataframe. Daarnaast geven de nummers voor iedere lijn ook aan welk rijnummer de de rijen hebben t.o.v. van het totale dataframe. Een tegenovergestelde functie is ook beschikbaar:
-<<label="DiamantenHead", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="DiamantenHead", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 head(x=diamanten)
 @
 
 Nu de eerste en laatste rijen bekend zijn, zijn er nog een aantal ander functies die een overzicht geven de structuur van de data, zoals onder andere het aantal rijen, kolommen, of beide:
-<<label="DimensiesDiamanten", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="DimensiesDiamanten", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 nrow(x=diamanten) #Aantal rijen
 ncol(x=diamanten) #Aantal kolommen
 dim(x=diamanten) #Aantal dimensies
 @
 
 Het aantal rijen en kolommen komt, zoals verwacht, overeen met het aantal van het SPSS-bestand. Een laatste handige methode om zicht te krijgen op de structuur van je data is de \texttt{str} functie:
-<<label="StrDiamanten", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="StrDiamanten", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 #Overzicht structuur
 str(object=diamanten, vec.len=2)
 @
@@ -470,7 +470,7 @@ str(object=diamanten, vec.len=2)
 Deze functie geeft voor iedere variabele (kolom) aan wat voor een soort variabele het is en geeft een aantal unieke waardes voor iedere variabele. Zoals te zien is bijvoorbeeld de variabele \texttt{cut} een \term{factor} met 5 mogelijke waardes (waarvan twee voorbeelden worden gegegeven: ''Fair'' \& ''Good''). De variabele \texttt{depth} daarintegen is een numerieke variabele. De vorm van de variabele be\"invloedt de mogelijke bewerkingen die met de variabele mogelijk zijn. 
 
 Tot slot is het som handig om alleen de variabele namen van het dataframe te zien, daarvoor kan je simpelweg de volgende functie gebruiken:
-<<label="ColNames", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="ColNames", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 colnames(x=diamanten)
 @
 
@@ -482,36 +482,36 @@ Zoals je ziet wordt alle input na een \# genegeerd door de \texttt{Console}. Tek
 Een kleine introductie tot \term{object} manipulatie is onontkoombaar om \term{R} effici\"ent te gebruiken. Het is bijvoorbeeld nodig om beschrijvende statistiek te verkrijgen van een selectie van variabelen, i.p.v. alle variabelen. Daarnaast gebruik ik bewust de bewoording  ''\term{object}-manipulatie'' t.o.v. ''Dataframe-manipulatie'', omdat de manipulatie methodes niet alleen toegepast kunnen worden op dataframes maar op objecten in het algemeen. 
 
 Laten we eerst kijken naar de mogelijkheid om \'e\'en enkele variabele selecteren. Hiervoor zijn verschillende methode's waarvan we hier er twee zullen toelichten. De eerste methode maakt gebruik van het \keys{\$}-teken, dit wordt toegepast als volgt:
-<<label="DollarDiamanten", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="DollarDiamanten", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 diamanten$carat
 @
 
 Het onderdeel met de naam vermeld na het \keys{\$}-teken wordt dus ontrokken uit het \term{object} voor het \keys{\$}-teken. Het resultaat is een vector, wat niks meer is dan een rij van waardes (in dit geval cijfers), ofwel een dataframe met slechts een kolom. 
 
 De tweede optie maakt gebruik van de \keys{\lbrack + \rbrack}-tekens. De uitwerking van de deze optie ziet er als volgt uit:
-<<label="BrackDiamanten", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="BrackDiamanten", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 diamanten[,c("carat")]
 @
 
 Dat ziet er een stuk ingewikkelder uit! Maar deze methode heeft zijn winst echter liggen in de mogelijkheid tot uitbreiding. Zo is het bijvoorbeeld mogelijk om meerdere kolommen tegelijk te selecteren:
-<<label="BrackDiamantenMultiple", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, echo=2>>=
+<<label="BrackDiamantenMultiple", tidy=FALSE, highlight=TRUE, warning=FALSE,   echo=2>>=
 options(max.print=20)
 diamanten[,c("carat","color")]
 @
 
 Naast het selecteren van kolommen is ook mogelijk om rijen te selecteren, zo is het mogelijk om de eerste 5 rijen te selecteren:
-<<label="BrackDiamantenRow5", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, echo=2>>=
+<<label="BrackDiamantenRow5", tidy=FALSE, highlight=TRUE, warning=FALSE, echo=2>>=
 options(max.print=100)
 diamanten[1:5,]
 @
 
 Waarbij beide methode's ook gecombineerd kunnen worden:
-<<label="BrackDiamantenRowKolom", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="BrackDiamantenRowKolom", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 diamanten[20:25,c("color","table")]
 @
 
 Hier worden dus rij 20 t/m 25 geselecteerd voor de variabelen \texttt{color} \& \texttt{table}. De laatste functie die we in dit stuk bespreken is de \texttt{subset}-functie. Deze functie zorgt ervoor dat alleen de rijen (\emph{cases}) die voldoen aan een bepaalde voorwaarde worden geselecteerd. Stel dat we bijvoorbeeld alleen maar de rijen willen selecter waarvan de \texttt{cut} 'Very Good' is, dan kan dat als volgt:
-<<label="SubsetExamp", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="SubsetExamp", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 subset(x=diamanten, subset=cut=="Very Good")
 @
 
@@ -519,7 +519,7 @@ Hierop zijn natuurlijk talloze variaties mogelijk, die in de \textbf{Kijkje in d
 
 \subsection{Beschrijvende statistiek}
 Een goede start is de \texttt{summary}-functie. Deze kan je bijvoorbeeld toepassen op het hele dataframe:
-<<label="SummaryDiamant", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, echo=-1>>=
+<<label="SummaryDiamant", tidy=FALSE, highlight=TRUE, warning=FALSE,   echo=-1>>=
 options(max.print=100)
 summary(diamanten)
 @
@@ -527,7 +527,7 @@ summary(diamanten)
 Voor \term{numerieke}-variabelen wordt het minumim, 1\textsuperscript{e} kwartiel, mediaan, gemiddelde, 3\textsuperscript{e} kwartiel en maximum getoond. Voor \term{factor}- en \term{karakter}-variabelen worden de meest frequente waardes getoond.
 
 Het is natuurlijk ook mogelijk om per variabele verschillende waardes te bekijken, voor numerieke variabelen zijn er bijvoorbeeld de volgende mogelijkheden:
-<<label="NumeriekeMogelijkheden", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="NumeriekeMogelijkheden", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 mean(x=diamanten$carat, na.rm=TRUE) #Gemiddelde
 sd(x=diamanten$carat, na.rm=TRUE) #Standaard deviatie
 min(x=diamanten$carat, na.rm=TRUE) #Minimum
@@ -536,7 +536,7 @@ max(x=diamanten$carat, na.rm=TRUE) #Maximum
 
 \begin{war}[na.rm=TRUE]
 Waarom staat er bij de meeste simpele functie al een rare toevoeging in de vorm van \texttt{na.rm=TRUE}. In het bovenstaande geval werken de functies ook zonder deze toevoeging, echter als de variabele \'e\'en of meerdere missende waardes bevat (aangeveven met \texttt{NA}) dan is deze toevoeging wel cruciaal. De toevoeging staat namelijk voor ''Missing at random''. Als dit niet waar is, FALSE (de standaardwaarde in deze functie), is het niet mogelijk om een gemiddelde te berekenen:
-<<label="MissingMean", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="MissingMean", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 Var1 <- c(0,2,4,6,8,10,NA)
 # Vergelijk 
 mean(x=Var1, na.rm=TRUE)
@@ -545,14 +545,14 @@ mean(x=Var1) #gelijk aan mean(x=Var1, na.rm=FALSE)
 \end{war}
 
 Voor \term{factor}- en \term{karakter}-variabelen zijn behoren de volgende opties tot de mogelijkheden:
-<<label="KarakterMogelijkheden", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="KarakterMogelijkheden", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 table(diamanten$cut) #Frequenties van iedere waarde
 prop.table(table(diamanten$cut)) #Relatieve proporties per waarde
 prop.table(table(diamanten$cut))*100 #als percentage
 @
 
 Tot slot kijken we nog naar de basis functie voor de correlatie:
-<<label="CorrelatieDiamanten", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="CorrelatieDiamanten", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 cor(diamanten[ ,c("depth","table","price")])
 @
 Waarbij hier dus de correlatie voor de variabelen \texttt{depth}, \texttt{table}, en \texttt{price} worden gegeven. 
@@ -561,7 +561,7 @@ Waarbij hier dus de correlatie voor de variabelen \texttt{depth}, \texttt{table}
 \subsection{Datastructuur}
 
 Zoals we in het voorgaande hoofdstuk hebben kunnen zien, is het niet nodig om elementen van een functie te defineren als deze een standaardwaarde hebben. Als een dergelijk element niet wordt gedefineerd zal de functie immers deze standaardwaarde gebruiken om de functie uit te voeren. Ook bij de functies \func{head} en \func{tail} maakten we hier in het kookboek gebruik van. In het kookboek werd aangegeven dat deze functie de eerste (of laatste) 6 rijen van een dataframe laat zien. Als we echter kijken naar de elementen van deze functies (\texttt{?head} of \texttt{?tail}) zien we dat we dit aantal kunnen aanpassen door een waarde aan het element \texttt{n} toe te wijzen. Standaard is dit getal \texttt{6},\footnote{Zoals je in het \texttt{Help}-bestand kan zien is de standaardwaarde \texttt{6L} i.p.v. \texttt{6}. Deze \texttt{L} zorgt ervoor dat deze 6 als een geheel getal wordt gedefineerd. Voor de werking van de functie maakt het niks uit, het enige verschil is dat bewerkingen van dergelijke ''hele'' getallen ietsjes sneller zijn dan van ''normale'' getallen. Wil je zeker weten dat een \texttt{6} gelijk is aan \texttt{6L}, vraag het aan \term{R} zelf (\texttt{6 == 6L}).} als we dit echter veranderen in \texttt{3} dan zullen alleen de eerste (of laatste) drie rijen worden getoond:
-<<label="DiamantenHead3Rows", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="DiamantenHead3Rows", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 head(x=diamanten, n=3)
 # versimpeld; head(diamanten, 3) 
 @
@@ -571,14 +571,14 @@ De fucnties \func{ncol}, \func{nrow} en \func{dim} hebben geen alternatieve elem
 Een stuk intressanter zijn echter de mogelijkheden die \func{colnames} biedt. Twee aspecten zijn van belang om deze mogelijkheden te begrijpen. Het eerste aspect betreft het soort object dat deze functie als uitvoer geeft, een \term{vector}. Een \term{vector} is een reeks van \'e\'en bepaald soort waarde, in dit geval een verzameling van \term{karakter}-reeksen. Dergelijke vectoren zijn cruciaal voor het gebruik en begrijpen van \term{R}, waarmee we op het tweede komen. Het handige van een \term{vector} is namelijke dat de elementen die de reeks (\term{vector}) vormen vervangen kunnen worden. Deze bewerkingmogelijkheid zullen we gaan gebruiken om de variabele namen van ons dataframe te gaan veranderen.
 
 Voordat we echter deze mogelijkheid gaan bekijken maken we eerst een ''kopie'' van het \term{diamenten}-dataframe zodat we niet het orgineel gaan aanpassen.\footnote{Nu is het natuurlijk een kleine moeite om het dataframe opnieuw in te lezen, echter voor de overzichteloijkheid is hier niet voor gekozen}:
-<<label="DiamantenNewName", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="DiamantenNewName", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 diamanten_kopie <- diamanten
 # Check of dataframes inderdaad gelijk zijn
 identical(x=diamanten_kopie, y=diamanten)
 @
 
 Zoals je ziet laat de functie \func{identical} zien dat we nu twee identieke dataframes hebben, waarvan we het kopie gaan bewerken. Stel nu dat we bijvoorbeeld de variabelen V1 t/m V10 willen noemen, dan kan dit als volgt:
-<<label="DiamantenNewVariableName", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="DiamantenNewVariableName", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 colnames(x=diamanten_kopie) <- c("V1","V2","V3","V4","V5",
                                  "V6","V7","V8","V9","V10")
 # Controleren
@@ -625,7 +625,7 @@ Er staat dus zowel aan de linkse als de rechts kant van de \texttt{<-} een \term
 \end{figure}
 
 In dit voorbeeld hebben we dus alle variabelen gelijk benoemd. Stel nu eeens dat we slechts twee variabelen een nieuwe naam willen geven. Dan kunnen we gebruik maken van een bewerking die we in het kookboek bij de selectie van rijen en kolommen terug hebben gezien:
-<<label="DiamantenOneNewVariableName", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="DiamantenOneNewVariableName", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 diamanten_kopie <- diamanten
 # Geeft alleen naam van tweede variabele
 colnames(x=diamanten_kopie)[c(2,10)] 
@@ -681,7 +681,7 @@ In de loop van dit boek zullen nog vele varianten en alternatieve manieren van f
 De bvoenstaand filter-technieken worden in principe ook toegepast bij het selecteren van rijen en kolommen van dataframes. Als voorbeeld kunnen we de code nemen zoals in het kookboek workt gebruikt; \texttt{diamanten[,c(''carat'')]}. Omdat een dataframe twee dimensies heeft is het van belang om aan te geven over welke dimensie je de filter wilt toepassen, de rijen of de kolommen.\footnote{Dit dus in tegenstelling tot het filteren van een \term{vector}, welke slechts \'e\'en dimensie heeft.} Om aan te geven welke dimensie we willen filteren gebruiken we de \keys{,}, waarbij alle invoer voor de \keys{,} wordt gebruikt om de rijen te filteren, en alle informatie na de \keys{,} voor de kolommen. Als er voor een dimensie geen invoer wordt gegeven wordt deze hele dimensie behouden, er wordt dan dus niet gefilterd.
 
 In het voorbeeld (\texttt{diamanten[,c(''carat'')]}) wordt er dus informatie gegeven met betrekking tot de kolommen. Waarbij dus alleen de kolom wordt behouden met de naam \texttt{''carat''}. Het gebruiken van namen om te filteren is mogelijk omdat een dataframe niet alleen nummers aan kolommen toekent maar ook namen. In dit geval heeft de volgende bewerking dus hetzelfde effect.
-<<label="BrackDiamantenNumber", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, echo=-1>>=
+<<label="BrackDiamantenNumber", tidy=FALSE, highlight=TRUE, warning=FALSE,   echo=-1>>=
 options(max.print=20)
 diamanten[,2]
 @
@@ -756,14 +756,14 @@ In principe is dit ook wat \term{R} daadwerkelijk doet. Het kijkt welke positie 
 \end{figure}
 
 Als er slechts een kolom hoeft te worden gefilterd is het niet nodig om de variabele-naam of kolom-nummer tussen \keys{(+)} te plaatsen. Dus \texttt{diamanten[\allowbreak,c(''carat'')]} staat gelijk aan \texttt{diamanten[,\allowbreak''carat'']}. Echter als er meerde variabelen worden geselecteerd is dit wel nodig. Als er immers geens \keys{(+)} worden gebruikt dan is het voor \term{R} niet duidelijk welke invoer waarvoor bestemd is. Als we bijvoorbeeld naar het tweede voorbeeld kijken uit het kookboek, \texttt{diamanten[,c("carat","color")]}, dan zou het fout gaan als we de variabele-namen niet in een vector zouden plaatsen:
-<<label="BrackDiamantenMultipleFout", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, echo=-1>>=
+<<label="BrackDiamantenMultipleFout", tidy=FALSE, highlight=TRUE, warning=FALSE,   echo=-1>>=
 options(max.print=20)
 diamanten[,"carat","color"]
 @
 
 Zoals je ziet krijg je een error. Dit komt omdat je voor teveel dimensies informatie geeft. Daarom is het dus van belang om de filters voor de rijen respectievelijk de kolommen in een \term{vector} te plaatsen. Waarbij de \term{vector} voor de \keys{,} dus de filter aangeeft voor de rijen en de \term{vector} na de \keys{,} voor de kolommen. Maar hoe zit het dan met het de \keys{:} zoals in bijvoorbeeld \texttt{diamanten[1:5,]
 }~? De bewerking is mogelijk omdat het gebruik van een \keys{:} resulteert in een \term{vector}:
-<<label="Vector1to5", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="Vector1to5", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 1:5
 # Is gelijk aan
 c(1,2,3,4,5)
@@ -772,49 +772,49 @@ c(1,2,3,4,5)
 En aangezien een \term{vector} gebruikt kan worden als vector is het mogelijk om op deze manier de eerste tot en met de vijfde rij te selecteren.
 
 Het gaat er dus om dat er de invoer na en voor de \keys{,} een \term{vector} is die gebruikt kan worden als een filter. Hierbij is het bijvoorbeeld niet van belang wat de volgorde is van de filter.
-<<label="BrackDiamantenOrder", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, echo=-1>>=
+<<label="BrackDiamantenOrder", tidy=FALSE, highlight=TRUE, warning=FALSE, echo=-1>>=
 options(max.print=20)
 diamanten[,c("color","carat")]
 @
 
 Zoals je ziet worden nog steeds dezelfde variabelen gefiltert. Echter, let op! De volgorde van de variabelen in het nieuwe, gefilterde, dataframe is wel veranderd. Het neemt de volgorde aan zoals deze in de filter is gegeven. Tot slot nog een voorbeeld waarin we de 1\textsuperscript{e}, 10\textsuperscript{e}, 100\textsuperscript{e}, en de 1000\textsuperscript{e} rij filteren:
-<<label="BrackDiamantenRow110", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, echo=-1>>=
+<<label="BrackDiamantenRow110", tidy=FALSE, highlight=TRUE, warning=FALSE,   echo=-1>>=
 options(max.print=100)
 diamanten[c(1,10,100,1000),]
 @
 
 Naast het gebruik van variabele namen, kolom- en rijnummers, als filters is echter nog een andere methode. Deze maakt ook gebruik van vectors, alleen ditmaal zijn de elementen geen cijfers of namen maar \term{logisische constanten}.\footnote{Engels = Logical constants} Deze term is misschien nieuw, de elementen niet. Dit gaat namelijk om de elementen \texttt{TRUE} en \texttt{FALSE} welke ook al zijn behandeld in relatie tot het gebruik van functies. Hierbij werd aangegeven dat deze toestemming geven (of niet) aan het uitvoeren van bepaalde elementen in een functie. De werking van deze \term{logisische constanten} bij het filteren van een dataframe is in principe hetzelfde:
-<<label="BrackDiamantenLogical", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, echo=-1>>=
+<<label="BrackDiamantenLogical", tidy=FALSE, highlight=TRUE, warning=FALSE,   echo=-1>>=
 options(max.print=20)
 diamanten[,c(FALSE,TRUE,FALSE,FALSE,FALSE,
              TRUE,FALSE,FALSE,FALSE,FALSE)]
 @
 
 Zoals je ziet worden nu de alleen de tweede en zesde kolom geselecteerd. Het lastige van deze methode is echter dat je voor iedere kolom moet aangeven of deze al dan niet gefilterd moet worden. In dit geval is nog te overzien maar stel nu dat al we rij 1 t/m 10 willen selecteren. Dan zouden we een vector van \term{logisische constanten} nodig hebben met \Sexpr{nrow(diamanten)} elementen. Dit is natuurlijk absurd, en op deze manier heeft deze manier van filteren ook weinig zin. Het heeft echter wel nut als we rijen willen selecteren die aan een bepaalde voorwaarde voldoen. Stel nu eens dat we alleen maar de rijen willen met diamanten die als kleur \texttt{''E''} hebben. Dan kan dat als volgt:
-<<label="BrackDiamantenLogicalRow", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA, echo=-1>>=
+<<label="BrackDiamantenLogicalRow", tidy=FALSE, highlight=TRUE, warning=FALSE,   echo=-1>>=
 options(max.print=100)
 diamanten[diamanten$color=="I",]
 @
 
 Dit gaat misschien een beetje snel, dus daarom gaan we even stap voor stap bekijken wat hier nu precies gebeurd. Eerst kunnen we vaststellen dat we rijen gaan filteren omdat we informatie invoeren voor de \keys{,}. De kolommen laten we onaangetast aangezien we na de \keys{,} geen informatie invoeren. Daarna gaan we kijken wat we precies voor een vector invoeren:
-<<label="BrackDiamantenLogicalRowBreak1", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="BrackDiamantenLogicalRowBreak1", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 diamanten$color=="I"
 @
 
 Voor het \texttt{==}-teken staat een vector, namelijk de \texttt{color}-kolom van het dataframe. Dit is dus een \term{vector} met een lengte van \Sexpr{nrow(diamanten)} waarin de waardes voor iedere rij op de variabele \texttt{color} zijn gegeven:
-<<label="BrackDiamantenLogicalRowBreak1a", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="BrackDiamantenLogicalRowBreak1a", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 diamanten$color
 @
 
 Het \texttt{==}-teken bekijkt of de elementen voor het teken gelijk zijn aan de elementen (in dit geval \'e\'en  element) na het teken. In dit geval wordt dus voor alle \Sexpr{nrow(diamanten)} waardes gekeken of deze gelijk is aan \texttt{''I''}. Zoals we kunnen zien zijn de eerste drie waardes niet gelijk aan \texttt{''I''}, de uitkomst is immers \texttt{FALSE}. De vierde waarde is echter wel gelijk aan \texttt{''I''}. Deze informatie wordt samengevoegd in een \term{vector} waarin er dus voor iedere rij controleerd of de kleur van de diamant gelijk is aan een door ons gespecifeerde kleur. Deze \term{vector} kan dan dus dienst doen als filter aangezien het voor iedere rij specifieerd of deze rij in het dataframe moet blijven, of niet.
 
 Aangezien deze methode nogal lastig is (zeker als er meerdere filters moeten worden toegepast), is er ook de \func{subset}-functie.\footnote{Het ongelukkige aan deze functie vind ik zelf dat zowel een element als de functie zelf de naam \emph{subset} hebben. Dit kan soms verwarrend werken.} Deze functie is al kort toegelicht in het kookboek (\texttt{subset(x=diamanten,\allowbreak subset=cut==''Very Good'')}). De werking van deze functie is ook gebasseerd op \term{logisische constanten}, alleen de notatie is wat overzichtelijker. De zojuist gebruikte filter, \texttt{diamanten\allowbreak [diamanten\$color==\allowbreak ''I'',]}, kan namelijk eenvoudig als volgt worden genoteerd:
-<<label="BrackDiamantenSubsetEqual", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="BrackDiamantenSubsetEqual", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 subset(x=diamanten, subset=color=="I")
 @
 
 Dit resulteert in precies hetzelfde dataframe, het is maar net waar je voorkeur ligt! De \func{subset}-functie heeft als voordeel dat waneer er meerdere filters moeten worden teogepast het nog steeds redelijk overzichtelijk blijft.
-<<label="BrackDiamantenSubsetMultiple", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="BrackDiamantenSubsetMultiple", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 # Zowel kleur "I" als kwaliteit "Premium"
 subset(x=diamanten, subset= color=="I" & cut=="Premium")
 # OF kleur "I" OF kwaliteit "Premium" (of "toevallig" beide)
@@ -825,14 +825,14 @@ Hierbij defineert een \keys{\&} \emph{zowel}, en een \keys{\textbar} \emph{of}. 
 
 \begin{tip}[Waarom \term{R} geweldig is]
 In het begin kan het cre\"eeren van bepaalde subsets van je data erg lastig zijn, als je het echter onder de knie krijgt zal je merken dat \term{R} eindeloze mogelijkheden biedt. Stel bijvoorbeeld dat we maar diamanten willen selecter die een een karaat-gehalte boven het gemiddelde hebben. Dan zouden we eerst kunnen kijken naar het gemiddelde, om dit vervolgens in de filter te gebruiken:
-<<label="RisGreat", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA,echo=-1>>=
+<<label="RisGreat", tidy=FALSE, highlight=TRUE, warning=FALSE, echo=-1>>=
 options(max.print=20)
 mean(diamanten$carat, na.rm=TRUE)
 subset(x=diamanten, subset= carat>0.7979397)
 @
 
 Stel nu echter dat de dataset veranderd, omdat er bijvoorbeeld nieuwe data beschikbaar. In dit geval zouden we opnieuw het gemiddelde moeten uitrekenen en het oude gemiddelde hiermee vervangen. Het kan echter eenvoudiger:
-<<label="RisGreat2", tidy=FALSE, highlight=TRUE, warning=FALSE, comment=NA>>=
+<<label="RisGreat2", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 subset(x=diamanten, 
        subset= carat>mean(diamanten$carat, na.rm=TRUE))
 @

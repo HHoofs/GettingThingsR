@@ -1,9 +1,26 @@
+setwd("X:\\Ond\\Arbeid\\GGD-vragenlijsten JGZ\\ArtikelSelfReport")
+
+Chapter1 <- file("Artikel_ref.txt", "rt") 
+Chapter1 <- readLines(Chapter1)
+
+Chapter1[[57]]
+
+AA <- which(str_detect(Chapter1,"note"))
+BB <- which(str_detect(Chapter1,"},"))
+
+for(i in 1:length(AA)){
+  V <-which.min(abs(AA[i] - BB))
+  print(V)
+}
+
+
 require(stringr)
 Chapter1 <- file("Chapter1.Rnw", "rt") 
+Chapter1 <- readLines(Chapter1)
 
 Term_w <- str_detect(string=Chapter1, pattern="\\\\term")
 Term <- list()
-for(i in 1:length(Chapter1[Which])){
+for(i in 1:length(Chapter1[Term_w])){
 line <- Chapter1[Term_w][i]
 line_cleaned <- gsub("[\\{\\}]", "", regmatches(line, gregexpr("term\\{.*?\\}", line))[[1]])
 line_term_cleaned <- gsub("term","",line_cleaned)

@@ -843,7 +843,42 @@ Door handig gebruik te maken van dit soort eigenschappen van \term{R} wordt het 
 \end{tip}
 
 \subsection{Beschrijvende statistiek}
+Een laatste kijkje in de keuken in de hoofdstuk betreft de beschrijvende statistiek. De \func{summary}-functie spreekt voor zich, evenals de functies die nodig zijn om de verschillende spreidings- en centrummaten te verkrijgen. Wel is het misschien goed om even stil te staan bij de tabellen. Ten eerste is belangrijk om te begrijpen wat er bij de laatste tabel gebeurde:
+<<label="KarakterMogelijkhedenAdvanced", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+prop.table(table(diamanten$cut))*100 #als percentage
+@
 
+Lijkt logisch, en dat is het ook. Toch is het goed om te begrijpen wat er precies gebeurd. Eerst wordt er door \term{R} een object geproduceert. In dit geval bestaat dit uit aantallen. Daarna worden deze aantallen omgezet in proporties. Belangrijker is echter dat het dergelijke object, met de proporties of ruwe aantallen, alleen numerieke waardes bevat. Daarom wordt het mogelijk om allerlei, mathematische, bewerkingen uit te voeren op deze waardes.
+
+Een andere optie van tabellen die in het kookboek niet zijn genoemd, zijn kruistabellen. Dit is relatief eenvoudig:
+<<label="Kruistabel", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+table(diamanten$cut,diamanten$color)
+@
+
+Ook hierbij is natuurlijk mogelijk om, op een gelijke manier als bij de univariate-tabel, percentages en proporties weer te geven:
+<<label="KruistabelPer", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+# Percentages
+prop.table(table(diamanten$cut,
+                 diamanten$color)
+           )*100
+@
+
+\begin{tip}[Het afbreken van lijnen]
+Zoals je al af en toe hebt gezien wordt niet altijd alle invoer op een lijn geplaatst. Dit heeft voor dit boek het voordeel dat alles netjes binnen de lijntjes blijft, maar heeft ook het algemene voordeel dat de syntax leesbaar blijft. Daar waar we momenteel nog maar korte stukjes syntax hebben, zal dit namelijk snel meer worden. Zeker als er meerdere \keys{()}, \keys{,}, en/of \keys{'} worden gebruikt wordt het soms onduidelijk door welk \keys{)} een \keys{(} wordt gesloten. Voor \term{R} maakt het niet uit over hoeveel lijnen je de code verdeeld. Zolang er namelijk nog sluitende \keys{)} of \keys{'} ontbreken zal het de de invoer niet onderbreken:
+<<label="Fout", tidy=FALSE, highlight=TRUE, eval=FALSE, warning=FALSE>>=
+prop.table(table(diamanten$cut,
+                 diamanten$color)
+@
+Zoals je ziet komt er in de \texttt{console} een \keys{+} te staan. Dit komt omdat \term{R} nog extra informatie verwacht aangezien de \term{functie} nog niet ''afgesloten'' is. Als je nu in de \texttt{console} klikt en heel veel \keys{enter} geeft zal je merken dat er nog niks veranderd. Om de \term{functie} toch ''af te sluiten'', kunnen we het ontbrekende \keys{)} geven:\footnote{Het is ook altijd mogelijk om op \keys{Esc} te duwen. Dan worden alle bewerkingen gestopt en komt er weer een nieuwe, lege, regel te staan!.}
+<<label="FoutK", tidy=FALSE, highlight=TRUE, eval=FALSE, warning=FALSE>>=
+)
+*100
+@
+Maar waarom krijg je nu een error? Dat komt omdat het stukje \texttt{*100} een geheel nieuwe invoer lijn is. Hier begin \term{R} dus opnieuw te werken. En aangezien \texttt{*100} een bewerking is die over een \term{object} moet worden uitgevoerd, is dit niet mogelijk aangezien deze niet gegeven is. Het ''ongestraft'' afbreken van syntax kan dus alleen als de \term{functie} of bewerking nog niet afgesloten is, zodra dit wel is gebeurd zal \term{R} weer ''opnieuw'' beginnen. Onderstaande had wel gewerkt:
+<<label="FoutK2", tidy=FALSE, highlight=TRUE, eval=FALSE, warning=FALSE>>=
+)*100
+@
+\end{tip}
 
 \chapter{Elementaire Statistische Toetsen}
 

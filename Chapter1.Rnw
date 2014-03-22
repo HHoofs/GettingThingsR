@@ -9,6 +9,9 @@
 \setlength{\belowcaptionskip}{5pt plus 3pt minus 2pt}
 \usepackage[font={sf},labelfont={bf,sf}]{caption}
 
+%Inline blockquote
+\usepackage[autostyle]{csquotes}
+
 %Kleuren pakket
 \usepackage{xcolor}
 
@@ -235,7 +238,7 @@ Als je er voor hebt gekozen om bij de installatie af te wijken van de gesuggeree
 
 \chapter{Data Inlezen}
 \section{Kookboek}
-\subsection{\texttt[black]{foreign}-Pakket installeren \& activeren}
+\subsection{\texttt[black]{foreign}-Pakket installeren \& activeren}\label{sec:DataKookForeign}
 Om data van andere statistische programma's in te lezen hebben het \term{foreign} pakket nodig. Eerst moeten we dit pakket installeren. Klik hiervoor op \menu{Packages > Install Packages} en type onder \menu{Packages (seperate multiple with space or comma)} \directory{foreign} en vervolgens op \menu{Install}. Het \term{foreign}-pakket is nu ge\"installeerd.
 
 Vervolgens moet het pakket worden ingeladen, hiervoor moet we eerst een nieuw script openen van waaruit we alle commando's gaan uitvoeren. Klik hiervoor op \menu{File > New File > R Script}. Vervolgens verschijnt er een venster met als titel \texttt{Untitled1}. Vervolgens typen we in dit script onze eerste syntax.
@@ -319,7 +322,7 @@ Aangezien \term{R} echter werkt met een open-code (open-source), is het voor ied
 
 Nu het hoe en waarom van pakketen is uitgelegd, kunnen we ons concentreren op de installatie ervan. Zoals vermeld is dit eenvoudig mogelijk via \menu{Packages > Install Packages}, het is echter ook mogelijk om een installatie via de syntax uit te voeren. Deze methode is ook zichtbaar als je een pakket installeerd via de zojuist genoemde methode. Als je deze methode namelijk volgt zal je in \texttt{Console} de volgende invoer zien:
 <<label="InstallSyntaxx", tidy=FALSE, highlight=TRUE, warning=FALSE,  eval=FALSE>>=
-install.packages("ggplot2")
+install.packages("foreign")
 @
 
 Echter, zoals vermeld staat bij de Tip aangaande het installeren van pakketten is installatie van een pakket slechts per PC slechts een keer nodig. Daarom is het voor de reproduceerbaarheid van de \texttt{syntax} geen must om het hierin op te nemen. Wat dus wel een must is voor de repoduceerbaarheid is het includeren van in de syntax van het inladen van het pakket. Naast de gebruikte functie \func{require} is het ook mogelijk de functie \func{library} te gebruiken--er zit geen enkel verschil tussen beiden.
@@ -879,6 +882,65 @@ Maar waarom krijg je nu een error? Dat komt omdat het stukje \texttt{*100} een g
 )*100
 @
 \end{tip}
+
+Tot slot blikken we nog even terug op het gebruik van correlaties in \term{R}. Zoals werd gedemonstreerd in het kookboek kunnen correlaties eenvoudig worden berekend door de \term{functie} \texttt{cor()} te gebruiken. Er is echter een grote tekortkoming aan deze basis-\term{functie}, het geeft namelijk geen significantie-niveau's (\emph{p}-waardes) voor de correlaties. Om significantie-niveau's te verkrijgen is het daarom nodig om een pakket te installeren dat dit wel kan, het \term{Hmisc}-pakket. Om dit pakket te installeren kunnen dezelfde stappen worden doorlopen als bij het installeren van het \term{foreign}-pakket (blz. \pageref{sec:DataKookForeign}), dus bijvoorbeeld:
+<<label="InstallSyntaxHmisc", tidy=FALSE, highlight=TRUE, warning=FALSE,  eval=FALSE>>=
+install.packages("Hmisc")
+@
+
+Daarna moeten we dit pakket natuurlijk ook nog activeren:
+<<label="RequireSyntaxHmisc", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+require(Hmisc)
+@
+
+Vervolgens kunnen we de correlatie van het kookboek opnieuwe berekenen met de correlatie-\term{functie} uit het \term{Hmisc}-pakket:
+<<label="CorrelatieDiamantenRcorr", tidy=FALSE, highlight=TRUE, warning=TRUE>>=
+rcorr(x=diamanten[ ,c("depth","table","price")])
+@
+
+Een fout-melding! Hoe kan dit? Zoals als vermeld is de eerste stap als er iets geks gebeurd met een \term{functie} het help-bestand te openen van de \term{functie} in kwestie; \texttt{?rcorr}. Hier staat onder \emph{Arguments} wat er moet worden ingevoerd voor \texttt[black]{x}: 
+\begin{quotation} \small \noindent a numeric \textbf{matrix} with at least 5 rows and at least 2 columns (if y is absent). For print, x is an object produced by rcorr.\end{quotation}
+Het gaat hier vooral om het vet-gedrukte woord, \term{matrix}. De \emph{invoer} voor het element \texttt[black]{x} moet dus uit een \term{matrix} bestaan. Laten we eens kijken of we aan deze eis voldoen, door te vragen of het ingevoerde \term{object} een \term{matrix} is:
+<<label="classdataframe", tidy=FALSE, highlight=TRUE, warning=TRUE>>=
+is.matrix(x=diamanten[ ,c("depth","table","price")])
+# wat is het dan wel?
+class(x=diamanten[ ,c("depth","table","price")])
+@
+
+Nee dus, het ingevoerde object is een \term{data.frame}. Maar wat is een \term{matrix}, en wat is het verschil met een \term{data.frame}. In principe zijn beide objecten gelijk, daar waar ze allebij uit rijen en kolommen bestaan. Een \term{data.frame} biedt alleen meer opties dan een \term{matrix}. Zo hebben in een \term{matrix} alle waardes dezelfde structruur, dus bijvoorbeeld of allemaal \term{karakter} of allemaal \term{numeriek}. Een ander verschil is dat een \term{matrix} rijen niet behandeld als variabelen, waardoor de mogelijkheden wat beperkter zijn. Er zijn nog meer verschillen maar de kern is dat een \term{matrix} meer moet worden als een mathematisch \term{object} waarmee gerekend kan worden. Het voordeel hiervan is dat een \term{matrix} minder 'meta-informatie' bevat dan een \term{data.frame} waardoor het minder ruimte in beslag neemt. Hierdoor kunnen berekenen sneller worden uitgevoerd. 
+
+Na deze korte, en waarschijnlijke te beknopte, toelichting op een \term{matrix} is de kernvraag natuurlijk: Hoe maken we een \term{matrix}? Het is mogelijk om een matrix zelf in te voeren (net zoals het mogelijk is om zelf een \term{data.frame} samen te stellen), maar het is makkelijker om een \term{data.frame} om te zetten in een \term{matrix}. Voordat we dit echter explecitiet gaan toepassen voor de \term{functie} \texttt{rcorr} gaan we  eerst even in zijn algemeenheid naar deze omzetting kijken. Om een \term{data.frame} om te zetten naar een \term{matrix} kan de \term{functie} \texttt{as.matrix} gebruikt worden. Zo kunnen we bijvoorbeeld een subset van het \term{diamanten}-\term{data.frame} omzetten naar een \term{matrix} op de volgende manier:
+<<label="asmatrixchar", tidy=FALSE, highlight=TRUE, warning=TRUE>>=
+as.matrix(x=diamanten[ ,c("depth","table","cut")])
+@
+
+Zoals je ziet worden nu dus alle waardes allemaal als een \term{karakter} gezien--dit kan je zien aan de \keys{''} om alle waardes. Dus ook de numerieke waardes van de eerste twee variabelen zijn geconverteerd naar een \term{karakter}. Als er echter alleen variabelen die \term{numeriek} zijn worden geconverteerd zullen de waardes van de uiteindelijke \term{matrix} dit ook zijn:
+<<label="asmatrix", tidy=FALSE, highlight=TRUE, warning=TRUE>>=
+as.matrix(x=diamanten[ ,c("depth","table","price")])
+@
+
+Dit is dus een numerieke \term{matrix}, het soort object wat we dus nodig hebben voor de \term{functie} \texttt{rcorr}. Voor de overzichtelijkheid wijzen we de matrix eerst toe aan een \term{object} om dit vervolgens in de \term{functie} in te voegen:
+<<label="CorrelatieDiamantenRcorrmatrix", tidy=FALSE, highlight=TRUE, warning=TRUE>>=
+data_cor <- as.matrix(x=diamanten[ ,c("depth","table","price")])
+rcorr(x=data_cor)
+@
+
+Kijk dat lijkt er al meer op, de correlaties, het aantal rijen (cases) waarover deze berekend zijn, plus het significantie-niveau van iedere correlatieco\"effici\"ent. Tot slot kijken we nog even naar een handig aspect van de uitvoer van deze \term{functie}. Een handigheid die het deelt met veel andere functies. Het is namelijk mogelijk om de uitvoer aan een \term{object} toe te wijzen:
+<<label="CorrelatieObject", tidy=FALSE, highlight=TRUE, warning=TRUE>>=
+cor_tabel <- rcorr(x=data_cor)
+cor_tabel
+@
+
+Is dat nu zo baanbrekend? Nee dat niet, maar de mogelijkheden die dit \term{object} met zich mee brengt zijn dat wel. Zo kunnen we apart de significantie-niveau's opvragen:
+<<label="CorrelatieObjectPval", tidy=FALSE, highlight=TRUE, warning=TRUE>>=
+cor_tabel$P
+# p-waarde voor correlatie depth met price 
+cor_tabel$P["depth","price"]
+@
+
+Het tweede voorbeeld is mogelijk doordat de uitvoer een object is in de vorm van een \term{matrix}. Hiervan wordt vervolgens de rij geselecteerd met de naam \texttt{depth} en de kolom met de naam \texttt{price}. Hierdoor krij je dus de \emph{p}-waarde die behoord bij de correlatie tussen deze twee variabelen. De werking is hier dus gelijk als bij de selectie van rijen en kolommen bij een \term{data.frame}.
+
+Maar 
 
 \chapter{Elementaire Statistische Toetsen}
 

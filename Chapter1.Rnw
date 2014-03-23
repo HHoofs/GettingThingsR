@@ -50,6 +50,11 @@
 %Plaatsing van H en andere float opties
 \usepackage{float}
 
+%Lege pagine figuur bovenaan
+\makeatletter
+\setlength{\@fptop}{0pt}
+\makeatother
+
 %Fancyhdr
 %\renewcommand{\sectionmark}[1]{\markright{#1}}
 %\renewcommand{\sectionmark}[1]{\markright{#1}}
@@ -81,7 +86,7 @@
 
 %Tips e.d. boxen in een float plaatsen
 \floatstyle{plain}
-\newfloat{program}{tb}{lop}
+\newfloat{program}{!tb}{lop}
 \floatname{program}{Program}
 
 \makeindex %https://mirror.hmc.edu/ctan/macros/latex/contrib/splitindex/splitidx.pdf
@@ -92,8 +97,6 @@
 % $ latex Chapter1.tex
 % $ latex Chapter1.tex
 % $ pdflatex Chapter1.tex
-
-
 
 %%% Frames voor zowel tips als warnings door gberuik van tikz
 \newcounter{tip}[section]
@@ -170,7 +173,7 @@ linewidth=2pt
 }
 \makeatother
 
-\specialterms{R,RStudio,foreign,diamanten,Diamanten,karakter,object,Usage,Inf,factor,numerieke,vector,diamenten,element,logisische constanten}
+\specialterms{R,RStudio,foreign,diamanten,karakter,object,Usage,Inf,factor,numerieke,vector,element,logisische constanten,functie,Hmisc,matrix,data.frame,numeriek,lijst}
 
 
 %%% Code to set up special func treatment
@@ -185,12 +188,14 @@ linewidth=2pt
 }
 \makeatother
 
-\specialfunc{require,library,read.spss,head,tail,ncol,nrow,dim,str,colnames,identical,subset}
+\specialfunc{require,library,read.spss,head,tail,ncol,nrow,dim,str,colnames,identical,subset,summary,rcorr
+}
 
 <<settings, include=FALSE>>=
 require(stringr)
 require(knitr)
 options(max.print=100, width=60)
+op <- options(str = strOptions(strict.width = "cut"))
 thm <- knit_theme$get("edit-kwrite")
 # thm <- knit_theme$get("biogoo")
 # thm <- knit_theme$get("acid")
@@ -307,7 +312,7 @@ diamanten
 Krijg je te zien dat het object \term{diamanten} gelijk staat aan het databestand. Doordat we objecten gebruiken is het echter handiger om niet meer over databestanden te spreken maar over dataframe's of dataobjecten. Het object \term{diamanten} is immers geen losstaand bestand maar is toegevoegd aan de \term{R}-omgeving, \texttt{Environment} genoemd in \term{RStudio}. Nu we het dataframe hebben toegevoegd aan de \texttt{Environment} kunnen we er in het volgende hoofdstuk van alles mee gaan doen!
 
 \begin{war}[Hoofdlettergevoelig]
-\term{R} is hoofdlettergevoelig, als een object dus \term{diamanten} heet dan zal je een foutmelding krijgen als je \term{Diamanten} gebruikt:
+\term{R} is hoofdlettergevoelig, als een object dus \term{diamanten} heet dan zal je een foutmelding krijgen als je \texttt[black]{Diamanten} gebruikt:
 <<label="DiamantenObject", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 Diamanten
 @
@@ -467,7 +472,7 @@ dim(x=diamanten) #Aantal dimensies
 Het aantal rijen en kolommen komt, zoals verwacht, overeen met het aantal van het SPSS-bestand. Een laatste handige methode om zicht te krijgen op de structuur van je data is de \texttt{str} functie:
 <<label="StrDiamanten", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 #Overzicht structuur
-str(object=diamanten, vec.len=2)
+str(object=diamanten)
 @
 
 Deze functie geeft voor iedere variabele (kolom) aan wat voor een soort variabele het is en geeft een aantal unieke waardes voor iedere variabele. Zoals te zien is bijvoorbeeld de variabele \texttt{cut} een \term{factor} met 5 mogelijke waardes (waarvan twee voorbeelden worden gegegeven: ''Fair'' \& ''Good''). De variabele \texttt{depth} daarintegen is een numerieke variabele. De vorm van de variabele be\"invloedt de mogelijke bewerkingen die met de variabele mogelijk zijn. 
@@ -573,7 +578,7 @@ De fucnties \func{ncol}, \func{nrow} en \func{dim} hebben geen alternatieve elem
 
 Een stuk intressanter zijn echter de mogelijkheden die \func{colnames} biedt. Twee aspecten zijn van belang om deze mogelijkheden te begrijpen. Het eerste aspect betreft het soort object dat deze functie als uitvoer geeft, een \term{vector}. Een \term{vector} is een reeks van \'e\'en bepaald soort waarde, in dit geval een verzameling van \term{karakter}-reeksen. Dergelijke vectoren zijn cruciaal voor het gebruik en begrijpen van \term{R}, waarmee we op het tweede komen. Het handige van een \term{vector} is namelijke dat de elementen die de reeks (\term{vector}) vormen vervangen kunnen worden. Deze bewerkingmogelijkheid zullen we gaan gebruiken om de variabele namen van ons dataframe te gaan veranderen.
 
-Voordat we echter deze mogelijkheid gaan bekijken maken we eerst een ''kopie'' van het \term{diamenten}-dataframe zodat we niet het orgineel gaan aanpassen.\footnote{Nu is het natuurlijk een kleine moeite om het dataframe opnieuw in te lezen, echter voor de overzichteloijkheid is hier niet voor gekozen}:
+Voordat we echter deze mogelijkheid gaan bekijken maken we eerst een ''kopie'' van het \term{diamanten}-dataframe zodat we niet het orgineel gaan aanpassen.\footnote{Nu is het natuurlijk een kleine moeite om het dataframe opnieuw in te lezen, echter voor de overzichteloijkheid is hier niet voor gekozen}:
 <<label="DiamantenNewName", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 diamanten_kopie <- diamanten
 # Check of dataframes inderdaad gelijk zijn
@@ -840,9 +845,7 @@ subset(x=diamanten,
        subset= carat>mean(diamanten$carat, na.rm=TRUE))
 @
 
-Het gemiddelde wordt dus eerste berekend en vervolgens gebruikt als waarde waartegen het karaat-gehalte van iedere diamant tegen wordt afgezet. Vergelijking die wordt gemaakt is dus niet langer statisch, maar dynamisch geworden. Als het gemiddelde door wat voor een reden veranderd, zal het filter namelijk nog steeds dezelfde werking hebben. 
-
-Door handig gebruik te maken van dit soort eigenschappen van \term{R} wordt het een stuk eenvoudiger om analyses te herhalen op nieuwe, of bewerkte, data.
+Het gemiddelde wordt dus eerste berekend en vervolgens gebruikt als waarde waartegen het karaat-gehalte van iedere diamant tegen wordt afgezet. Vergelijking die wordt gemaakt is dus niet langer statisch, maar dynamisch geworden. Als het gemiddelde door wat voor een reden veranderd, zal het filter namelijk nog steeds dezelfde werking hebben!
 \end{tip}
 
 \subsection{Beschrijvende statistiek}
@@ -893,7 +896,7 @@ Daarna moeten we dit pakket natuurlijk ook nog activeren:
 require(Hmisc)
 @
 
-Vervolgens kunnen we de correlatie van het kookboek opnieuwe berekenen met de correlatie-\term{functie} uit het \term{Hmisc}-pakket:
+Vervolgens kunnen we de correlatie van het kookboek opnieuwe berekenen met de correlatie-\term{functie} \func{rcorr} uit het \term{Hmisc}-pakket:
 <<label="CorrelatieDiamantenRcorr", tidy=FALSE, highlight=TRUE, warning=TRUE>>=
 rcorr(x=diamanten[ ,c("depth","table","price")])
 @
@@ -938,9 +941,101 @@ cor_tabel$P
 cor_tabel$P["depth","price"]
 @
 
-Het tweede voorbeeld is mogelijk doordat de uitvoer een object is in de vorm van een \term{matrix}. Hiervan wordt vervolgens de rij geselecteerd met de naam \texttt{depth} en de kolom met de naam \texttt{price}. Hierdoor krij je dus de \emph{p}-waarde die behoord bij de correlatie tussen deze twee variabelen. De werking is hier dus gelijk als bij de selectie van rijen en kolommen bij een \term{data.frame}.
+Het tweede voorbeeld is mogelijk doordat de uitvoer van \texttt{cor\_tabel\$P} een object is in de vorm van een \term{matrix}. Hiervan wordt vervolgens de rij geselecteerd met de naam \texttt{depth} en de kolom met de naam \texttt{price}. Hierdoor krijg je dus de \emph{p}-waarde die behoord bij de correlatie tussen deze twee variabelen. De werking is hier dus gelijk als bij de selectie van rijen en kolommen bij een \term{data.frame}.
 
-Maar 
+Daarnaast verdient de werking van het \texttt{\$P} stukje ook nog wat verdere uitleg. Eerder hebben we immers gezien dat \keys{\$} een soort filter is die helpt bij het selecteren van variabelen, terwijl hier een \term{matrix} wordt geselecteerd. Om dit te begrijpen moeten we eerste naar de inhoud van \term{object} \texttt{cor\_tabel} kijken:
+<<label="CorrelatieClass", tidy=FALSE, highlight=TRUE, warning=TRUE>>=
+str(cor_tabel)
+@
+
+Zoals aangegeven betreft het \term{object} een \term{lijst}, met drie verschillende matrices, genaamd \emph{r}, \emph{n}, en \emph{P}.\footnote{\emph{n} is ook een \term{matrix} maar aangezien alle elementen dezelfde waarde bevatten wordt in dit geval slechts een keer deze waarde gegeven (dit is geen algemeenheid en is een speciefieke werking van de \func{rcorr} functie). Zo zijn er wel meer kleine weergave verschillen tussen de aparte weergave van iedere \term{matrix} of de, mooi opgemaakte, totale weergave.} Als we het gehele \term{object} opvragen wordt dus de gehele inhoud van de \term{lijst} gegeven, daar waar we met \keys{\$} een selectie kunnen maken. Dit is ook te zien in de zojusit gegeven output, aangezien er ook een \keys{\$} vermeld staat voor de naam van iedere \term{matrix}. Een andere manier om een gedeelte van een lijst te selecteren is als volgt:
+<<label="werkinglijst", tidy=FALSE, highlight=TRUE, warning=TRUE>>=
+cor_tabel[[1]]
+@
+
+In plaats van enkele \keys{[+]} zijn er bij de selectie vanuit een \term{lijst} dubbele \keys{[+]} nodig.\footnote{Het is ook mogelijk om enkele \keys{[+]} te gebruiken, maar de functionaliteit hiervan gaat te ver voor dit boek.} In dit geval selecteren we dus de eerste index uit de \term{lijst} in dit geval \emph{r}, de correlatieco\"effici\"enten. In feite lijkt de werking dus heel erg op de selectie van variabelen uit een \term{data.frame}, alleen ditmaal een dimensie hoger. Een \keys{\$} selecteerd dus een sub-onderdeel van een bepaald object, zoals is ge\"ilustreerd in Figuur \ref{fig:schemaLijstFilter}. Tot slot is het belangrijk om te begrijpen dat een \term{lijst} uit verschillende soorten objecten kan worden opgebouwd. Het hoeft dus niet uit alleen maar dataframes of vectoren te bevatten:
+<<label="werkinglijstdif", tidy=FALSE, highlight=TRUE, warning=TRUE>>=
+voorbeeld_lijst <- list(A=data.frame(V1=1:10,V2=11:20),
+                        B=matrix(c(1:20),ncol=2),
+                        C=1:20,
+                        D=LETTERS[1:20])
+str(voorbeeld_lijst)
+@
+
+\begin{figure}[!h]
+\begin{figframe}
+\centering
+\begin{tikzpicture}[scale=2, font=\sffamily]
+%  \draw[black] (-.7,.7) rectangle (5.6,-1.6);
+  \node[block,align=center] (Overal)  at (2.45, 1.5) {Cor\_tabel};
+
+    	% Correlation
+	\fill [gray!30, label=Nbox] (-.5,.5) rectangle (1.4,-1.4);
+	\node[text= black!60,anchor=south, text height=1.5ex, text depth=.1ex] (rlab) at (.45,.5) {r};
+
+	\node[fblock,align=center] (X11)  at (0, 0) {$r_{1,1}$};
+	\node[fblock,align=center] (X12)  at (.5, 0) {$r_{1,2}$};
+	\node[fblock,align=center] (X13)  at (1, 0) {$r_{1,3}$};
+	\node[fblock,align=center] (X21)  at (0, -.5) {$r_{2,1}$};
+	\node[fblock,align=center] (X22)  at (.5, -.5) {$r_{2,2}$};
+	\node[fblock,align=center] (X23)  at (1, -.5) {$r_{2,3}$};
+	\node[fblock,align=center] (X31)  at (0, -1) {$r_{3,1}$};
+	\node[fblock,align=center] (X32)  at (.5, -1) {$r_{3,2}$};
+	\node[fblock,align=center] (X33)  at (1, -1) {$r_{3,3}$};
+	\node[text= black!80, anchor=south, text height=1.5ex, text depth=.1ex] at (X11.north) {depth};
+	\node[text= black!80, anchor=south, text height=1.5ex, text depth=.1ex] at (X12.north) {table};
+	\node[text= black!80, anchor=south, text height=1.5ex, text depth=.1ex] at (X13.north) {price};
+	\node[text= black!80, rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (X11.west) {depth};
+	\node[text= black!80, rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (X21.west) {table};
+	\node[text= black!80, rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (X31.west) {price};
+    	% N
+
+	\fill [gray!30, label=Vector ] (1.5,.5) rectangle (3.4,-1.4);
+	\node[text= black!60,anchor=south, text height=1.5ex, text depth=.1ex] (nlab) at (2.45,.5) {n};
+
+	\node[fblock,align=center] (N11)  at (2, 0) {$n_{1,1}$};
+	\node[fblock,align=center] (N12)  at (2.5, 0) {$n_{1,2}$};
+	\node[fblock,align=center] (N13)  at (3, 0) {$n_{1,3}$};
+	\node[fblock,align=center] (N21)  at (2, -.5) {$n_{2,1}$};
+	\node[fblock,align=center] (N22)  at (2.5, -.5) {$n_{2,2}$};
+	\node[fblock,align=center] (N23)  at (3, -.5) {$n_{2,3}$};
+	\node[fblock,align=center] (N31)  at (2, -1) {$n_{3,1}$};
+	\node[fblock,align=center] (N32)  at (2.5, -1) {$n_{3,2}$};
+	\node[fblock,align=center] (N33)  at (3, -1) {$n_{3,3}$};
+	\node[text= black!80, anchor=south, text height=1.5ex, text depth=.1ex] at (N11.north) {depth};
+	\node[text= black!80, anchor=south, text height=1.5ex, text depth=.1ex] at (N12.north) {table};
+	\node[text= black!80, anchor=south, text height=1.5ex, text depth=.1ex] at (N13.north) {price};
+	\node[text= black!80, rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (N11.west) {depth};
+	\node[text= black!80, rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (N21.west) {table};
+	\node[text= black!80, rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (N31.west) {price};
+    	% P
+
+	\fill [gray!60, label=Vector ] (3.5,.5) rectangle (5.4,-1.4);
+	\node[ anchor=south, text height=1.5ex, text depth=.1ex] (plab) at (4.45,.5) {P};
+
+	\node[block,align=center] (P11)  at (4, 0) {$p_{1,1}$};
+	\node[block,align=center] (P12)  at (4.5, 0) {$p_{1,2}$};
+	\node[block,align=center] (P13)  at (5, 0) {$p_{1,3}$};
+	\node[block,align=center] (P21)  at (4, -.5) {$p_{2,1}$};
+	\node[block,align=center] (P22)  at (4.5, -.5) {$p_{2,2}$};
+	\node[block,align=center] (P23)  at (5, -.5) {$p_{2,3}$};
+	\node[block,align=center] (P31)  at (4, -1) {$p_{3,1}$};
+	\node[block,align=center] (P32)  at (4.5, -1) {$p_{3,2}$};
+	\node[block,align=center] (P33)  at (5, -1) {$p_{3,3}$};
+	\node[anchor=south, text height=1.5ex, text depth=.1ex] at (P11.north) {depth};
+	\node[anchor=south, text height=1.5ex, text depth=.1ex] at (P12.north) {table};
+	\node[anchor=south, text height=1.5ex, text depth=.1ex] at (P13.north) {price};
+	\node[rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (P11.west) {depth};
+	\node[rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (P21.west) {table};
+	\node[rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (P31.west) {price};
+
+	\path [line] (Overal) --  node [anchor=center, fill=white,align=center,sloped] {Filter~=~\$P} (plab);
+	\path [line, dashed] (Overal) -- (nlab);
+	\path [line, dashed] (Overal) -- (rlab);
+\end{tikzpicture}
+\caption{Schematische weergave van de werking van een lijst en het filteren ervan. De filter is in dit geval, \texttt{\$P}. Hierdoor wordt dus het object in de lijst geselecteerd met de naam \emph{P}.} \label{fig:schemaLijstFilter}
+\end{figframe}
+\end{figure}
 
 \chapter{Elementaire Statistische Toetsen}
 

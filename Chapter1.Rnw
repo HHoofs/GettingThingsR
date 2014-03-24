@@ -280,7 +280,12 @@ En voer je dit commando uit (bijv. \keys{ctrl + enter})
 getwd()
 @
 
-In de \texttt{Console} is nu te zien welke map als werkmap is gedifineerd. 
+In de \texttt{Console} is nu te zien welke map als werkmap is gedifineerd. Er is echter een klein verschil met de daadwerkelijke weergave op het scherm, aangezien dat er als volgt uit zal zien:
+<<label="consolegetwdactual",  echo=FALSE, eval=TRUE, comment=NA>>=
+cat(c('> getwd()','[1] "C:/Users/HuCa/Documents/GettingThingsR"'),sep="\n")
+@
+
+De \keys{\textgreater} wordt echter weggelaten omdat op deze manier de syntax makkelijker te kopieren is (anders zou de \keys{\textgreater} worden meegekopierd en werkt de syntax niet). Deze invoer is dus precies hetzelfde als de geactiveerde syntax. In principe is het ook mogelijk om alles direct in de \texttt{Console} te typen, maar dit is niet bevordelijk voor de reproduceerbaarheid en gebruiksgemak van \term{R} en daarom wordt deze methode niet toegepast in dit boek. Het andere verschil zit in de toevoeging van \keys{\#\#} voor iedere lijn uitvoer. Hierdoor is de uitvoer en invoer makkelijk te scheiden van elkaar. Er is hier voor \keys{\#\#} gekozen omdat alle invoer die hierna volgt in de syntax, genegeerd wordt door \term{R} (zie verder de tip op pagina \pageref{tip:opm}). Hierdoor is het dus mogelijk ieder blok in zijn geheel naar de syntax te kopieren en uit te voeren. 
 
 \begin{tip}[Definering werkmap opnemen in syntax]
 Zoals je kunt zien hebben we het commando:
@@ -335,7 +340,6 @@ Echter, zoals vermeld staat bij de Tip aangaande het installeren van pakketten i
 \subsection{Werkmap}
 
 Het defineren van een werkmap is relatief eenvoudig. Zoals vermeld zal \term{R} altijd vanuit deze map werken. Als bestanden worden ingelezen of worden opgeslagen zal dat dus vanuit deze werkmap plaatsvinden. Het is echter ook mogelijk om bij dergelijke bewerkingen af te wijken van de werkmap. Het kan bijvoorbeeld voorkomen dat een databestand op een andere locatie staat en dat het van belang is dat deze locatie niet wordt veranderd. Bij een dergelijk geval zal deze locatie moeten worden vermeld bij het gebruik van een functie. Stel bijvoorbeeld dat het \term{diamanten}-bestand op een andere locatie staat dan in de werkmap dan zou de \texttt{syntax} er bijvoorbeeld als volgt uit kunnen zien:
-
 <<label="diamantenAssignObjectOther", tidy=FALSE, highlight=TRUE, warning=FALSE,   eval=FALSE>>=
 read.spss(file="D:/Users/Huub/Documents/OverigeMap/diamanten.sav",
           to.data.frame=TRUE)
@@ -483,7 +487,7 @@ colnames(x=diamanten)
 @
 
 \begin{tip}[Opmerkingen \#]
-Zoals je ziet wordt alle input na een \# genegeerd door de \texttt{Console}. Tekst naar een \# kan daarom ook gezien worden als een opmerking. Dit is uiteraard handig als je de syntax enigzins overzichtelijk wilt maken. Het maakt niet uit wat je naar het \# doet, een opmerking hoeft dus niet afgesloten te worden. Als je echter over meerdere lijnen een opmerking wilt maken is het wel van belang om iedere lijn te beginnen met een \#.
+Zoals je ziet wordt alle input na een \# genegeerd door de \texttt{Console}. Tekst naar een \# kan daarom ook gezien worden als een opmerking. Dit is uiteraard handig als je de syntax enigzins overzichtelijk wilt maken. Het maakt niet uit wat je naar het \# doet, een opmerking hoeft dus niet afgesloten te worden. Als je echter over meerdere lijnen een opmerking wilt maken is het wel van belang om iedere lijn te beginnen met een \#. \label{tip:opm}
 \end{tip}
 
 \subsection{Object manipulatie}
@@ -966,13 +970,10 @@ str(voorbeeld_lijst)
 \begin{figframe}
 \centering
 \begin{tikzpicture}[scale=2, font=\sffamily]
-%  \draw[black] (-.7,.7) rectangle (5.6,-1.6);
   \node[block,align=center] (Overal)  at (2.45, 1.5) {Cor\_tabel};
-
-    	% Correlation
+  % Correlation
 	\fill [gray!30, label=Nbox] (-.5,.5) rectangle (1.4,-1.4);
 	\node[text= black!60,anchor=south, text height=1.5ex, text depth=.1ex] (rlab) at (.45,.5) {r};
-
 	\node[fblock,align=center] (X11)  at (0, 0) {$r_{1,1}$};
 	\node[fblock,align=center] (X12)  at (.5, 0) {$r_{1,2}$};
 	\node[fblock,align=center] (X13)  at (1, 0) {$r_{1,3}$};
@@ -988,11 +989,9 @@ str(voorbeeld_lijst)
 	\node[text= black!80, rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (X11.west) {depth};
 	\node[text= black!80, rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (X21.west) {table};
 	\node[text= black!80, rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (X31.west) {price};
-    	% N
-
+  % N
 	\fill [gray!30, label=Vector ] (1.5,.5) rectangle (3.4,-1.4);
 	\node[text= black!60,anchor=south, text height=1.5ex, text depth=.1ex] (nlab) at (2.45,.5) {n};
-
 	\node[fblock,align=center] (N11)  at (2, 0) {$n_{1,1}$};
 	\node[fblock,align=center] (N12)  at (2.5, 0) {$n_{1,2}$};
 	\node[fblock,align=center] (N13)  at (3, 0) {$n_{1,3}$};
@@ -1008,11 +1007,9 @@ str(voorbeeld_lijst)
 	\node[text= black!80, rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (N11.west) {depth};
 	\node[text= black!80, rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (N21.west) {table};
 	\node[text= black!80, rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (N31.west) {price};
-    	% P
-
+  % P
 	\fill [gray!60, label=Vector ] (3.5,.5) rectangle (5.4,-1.4);
 	\node[ anchor=south, text height=1.5ex, text depth=.1ex] (plab) at (4.45,.5) {P};
-
 	\node[block,align=center] (P11)  at (4, 0) {$p_{1,1}$};
 	\node[block,align=center] (P12)  at (4.5, 0) {$p_{1,2}$};
 	\node[block,align=center] (P13)  at (5, 0) {$p_{1,3}$};
@@ -1028,7 +1025,7 @@ str(voorbeeld_lijst)
 	\node[rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (P11.west) {depth};
 	\node[rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (P21.west) {table};
 	\node[rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (P31.west) {price};
-
+  % Paths
 	\path [line] (Overal) --  node [anchor=center, fill=white,align=center,sloped] {Filter~=~\$P} (plab);
 	\path [line, dashed] (Overal) -- (nlab);
 	\path [line, dashed] (Overal) -- (rlab);
@@ -1040,6 +1037,8 @@ str(voorbeeld_lijst)
 \chapter{Elementaire Statistische Toetsen}
 
 \section{Kookboek}
+
+
 
 \section{Kijkje in de keuken}
 

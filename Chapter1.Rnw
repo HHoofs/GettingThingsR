@@ -4,6 +4,9 @@
 \title{Aan de slag met \texttt{R}: Een kookboek en een kijkje in de keuken}
 \author{Huub Hoofs}
 
+%Griekse letters in tekst
+\usepackage{textgreek}
+
 %MmdFramed package (voor de tip blokken en borders voor fiugres)
 \usepackage[tikz]{mdframed}
 \setlength{\belowcaptionskip}{5pt plus 3pt minus 2pt}
@@ -55,24 +58,6 @@
 \setlength{\@fptop}{0pt}
 \makeatother
 
-%Fancyhdr
-%\renewcommand{\sectionmark}[1]{\markright{#1}}
-%\renewcommand{\sectionmark}[1]{\markright{#1}}
-
-\usepackage{emptypage}
-\usepackage{fancyhdr}
-\pagestyle{fancy}
-\renewcommand{\chaptermark}[1]%
-{\markboth{\ #1}{}}
-\renewcommand{\sectionmark}[1]%
-{\markright{\ #1}}
-\fancyhead{}
-\fancyfoot{}
-\fancyhead[RE] {\rightmark\hspace{15pt}\thepage}
-\fancyhead[LO] {\thepage\hspace{15pt}\leftmark}
-
-
-
 %Hyperref
 \usepackage[breaklinks]{hyperref}
 \hypersetup{
@@ -86,8 +71,11 @@
 
 %Tips e.d. boxen in een float plaatsen
 \floatstyle{plain}
-\newfloat{program}{!tb}{lop}
+\newfloat{program}{!b}{lop}
 \floatname{program}{Program}
+
+%Float niet onder voetnoot
+\usepackage[bottom]{footmisc}
 
 \makeindex %https://mirror.hmc.edu/ctan/macros/latex/contrib/splitindex/splitidx.pdf
 % $ latex Chapter1.tex
@@ -173,7 +161,7 @@ linewidth=2pt
 }
 \makeatother
 
-\specialterms{R,RStudio,foreign,diamanten,karakter,object,Usage,Inf,factor,numerieke,vector,element,logisische constanten,functie,Hmisc,matrix,data.frame,numeriek,lijst}
+\specialterms{R,RStudio,foreign,diamanten,karakter,object,Usage,Inf,factor,numerieke,vector,element,logisische constanten,functie,Hmisc,matrix,data.frame,numeriek,lijst,t-toets,formula,car}
 
 
 %%% Code to set up special func treatment
@@ -188,14 +176,34 @@ linewidth=2pt
 }
 \makeatother
 
-\specialfunc{require,library,read.spss,head,tail,ncol,nrow,dim,str,colnames,identical,subset,summary,rcorr
+\specialfunc{
+require,library,read.spss,head,tail,ncol,nrow,dim,str,colnames,identical,subset,summary,rcorr,t.test
 }
+
+%Width
+\usepackage[bindingoffset=0.5cm,margin=3.5cm]{geometry}
+
+%Fancyhdr
+%\renewcommand{\sectionmark}[1]{\markright{#1}}
+%\renewcommand{\sectionmark}[1]{\markright{#1}}
+
+\usepackage{emptypage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\chaptermark}[1]%
+{\markboth{\ #1}{}}
+\renewcommand{\sectionmark}[1]%
+{\markright{\ #1}}
+\fancyhead{}
+\fancyfoot{}
+\fancyhead[RE] {\rightmark\hspace{15pt}\thepage}
+\fancyhead[LO] {\thepage\hspace{15pt}\leftmark}
 
 <<settings, include=FALSE>>=
 require(stringr)
 require(knitr)
-options(max.print=100, width=60)
-op <- options(str = strOptions(strict.width = "cut"))
+options(max.print=100, width=70)
+op <- options(str = strOptions(strict.width = "wrap"))
 thm <- knit_theme$get("edit-kwrite")
 # thm <- knit_theme$get("biogoo")
 # thm <- knit_theme$get("acid")
@@ -244,7 +252,7 @@ Als je er voor hebt gekozen om bij de installatie af te wijken van de gesuggeree
 \chapter{Data Inlezen}
 \section{Kookboek}
 \subsection{\texttt[black]{foreign}-Pakket installeren \& activeren}\label{sec:DataKookForeign}
-Om data van andere statistische programma's in te lezen hebben het \term{foreign} pakket nodig. Eerst moeten we dit pakket installeren. Klik hiervoor op \menu{Packages > Install Packages} en type onder \menu{Packages (seperate multiple with space or comma)} \directory{foreign} en vervolgens op \menu{Install}. Het \term{foreign}-pakket is nu ge\"installeerd.
+Om data van andere statistische programma's in te lezen hebben het \term{foreign} \term{pakket} nodig. Eerst moeten we dit pakket installeren. Klik hiervoor op \menu{Packages > Install Packages} en type onder \menu{Packages (seperate multiple with space or comma)} \directory{foreign} en vervolgens op \menu{Install}. Het \term{foreign}-pakket is nu ge\"installeerd.
 
 Vervolgens moet het pakket worden ingeladen, hiervoor moet we eerst een nieuw script openen van waaruit we alle commando's gaan uitvoeren. Klik hiervoor op \menu{File > New File > R Script}. Vervolgens verschijnt er een venster met als titel \texttt{Untitled1}. Vervolgens typen we in dit script onze eerste syntax.
 <<label="foreignsyntax",  echo=TRUE, eval=FALSE>>=
@@ -1037,8 +1045,79 @@ str(voorbeeld_lijst)
 \chapter{Elementaire Statistische Toetsen}
 
 \section{Kookboek}
+\subsection{T-toets}
+Nu we zicht hebben op de elementaire stappen binnen \term{R}, kunnen we enkele basale toetsen gaan uitvoeren. Als eerste zullen we, uiteraard, kijken naar de \term{t-toets} voor \'e\'en steekproef. Zo kunnen we bijvoorbeeld kijken of de gemiddelde waarde van de diamanten gelijk is aan \$ 4000,-. Hiervoor gebruiken de \term{functie} \func{t.test} op de volgende manier:
+<<label="DiamantenPrijsTtest", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+t.test(x=diamanten$price, mu=4000)
+@
 
+De gemiddelde waarde is dus niet gelijk aan \$ 4000,-. In dit geval is er gebruik gemaakt van een tweezijdige toets met een \textalpha van 5\%. Om andere toetsingscriteria te gebruiken kunnen de standaard waardes worden aangepast (\texttt{?t.test}). Zo kan het \term{element} \texttt{alternative} de waardes \texttt{''two.sided''} (standaard waarde), \texttt{''less''}, of \texttt{''greater''} krijgen, om de richten van de hypothese aan te geven. Om het significantieniveau aan te passen kan de standaard waarde van het \term{element} \texttt{conf.level} worden aangepast. Deze waarde is gelijk aan 1 - \textalpha en geeft dus het percentage van het betrouwbaarheidsinterval van de t-waarde aan. Als we dus een rechtszijdige \term{t-toets} willen uitvoeren met \textalpha = .01 dan kan dat als volgt:
+<<label="DiamantenPrijsTtest01", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+t.test(x=diamanten$price, mu=4000, alternative="greater", 
+       conf.level=1-.01)
+@
 
+Zoals je ziet is er voor gekozen om het percentage van het betrouwbaarheidsinterval niet direct te geven maar door \term{R} te laten uitrekenen. Ook al was dat in dit geval natuurlijk net zo eenvoudig om zelf te doen, het geeft aan dat de waarde van een element ook ''indirect'' kan worden gegeven. 
+
+Na de \term{t-toets} voor \'e\'en steekproef volgt logischerwijs de \term{t-toets} voor twee steekproeven. De dataset bevat momenteel echter nog geen variabele die uit twee groepen bestaat. Daarom gaan we eerst een dichotome variabele aanmaken. Laten we bijvoorbeeld het aantal karaat waaruit de diamanten bestaan categoriseren in een hoge en lage groep. Eerst voegen we een nieuwe, lege, variabele toe aan het dataframe:
+<<label="DiamantenNewVariable", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+diamanten$caratC <- NA
+@
+
+Nu is er nieuwe variabele toegevoegd aan het dataframe. Momenteel bestaat deze variabele echter uitsluitend uit missende waardes, \texttt{NA}\footnote{NA staat voor \textit{Not Available}, niet aanwezig}. Nu willen we alle diamanten die beneden gemiddeld scoren m.b.t. het aantal karaats aan de groep ''laag'' toewijzen, dit kan (onder andere) als volgt:
+<<label="DiamantenNewVariableLaag", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+gem_karaat <- mean(x=diamanten$carat, na.rm=TRUE)
+diamanten[diamanten$carat < gem_karaat,"caratC"] <- "laag"
+@
+
+Te snel? Dan lopen we de bewerkingen nog even stap voor stap door. Eerst berekenen we het gemiddelde karaat-niveau en wijzen we deze waarde toe aan het \term{object} \texttt{gem\_karaat}. Als we dit dus opvragen krijgen we het gemiddelde karaat-niveau (\Sexpr{gem_karaat}). Vervolgens selecteren we alle rijen van het dataframe waarvan het aantal karaats lager ligt dan dit gemiddelde (\texttt{diamanten\$carat < gem\_karaat}). Daarnaast selecteren we de variabele waaraan we nieuwe waardes willen toevoegen (\texttt{''caratC''}). Eigenlijk worden alleen de cellen geselecteerd van de kolom met als variabele naam ''caratC'' waarvan de rijen een waarde hebben onder het gemiddelde karaats-niveau. Tot slot wordt de waarde toegewezen die deze cellen moeten krijgen (\texttt{''laag''}). Nu rest ons alleen nog om de andere, hoge, groep toe te wijzen:
+<<label="DiamantenNewVariableHoog", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+diamanten[diamanten$carat >= gem_karaat,"caratC"] <- "hoog"
+@
+
+Zoals je ziet wordt er in plaats van \keys{>}, \keys{>=} gebruikt. Hiervoor is gekozen omdat anders diamanten met een waarde die exact gelijk ligt aan het gemiddelde geen waarde krijgen toegewezen. 
+
+Ok, terug naar waar we mee bezig waren, een \term{t-toets} voor twee steekproeven:
+<<label="DiamantenTtest", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+t.test(formula=price~caratC, data=diamanten)
+@
+
+Zoals verwacht ligt de gemiddelde waarde van diamanten met een hoog karaats gehalte een stuk hoger. Het \term{formula} element is een bijzonder element binnen \term{R}, en we zullen dit dan ook nog vaker tegenkomen (voor wie niet kan wachten; \texttt{?formula}). In dit geval betekent het, dat \texttt{price} wordt opgesplitst voor de verschillende waardes van \texttt{caratC}. 
+
+Zoals we echter van SPSS(-handboeken) leren, is het van belang om te kijken of de varianties van de twee groepen wel gelijk zijn. Als dit immers niet het geval is moet er een gecorigeerde \term{t-toets} worden uitgevoerd. Als we echter kijken naar het aantal vrijheidsgraden dan zien we dat dit geen rond getal is, oftewel er is al sprake van een gecorigeerde \term{t-toets}. Om te controleren of dit terecht is, is de bekende Levene's test nodig om de homogeniteit van varianties te toetsen. Deze zit, vreemd genoeg, echter niet standaard in \term{R} en daarom moeten we hier een additioneel pakket (\term{car}) voor installeren, in dit voorbeeld via de syntax:
+
+<<label="InstallSyntaxCar", tidy=FALSE, highlight=TRUE, warning=FALSE,  eval=FALSE>>=
+install.packages("car")
+@
+
+Daarna moeten we dit pakket natuurlijk ook nog activeren:
+<<label="RequireSyntaxCar", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+require(car)
+@
+
+Nu kunnen we kijken of de varianties aangaande de karaats-niveaus van de lage en hoge groep gelijk zijn:
+<<label="DLevenesTtest", tidy=FALSE, highlight=TRUE>>=
+leveneTest(y=price~caratC, data=diamanten)
+@
+
+De \texttt[newred]{Warning message} kunnen we negeren, deze wordt aangemaakt omdat de groep variabele niet een \term{factor} is (t.b.v. deze bewerking is wel als zodanig behandeld). Het blijkt dat het terecht is dat er een gecorigeerde \term{t-toets} is uitgvoerd aangezien de Levene's test significant is, \emph{p} < .05. Mocht dit niet het geval zijn geweest, dan hadden we een ''normale'' \term{t-toets} kunnen uitvoeren:
+<<label="DiamantenTtestCorrect", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+t.test(formula=price~caratC, data=diamanten, var.equal=TRUE)
+@
+
+\subsection{AN(C)OVA}
+Maar wat nu als we niet twee maar meerdere groepen hebben, dan komen we natuurlijk uit op de \term{ANOVA}. \term{R} heeft een ingebouwde \term{ANOVA} \term{functie}, maar deze zullen we hier niet behandelen. De reden hiervoor is dat de standaard\footnote{Een \term{functie} die standaard in \term{R} zit noemen we ook wel een \term{base}-\term{functie}. \term{base} zou je eigenlijk kunnen zien als een \term{pakket} dat automatisch geladen wordt.} \term{functie} moeilijk te gebruiken is in combinatie met de gebruikelelijke type II of III kwadratensom (zoals gebruikelijk in bijvoorbeeld SPSS). Daarom gebruiken we de \term{ANOVA} \term{functie} uit het \term{car} \term{pakket}; \func{Anova}. Stel bijvoorbeeld dat we nogmaals naar de waarde van de diamanten willen kijken maar nu in relatie met de kwalitiet van de stenen:
+<<label="DiamantenAnova", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+model <- lm(formula=price~cut, data=diamanten)
+Anova(mod=model)
+@
+
+Voor de overzichtelijkheid is de bewerking hier in twee stappen uitgevoerd. Eerst wordt het model gespecificeerd, in dit geval dus de prijs als functie van de kwalieit van de steen en het bijbehorende dataframe. Daarna wijzen we dit model toe aan \func{Anova}, welke als standaard type II gebruikt. Als we dit willen aanpassen kan dat als volgt:
+<<label="DiamantenAnovaType3", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+Anova(mod=model, type="3")
+@
+
+Ook hier is er een significant verschil tussen de groepen. Om te kijken welke groepen precies verschillen voeren we een post-hoc toets uit.
 
 \section{Kijkje in de keuken}
 

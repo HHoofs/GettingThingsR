@@ -4,10 +4,16 @@
 \title{Aan de slag met \texttt{R}: Een kookboek en een kijkje in de keuken}
 \author{Huub Hoofs}
 
+%Griekse letters in tekst
+\usepackage{textgreek}
+
 %MmdFramed package (voor de tip blokken en borders voor fiugres)
 \usepackage[tikz]{mdframed}
 \setlength{\belowcaptionskip}{5pt plus 3pt minus 2pt}
 \usepackage[font={sf},labelfont={bf,sf}]{caption}
+
+%Inline blockquote
+\usepackage[autostyle]{csquotes}
 
 %Kleuren pakket
 \usepackage{xcolor}
@@ -47,23 +53,10 @@
 %Plaatsing van H en andere float opties
 \usepackage{float}
 
-%Fancyhdr
-%\renewcommand{\sectionmark}[1]{\markright{#1}}
-%\renewcommand{\sectionmark}[1]{\markright{#1}}
-
-\usepackage{emptypage}
-\usepackage{fancyhdr}
-\pagestyle{fancy}
-\renewcommand{\chaptermark}[1]%
-{\markboth{\ #1}{}}
-\renewcommand{\sectionmark}[1]%
-{\markright{\ #1}}
-\fancyhead{}
-\fancyfoot{}
-\fancyhead[RE] {\rightmark\hspace{15pt}\thepage}
-\fancyhead[LO] {\thepage\hspace{15pt}\leftmark}
-
-
+%Lege pagine figuur bovenaan
+\makeatletter
+\setlength{\@fptop}{0pt}
+\makeatother
 
 %Hyperref
 \usepackage[breaklinks]{hyperref}
@@ -78,8 +71,11 @@
 
 %Tips e.d. boxen in een float plaatsen
 \floatstyle{plain}
-\newfloat{program}{tb}{lop}
+\newfloat{program}{!b}{lop}
 \floatname{program}{Program}
+
+%Float niet onder voetnoot
+\usepackage[bottom]{footmisc}
 
 \makeindex %https://mirror.hmc.edu/ctan/macros/latex/contrib/splitindex/splitidx.pdf
 % $ latex Chapter1.tex
@@ -89,8 +85,6 @@
 % $ latex Chapter1.tex
 % $ latex Chapter1.tex
 % $ pdflatex Chapter1.tex
-
-
 
 %%% Frames voor zowel tips als warnings door gberuik van tikz
 \newcounter{tip}[section]
@@ -167,7 +161,7 @@ linewidth=2pt
 }
 \makeatother
 
-\specialterms{R,RStudio,foreign,diamanten,Diamanten,karakter,object,Usage,Inf,factor,numerieke,vector,diamenten,element,logisische constanten}
+\specialterms{R,RStudio,foreign,diamanten,karakter,object,Usage,Inf,factor,numerieke,vector,element,logisische constanten,functie,Hmisc,matrix,data.frame,numeriek,lijst,t-toets,formula,car}
 
 
 %%% Code to set up special func treatment
@@ -182,12 +176,34 @@ linewidth=2pt
 }
 \makeatother
 
-\specialfunc{require,library,read.spss,head,tail,ncol,nrow,dim,str,colnames,identical,subset}
+\specialfunc{
+require,library,read.spss,head,tail,ncol,nrow,dim,str,colnames,identical,subset,summary,rcorr,t.test
+}
+
+%Width
+\usepackage[bindingoffset=0.5cm,margin=3.5cm]{geometry}
+
+%Fancyhdr
+%\renewcommand{\sectionmark}[1]{\markright{#1}}
+%\renewcommand{\sectionmark}[1]{\markright{#1}}
+
+\usepackage{emptypage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\chaptermark}[1]%
+{\markboth{\ #1}{}}
+\renewcommand{\sectionmark}[1]%
+{\markright{\ #1}}
+\fancyhead{}
+\fancyfoot{}
+\fancyhead[RE] {\rightmark\hspace{15pt}\thepage}
+\fancyhead[LO] {\thepage\hspace{15pt}\leftmark}
 
 <<settings, include=FALSE>>=
 require(stringr)
 require(knitr)
-options(max.print=100, width=60)
+options(max.print=100, width=70)
+op <- options(str = strOptions(strict.width = "wrap"))
 thm <- knit_theme$get("edit-kwrite")
 # thm <- knit_theme$get("biogoo")
 # thm <- knit_theme$get("acid")
@@ -235,8 +251,8 @@ Als je er voor hebt gekozen om bij de installatie af te wijken van de gesuggeree
 
 \chapter{Data Inlezen}
 \section{Kookboek}
-\subsection{\texttt[black]{foreign}-Pakket installeren \& activeren}
-Om data van andere statistische programma's in te lezen hebben het \term{foreign} pakket nodig. Eerst moeten we dit pakket installeren. Klik hiervoor op \menu{Packages > Install Packages} en type onder \menu{Packages (seperate multiple with space or comma)} \directory{foreign} en vervolgens op \menu{Install}. Het \term{foreign}-pakket is nu ge\"installeerd.
+\subsection{\texttt[black]{foreign}-Pakket installeren \& activeren}\label{sec:DataKookForeign}
+Om data van andere statistische programma's in te lezen hebben het \term{foreign} \term{pakket} nodig. Eerst moeten we dit pakket installeren. Klik hiervoor op \menu{Packages > Install Packages} en type onder \menu{Packages (seperate multiple with space or comma)} \directory{foreign} en vervolgens op \menu{Install}. Het \term{foreign}-pakket is nu ge\"installeerd.
 
 Vervolgens moet het pakket worden ingeladen, hiervoor moet we eerst een nieuw script openen van waaruit we alle commando's gaan uitvoeren. Klik hiervoor op \menu{File > New File > R Script}. Vervolgens verschijnt er een venster met als titel \texttt{Untitled1}. Vervolgens typen we in dit script onze eerste syntax.
 <<label="foreignsyntax",  echo=TRUE, eval=FALSE>>=
@@ -272,7 +288,12 @@ En voer je dit commando uit (bijv. \keys{ctrl + enter})
 getwd()
 @
 
-In de \texttt{Console} is nu te zien welke map als werkmap is gedifineerd. 
+In de \texttt{Console} is nu te zien welke map als werkmap is gedifineerd. Er is echter een klein verschil met de daadwerkelijke weergave op het scherm, aangezien dat er als volgt uit zal zien:
+<<label="consolegetwdactual",  echo=FALSE, eval=TRUE, comment=NA>>=
+cat(c('> getwd()','[1] "C:/Users/HuCa/Documents/GettingThingsR"'),sep="\n")
+@
+
+De \keys{\textgreater} wordt echter weggelaten omdat op deze manier de syntax makkelijker te kopieren is (anders zou de \keys{\textgreater} worden meegekopierd en werkt de syntax niet). Deze invoer is dus precies hetzelfde als de geactiveerde syntax. In principe is het ook mogelijk om alles direct in de \texttt{Console} te typen, maar dit is niet bevordelijk voor de reproduceerbaarheid en gebruiksgemak van \term{R} en daarom wordt deze methode niet toegepast in dit boek. Het andere verschil zit in de toevoeging van \keys{\#\#} voor iedere lijn uitvoer. Hierdoor is de uitvoer en invoer makkelijk te scheiden van elkaar. Er is hier voor \keys{\#\#} gekozen omdat alle invoer die hierna volgt in de syntax, genegeerd wordt door \term{R} (zie verder de tip op pagina \pageref{tip:opm}). Hierdoor is het dus mogelijk ieder blok in zijn geheel naar de syntax te kopieren en uit te voeren. 
 
 \begin{tip}[Definering werkmap opnemen in syntax]
 Zoals je kunt zien hebben we het commando:
@@ -304,7 +325,7 @@ diamanten
 Krijg je te zien dat het object \term{diamanten} gelijk staat aan het databestand. Doordat we objecten gebruiken is het echter handiger om niet meer over databestanden te spreken maar over dataframe's of dataobjecten. Het object \term{diamanten} is immers geen losstaand bestand maar is toegevoegd aan de \term{R}-omgeving, \texttt{Environment} genoemd in \term{RStudio}. Nu we het dataframe hebben toegevoegd aan de \texttt{Environment} kunnen we er in het volgende hoofdstuk van alles mee gaan doen!
 
 \begin{war}[Hoofdlettergevoelig]
-\term{R} is hoofdlettergevoelig, als een object dus \term{diamanten} heet dan zal je een foutmelding krijgen als je \term{Diamanten} gebruikt:
+\term{R} is hoofdlettergevoelig, als een object dus \term{diamanten} heet dan zal je een foutmelding krijgen als je \texttt[black]{Diamanten} gebruikt:
 <<label="DiamantenObject", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 Diamanten
 @
@@ -319,7 +340,7 @@ Aangezien \term{R} echter werkt met een open-code (open-source), is het voor ied
 
 Nu het hoe en waarom van pakketen is uitgelegd, kunnen we ons concentreren op de installatie ervan. Zoals vermeld is dit eenvoudig mogelijk via \menu{Packages > Install Packages}, het is echter ook mogelijk om een installatie via de syntax uit te voeren. Deze methode is ook zichtbaar als je een pakket installeerd via de zojuist genoemde methode. Als je deze methode namelijk volgt zal je in \texttt{Console} de volgende invoer zien:
 <<label="InstallSyntaxx", tidy=FALSE, highlight=TRUE, warning=FALSE,  eval=FALSE>>=
-install.packages("ggplot2")
+install.packages("foreign")
 @
 
 Echter, zoals vermeld staat bij de Tip aangaande het installeren van pakketten is installatie van een pakket slechts per PC slechts een keer nodig. Daarom is het voor de reproduceerbaarheid van de \texttt{syntax} geen must om het hierin op te nemen. Wat dus wel een must is voor de repoduceerbaarheid is het includeren van in de syntax van het inladen van het pakket. Naast de gebruikte functie \func{require} is het ook mogelijk de functie \func{library} te gebruiken--er zit geen enkel verschil tussen beiden.
@@ -327,7 +348,6 @@ Echter, zoals vermeld staat bij de Tip aangaande het installeren van pakketten i
 \subsection{Werkmap}
 
 Het defineren van een werkmap is relatief eenvoudig. Zoals vermeld zal \term{R} altijd vanuit deze map werken. Als bestanden worden ingelezen of worden opgeslagen zal dat dus vanuit deze werkmap plaatsvinden. Het is echter ook mogelijk om bij dergelijke bewerkingen af te wijken van de werkmap. Het kan bijvoorbeeld voorkomen dat een databestand op een andere locatie staat en dat het van belang is dat deze locatie niet wordt veranderd. Bij een dergelijk geval zal deze locatie moeten worden vermeld bij het gebruik van een functie. Stel bijvoorbeeld dat het \term{diamanten}-bestand op een andere locatie staat dan in de werkmap dan zou de \texttt{syntax} er bijvoorbeeld als volgt uit kunnen zien:
-
 <<label="diamantenAssignObjectOther", tidy=FALSE, highlight=TRUE, warning=FALSE,   eval=FALSE>>=
 read.spss(file="D:/Users/Huub/Documents/OverigeMap/diamanten.sav",
           to.data.frame=TRUE)
@@ -464,7 +484,7 @@ dim(x=diamanten) #Aantal dimensies
 Het aantal rijen en kolommen komt, zoals verwacht, overeen met het aantal van het SPSS-bestand. Een laatste handige methode om zicht te krijgen op de structuur van je data is de \texttt{str} functie:
 <<label="StrDiamanten", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 #Overzicht structuur
-str(object=diamanten, vec.len=2)
+str(object=diamanten)
 @
 
 Deze functie geeft voor iedere variabele (kolom) aan wat voor een soort variabele het is en geeft een aantal unieke waardes voor iedere variabele. Zoals te zien is bijvoorbeeld de variabele \texttt{cut} een \term{factor} met 5 mogelijke waardes (waarvan twee voorbeelden worden gegegeven: ''Fair'' \& ''Good''). De variabele \texttt{depth} daarintegen is een numerieke variabele. De vorm van de variabele be\"invloedt de mogelijke bewerkingen die met de variabele mogelijk zijn. 
@@ -475,7 +495,7 @@ colnames(x=diamanten)
 @
 
 \begin{tip}[Opmerkingen \#]
-Zoals je ziet wordt alle input na een \# genegeerd door de \texttt{Console}. Tekst naar een \# kan daarom ook gezien worden als een opmerking. Dit is uiteraard handig als je de syntax enigzins overzichtelijk wilt maken. Het maakt niet uit wat je naar het \# doet, een opmerking hoeft dus niet afgesloten te worden. Als je echter over meerdere lijnen een opmerking wilt maken is het wel van belang om iedere lijn te beginnen met een \#.
+Zoals je ziet wordt alle input na een \# genegeerd door de \texttt{Console}. Tekst naar een \# kan daarom ook gezien worden als een opmerking. Dit is uiteraard handig als je de syntax enigzins overzichtelijk wilt maken. Het maakt niet uit wat je naar het \# doet, een opmerking hoeft dus niet afgesloten te worden. Als je echter over meerdere lijnen een opmerking wilt maken is het wel van belang om iedere lijn te beginnen met een \#. \label{tip:opm}
 \end{tip}
 
 \subsection{Object manipulatie}
@@ -570,7 +590,7 @@ De fucnties \func{ncol}, \func{nrow} en \func{dim} hebben geen alternatieve elem
 
 Een stuk intressanter zijn echter de mogelijkheden die \func{colnames} biedt. Twee aspecten zijn van belang om deze mogelijkheden te begrijpen. Het eerste aspect betreft het soort object dat deze functie als uitvoer geeft, een \term{vector}. Een \term{vector} is een reeks van \'e\'en bepaald soort waarde, in dit geval een verzameling van \term{karakter}-reeksen. Dergelijke vectoren zijn cruciaal voor het gebruik en begrijpen van \term{R}, waarmee we op het tweede komen. Het handige van een \term{vector} is namelijke dat de elementen die de reeks (\term{vector}) vormen vervangen kunnen worden. Deze bewerkingmogelijkheid zullen we gaan gebruiken om de variabele namen van ons dataframe te gaan veranderen.
 
-Voordat we echter deze mogelijkheid gaan bekijken maken we eerst een ''kopie'' van het \term{diamenten}-dataframe zodat we niet het orgineel gaan aanpassen.\footnote{Nu is het natuurlijk een kleine moeite om het dataframe opnieuw in te lezen, echter voor de overzichteloijkheid is hier niet voor gekozen}:
+Voordat we echter deze mogelijkheid gaan bekijken maken we eerst een ''kopie'' van het \term{diamanten}-dataframe zodat we niet het orgineel gaan aanpassen.\footnote{Nu is het natuurlijk een kleine moeite om het dataframe opnieuw in te lezen, echter voor de overzichteloijkheid is hier niet voor gekozen}:
 <<label="DiamantenNewName", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 diamanten_kopie <- diamanten
 # Check of dataframes inderdaad gelijk zijn
@@ -837,17 +857,267 @@ subset(x=diamanten,
        subset= carat>mean(diamanten$carat, na.rm=TRUE))
 @
 
-Het gemiddelde wordt dus eerste berekend en vervolgens gebruikt als waarde waartegen het karaat-gehalte van iedere diamant tegen wordt afgezet. Vergelijking die wordt gemaakt is dus niet langer statisch, maar dynamisch geworden. Als het gemiddelde door wat voor een reden veranderd, zal het filter namelijk nog steeds dezelfde werking hebben. 
-
-Door handig gebruik te maken van dit soort eigenschappen van \term{R} wordt het een stuk eenvoudiger om analyses te herhalen op nieuwe, of bewerkte, data.
+Het gemiddelde wordt dus eerste berekend en vervolgens gebruikt als waarde waartegen het karaat-gehalte van iedere diamant tegen wordt afgezet. Vergelijking die wordt gemaakt is dus niet langer statisch, maar dynamisch geworden. Als het gemiddelde door wat voor een reden veranderd, zal het filter namelijk nog steeds dezelfde werking hebben!
 \end{tip}
 
 \subsection{Beschrijvende statistiek}
+Een laatste kijkje in de keuken in de hoofdstuk betreft de beschrijvende statistiek. De \func{summary}-functie spreekt voor zich, evenals de functies die nodig zijn om de verschillende spreidings- en centrummaten te verkrijgen. Wel is het misschien goed om even stil te staan bij de tabellen. Ten eerste is belangrijk om te begrijpen wat er bij de laatste tabel gebeurde:
+<<label="KarakterMogelijkhedenAdvanced", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+prop.table(table(diamanten$cut))*100 #als percentage
+@
 
+Lijkt logisch, en dat is het ook. Toch is het goed om te begrijpen wat er precies gebeurd. Eerst wordt er door \term{R} een object geproduceert. In dit geval bestaat dit uit aantallen. Daarna worden deze aantallen omgezet in proporties. Belangrijker is echter dat het dergelijke object, met de proporties of ruwe aantallen, alleen numerieke waardes bevat. Daarom wordt het mogelijk om allerlei, mathematische, bewerkingen uit te voeren op deze waardes.
+
+Een andere optie van tabellen die in het kookboek niet zijn genoemd, zijn kruistabellen. Dit is relatief eenvoudig:
+<<label="Kruistabel", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+table(diamanten$cut,diamanten$color)
+@
+
+Ook hierbij is natuurlijk mogelijk om, op een gelijke manier als bij de univariate-tabel, percentages en proporties weer te geven:
+<<label="KruistabelPer", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+# Percentages
+prop.table(table(diamanten$cut,
+                 diamanten$color)
+           )*100
+@
+
+\begin{tip}[Het afbreken van lijnen]
+Zoals je al af en toe hebt gezien wordt niet altijd alle invoer op een lijn geplaatst. Dit heeft voor dit boek het voordeel dat alles netjes binnen de lijntjes blijft, maar heeft ook het algemene voordeel dat de syntax leesbaar blijft. Daar waar we momenteel nog maar korte stukjes syntax hebben, zal dit namelijk snel meer worden. Zeker als er meerdere \keys{()}, \keys{,}, en/of \keys{'} worden gebruikt wordt het soms onduidelijk door welk \keys{)} een \keys{(} wordt gesloten. Voor \term{R} maakt het niet uit over hoeveel lijnen je de code verdeeld. Zolang er namelijk nog sluitende \keys{)} of \keys{'} ontbreken zal het de de invoer niet onderbreken:
+<<label="Fout", tidy=FALSE, highlight=TRUE, eval=FALSE, warning=FALSE>>=
+prop.table(table(diamanten$cut,
+                 diamanten$color)
+@
+Zoals je ziet komt er in de \texttt{console} een \keys{+} te staan. Dit komt omdat \term{R} nog extra informatie verwacht aangezien de \term{functie} nog niet ''afgesloten'' is. Als je nu in de \texttt{console} klikt en heel veel \keys{enter} geeft zal je merken dat er nog niks veranderd. Om de \term{functie} toch ''af te sluiten'', kunnen we het ontbrekende \keys{)} geven:\footnote{Het is ook altijd mogelijk om op \keys{Esc} te duwen. Dan worden alle bewerkingen gestopt en komt er weer een nieuwe, lege, regel te staan!.}
+<<label="FoutK", tidy=FALSE, highlight=TRUE, eval=FALSE, warning=FALSE>>=
+)
+*100
+@
+Maar waarom krijg je nu een error? Dat komt omdat het stukje \texttt{*100} een geheel nieuwe invoer lijn is. Hier begin \term{R} dus opnieuw te werken. En aangezien \texttt{*100} een bewerking is die over een \term{object} moet worden uitgevoerd, is dit niet mogelijk aangezien deze niet gegeven is. Het ''ongestraft'' afbreken van syntax kan dus alleen als de \term{functie} of bewerking nog niet afgesloten is, zodra dit wel is gebeurd zal \term{R} weer ''opnieuw'' beginnen. Onderstaande had wel gewerkt:
+<<label="FoutK2", tidy=FALSE, highlight=TRUE, eval=FALSE, warning=FALSE>>=
+)*100
+@
+\end{tip}
+
+Tot slot blikken we nog even terug op het gebruik van correlaties in \term{R}. Zoals werd gedemonstreerd in het kookboek kunnen correlaties eenvoudig worden berekend door de \term{functie} \texttt{cor()} te gebruiken. Er is echter een grote tekortkoming aan deze basis-\term{functie}, het geeft namelijk geen significantie-niveau's (\emph{p}-waardes) voor de correlaties. Om significantie-niveau's te verkrijgen is het daarom nodig om een pakket te installeren dat dit wel kan, het \term{Hmisc}-pakket. Om dit pakket te installeren kunnen dezelfde stappen worden doorlopen als bij het installeren van het \term{foreign}-pakket (blz. \pageref{sec:DataKookForeign}), dus bijvoorbeeld:
+<<label="InstallSyntaxHmisc", tidy=FALSE, highlight=TRUE, warning=FALSE,  eval=FALSE>>=
+install.packages("Hmisc")
+@
+
+Daarna moeten we dit pakket natuurlijk ook nog activeren:
+<<label="RequireSyntaxHmisc", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+require(Hmisc)
+@
+
+Vervolgens kunnen we de correlatie van het kookboek opnieuwe berekenen met de correlatie-\term{functie} \func{rcorr} uit het \term{Hmisc}-pakket:
+<<label="CorrelatieDiamantenRcorr", tidy=FALSE, highlight=TRUE, warning=TRUE>>=
+rcorr(x=diamanten[ ,c("depth","table","price")])
+@
+
+Een fout-melding! Hoe kan dit? Zoals als vermeld is de eerste stap als er iets geks gebeurd met een \term{functie} het help-bestand te openen van de \term{functie} in kwestie; \texttt{?rcorr}. Hier staat onder \emph{Arguments} wat er moet worden ingevoerd voor \texttt[black]{x}: 
+\begin{quotation} \small \noindent a numeric \textbf{matrix} with at least 5 rows and at least 2 columns (if y is absent). For print, x is an object produced by rcorr.\end{quotation}
+Het gaat hier vooral om het vet-gedrukte woord, \term{matrix}. De \emph{invoer} voor het element \texttt[black]{x} moet dus uit een \term{matrix} bestaan. Laten we eens kijken of we aan deze eis voldoen, door te vragen of het ingevoerde \term{object} een \term{matrix} is:
+<<label="classdataframe", tidy=FALSE, highlight=TRUE, warning=TRUE>>=
+is.matrix(x=diamanten[ ,c("depth","table","price")])
+# wat is het dan wel?
+class(x=diamanten[ ,c("depth","table","price")])
+@
+
+Nee dus, het ingevoerde object is een \term{data.frame}. Maar wat is een \term{matrix}, en wat is het verschil met een \term{data.frame}. In principe zijn beide objecten gelijk, daar waar ze allebij uit rijen en kolommen bestaan. Een \term{data.frame} biedt alleen meer opties dan een \term{matrix}. Zo hebben in een \term{matrix} alle waardes dezelfde structruur, dus bijvoorbeeld of allemaal \term{karakter} of allemaal \term{numeriek}. Een ander verschil is dat een \term{matrix} rijen niet behandeld als variabelen, waardoor de mogelijkheden wat beperkter zijn. Er zijn nog meer verschillen maar de kern is dat een \term{matrix} meer moet worden als een mathematisch \term{object} waarmee gerekend kan worden. Het voordeel hiervan is dat een \term{matrix} minder 'meta-informatie' bevat dan een \term{data.frame} waardoor het minder ruimte in beslag neemt. Hierdoor kunnen berekenen sneller worden uitgevoerd. 
+
+Na deze korte, en waarschijnlijke te beknopte, toelichting op een \term{matrix} is de kernvraag natuurlijk: Hoe maken we een \term{matrix}? Het is mogelijk om een matrix zelf in te voeren (net zoals het mogelijk is om zelf een \term{data.frame} samen te stellen), maar het is makkelijker om een \term{data.frame} om te zetten in een \term{matrix}. Voordat we dit echter explecitiet gaan toepassen voor de \term{functie} \texttt{rcorr} gaan we  eerst even in zijn algemeenheid naar deze omzetting kijken. Om een \term{data.frame} om te zetten naar een \term{matrix} kan de \term{functie} \texttt{as.matrix} gebruikt worden. Zo kunnen we bijvoorbeeld een subset van het \term{diamanten}-\term{data.frame} omzetten naar een \term{matrix} op de volgende manier:
+<<label="asmatrixchar", tidy=FALSE, highlight=TRUE, warning=TRUE>>=
+as.matrix(x=diamanten[ ,c("depth","table","cut")])
+@
+
+Zoals je ziet worden nu dus alle waardes allemaal als een \term{karakter} gezien--dit kan je zien aan de \keys{''} om alle waardes. Dus ook de numerieke waardes van de eerste twee variabelen zijn geconverteerd naar een \term{karakter}. Als er echter alleen variabelen die \term{numeriek} zijn worden geconverteerd zullen de waardes van de uiteindelijke \term{matrix} dit ook zijn:
+<<label="asmatrix", tidy=FALSE, highlight=TRUE, warning=TRUE>>=
+as.matrix(x=diamanten[ ,c("depth","table","price")])
+@
+
+Dit is dus een numerieke \term{matrix}, het soort object wat we dus nodig hebben voor de \term{functie} \texttt{rcorr}. Voor de overzichtelijkheid wijzen we de matrix eerst toe aan een \term{object} om dit vervolgens in de \term{functie} in te voegen:
+<<label="CorrelatieDiamantenRcorrmatrix", tidy=FALSE, highlight=TRUE, warning=TRUE>>=
+data_cor <- as.matrix(x=diamanten[ ,c("depth","table","price")])
+rcorr(x=data_cor)
+@
+
+Kijk dat lijkt er al meer op, de correlaties, het aantal rijen (cases) waarover deze berekend zijn, plus het significantie-niveau van iedere correlatieco\"effici\"ent. Tot slot kijken we nog even naar een handig aspect van de uitvoer van deze \term{functie}. Een handigheid die het deelt met veel andere functies. Het is namelijk mogelijk om de uitvoer aan een \term{object} toe te wijzen:
+<<label="CorrelatieObject", tidy=FALSE, highlight=TRUE, warning=TRUE>>=
+cor_tabel <- rcorr(x=data_cor)
+cor_tabel
+@
+
+Is dat nu zo baanbrekend? Nee dat niet, maar de mogelijkheden die dit \term{object} met zich mee brengt zijn dat wel. Zo kunnen we apart de significantie-niveau's opvragen:
+<<label="CorrelatieObjectPval", tidy=FALSE, highlight=TRUE, warning=TRUE>>=
+cor_tabel$P
+# p-waarde voor correlatie depth met price 
+cor_tabel$P["depth","price"]
+@
+
+Het tweede voorbeeld is mogelijk doordat de uitvoer van \texttt{cor\_tabel\$P} een object is in de vorm van een \term{matrix}. Hiervan wordt vervolgens de rij geselecteerd met de naam \texttt{depth} en de kolom met de naam \texttt{price}. Hierdoor krijg je dus de \emph{p}-waarde die behoord bij de correlatie tussen deze twee variabelen. De werking is hier dus gelijk als bij de selectie van rijen en kolommen bij een \term{data.frame}.
+
+Daarnaast verdient de werking van het \texttt{\$P} stukje ook nog wat verdere uitleg. Eerder hebben we immers gezien dat \keys{\$} een soort filter is die helpt bij het selecteren van variabelen, terwijl hier een \term{matrix} wordt geselecteerd. Om dit te begrijpen moeten we eerste naar de inhoud van \term{object} \texttt{cor\_tabel} kijken:
+<<label="CorrelatieClass", tidy=FALSE, highlight=TRUE, warning=TRUE>>=
+str(cor_tabel)
+@
+
+Zoals aangegeven betreft het \term{object} een \term{lijst}, met drie verschillende matrices, genaamd \emph{r}, \emph{n}, en \emph{P}.\footnote{\emph{n} is ook een \term{matrix} maar aangezien alle elementen dezelfde waarde bevatten wordt in dit geval slechts een keer deze waarde gegeven (dit is geen algemeenheid en is een speciefieke werking van de \func{rcorr} functie). Zo zijn er wel meer kleine weergave verschillen tussen de aparte weergave van iedere \term{matrix} of de, mooi opgemaakte, totale weergave.} Als we het gehele \term{object} opvragen wordt dus de gehele inhoud van de \term{lijst} gegeven, daar waar we met \keys{\$} een selectie kunnen maken. Dit is ook te zien in de zojusit gegeven output, aangezien er ook een \keys{\$} vermeld staat voor de naam van iedere \term{matrix}. Een andere manier om een gedeelte van een lijst te selecteren is als volgt:
+<<label="werkinglijst", tidy=FALSE, highlight=TRUE, warning=TRUE>>=
+cor_tabel[[1]]
+@
+
+In plaats van enkele \keys{[+]} zijn er bij de selectie vanuit een \term{lijst} dubbele \keys{[+]} nodig.\footnote{Het is ook mogelijk om enkele \keys{[+]} te gebruiken, maar de functionaliteit hiervan gaat te ver voor dit boek.} In dit geval selecteren we dus de eerste index uit de \term{lijst} in dit geval \emph{r}, de correlatieco\"effici\"enten. In feite lijkt de werking dus heel erg op de selectie van variabelen uit een \term{data.frame}, alleen ditmaal een dimensie hoger. Een \keys{\$} selecteerd dus een sub-onderdeel van een bepaald object, zoals is ge\"ilustreerd in Figuur \ref{fig:schemaLijstFilter}. Tot slot is het belangrijk om te begrijpen dat een \term{lijst} uit verschillende soorten objecten kan worden opgebouwd. Het hoeft dus niet uit alleen maar dataframes of vectoren te bevatten:
+<<label="werkinglijstdif", tidy=FALSE, highlight=TRUE, warning=TRUE>>=
+voorbeeld_lijst <- list(A=data.frame(V1=1:10,V2=11:20),
+                        B=matrix(c(1:20),ncol=2),
+                        C=1:20,
+                        D=LETTERS[1:20])
+str(voorbeeld_lijst)
+@
+
+\begin{figure}[!h]
+\begin{figframe}
+\centering
+\begin{tikzpicture}[scale=2, font=\sffamily]
+  \node[block,align=center] (Overal)  at (2.45, 1.5) {Cor\_tabel};
+  % Correlation
+	\fill [gray!30, label=Nbox] (-.5,.5) rectangle (1.4,-1.4);
+	\node[text= black!60,anchor=south, text height=1.5ex, text depth=.1ex] (rlab) at (.45,.5) {r};
+	\node[fblock,align=center] (X11)  at (0, 0) {$r_{1,1}$};
+	\node[fblock,align=center] (X12)  at (.5, 0) {$r_{1,2}$};
+	\node[fblock,align=center] (X13)  at (1, 0) {$r_{1,3}$};
+	\node[fblock,align=center] (X21)  at (0, -.5) {$r_{2,1}$};
+	\node[fblock,align=center] (X22)  at (.5, -.5) {$r_{2,2}$};
+	\node[fblock,align=center] (X23)  at (1, -.5) {$r_{2,3}$};
+	\node[fblock,align=center] (X31)  at (0, -1) {$r_{3,1}$};
+	\node[fblock,align=center] (X32)  at (.5, -1) {$r_{3,2}$};
+	\node[fblock,align=center] (X33)  at (1, -1) {$r_{3,3}$};
+	\node[text= black!80, anchor=south, text height=1.5ex, text depth=.1ex] at (X11.north) {depth};
+	\node[text= black!80, anchor=south, text height=1.5ex, text depth=.1ex] at (X12.north) {table};
+	\node[text= black!80, anchor=south, text height=1.5ex, text depth=.1ex] at (X13.north) {price};
+	\node[text= black!80, rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (X11.west) {depth};
+	\node[text= black!80, rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (X21.west) {table};
+	\node[text= black!80, rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (X31.west) {price};
+  % N
+	\fill [gray!30, label=Vector ] (1.5,.5) rectangle (3.4,-1.4);
+	\node[text= black!60,anchor=south, text height=1.5ex, text depth=.1ex] (nlab) at (2.45,.5) {n};
+	\node[fblock,align=center] (N11)  at (2, 0) {$n_{1,1}$};
+	\node[fblock,align=center] (N12)  at (2.5, 0) {$n_{1,2}$};
+	\node[fblock,align=center] (N13)  at (3, 0) {$n_{1,3}$};
+	\node[fblock,align=center] (N21)  at (2, -.5) {$n_{2,1}$};
+	\node[fblock,align=center] (N22)  at (2.5, -.5) {$n_{2,2}$};
+	\node[fblock,align=center] (N23)  at (3, -.5) {$n_{2,3}$};
+	\node[fblock,align=center] (N31)  at (2, -1) {$n_{3,1}$};
+	\node[fblock,align=center] (N32)  at (2.5, -1) {$n_{3,2}$};
+	\node[fblock,align=center] (N33)  at (3, -1) {$n_{3,3}$};
+	\node[text= black!80, anchor=south, text height=1.5ex, text depth=.1ex] at (N11.north) {depth};
+	\node[text= black!80, anchor=south, text height=1.5ex, text depth=.1ex] at (N12.north) {table};
+	\node[text= black!80, anchor=south, text height=1.5ex, text depth=.1ex] at (N13.north) {price};
+	\node[text= black!80, rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (N11.west) {depth};
+	\node[text= black!80, rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (N21.west) {table};
+	\node[text= black!80, rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (N31.west) {price};
+  % P
+	\fill [gray!60, label=Vector ] (3.5,.5) rectangle (5.4,-1.4);
+	\node[ anchor=south, text height=1.5ex, text depth=.1ex] (plab) at (4.45,.5) {P};
+	\node[block,align=center] (P11)  at (4, 0) {$p_{1,1}$};
+	\node[block,align=center] (P12)  at (4.5, 0) {$p_{1,2}$};
+	\node[block,align=center] (P13)  at (5, 0) {$p_{1,3}$};
+	\node[block,align=center] (P21)  at (4, -.5) {$p_{2,1}$};
+	\node[block,align=center] (P22)  at (4.5, -.5) {$p_{2,2}$};
+	\node[block,align=center] (P23)  at (5, -.5) {$p_{2,3}$};
+	\node[block,align=center] (P31)  at (4, -1) {$p_{3,1}$};
+	\node[block,align=center] (P32)  at (4.5, -1) {$p_{3,2}$};
+	\node[block,align=center] (P33)  at (5, -1) {$p_{3,3}$};
+	\node[anchor=south, text height=1.5ex, text depth=.1ex] at (P11.north) {depth};
+	\node[anchor=south, text height=1.5ex, text depth=.1ex] at (P12.north) {table};
+	\node[anchor=south, text height=1.5ex, text depth=.1ex] at (P13.north) {price};
+	\node[rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (P11.west) {depth};
+	\node[rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (P21.west) {table};
+	\node[rotate=90, anchor=south, text height=1.5ex, text depth=.1ex] at (P31.west) {price};
+  % Paths
+	\path [line] (Overal) --  node [anchor=center, fill=white,align=center,sloped] {Filter~=~\$P} (plab);
+	\path [line, dashed] (Overal) -- (nlab);
+	\path [line, dashed] (Overal) -- (rlab);
+\end{tikzpicture}
+\caption{Schematische weergave van de werking van een lijst en het filteren ervan. De filter is in dit geval, \texttt{\$P}. Hierdoor wordt dus het object in de lijst geselecteerd met de naam \emph{P}.} \label{fig:schemaLijstFilter}
+\end{figframe}
+\end{figure}
 
 \chapter{Elementaire Statistische Toetsen}
 
 \section{Kookboek}
+\subsection{T-toets}
+Nu we zicht hebben op de elementaire stappen binnen \term{R}, kunnen we enkele basale toetsen gaan uitvoeren. Als eerste zullen we, uiteraard, kijken naar de \term{t-toets} voor \'e\'en steekproef. Zo kunnen we bijvoorbeeld kijken of de gemiddelde waarde van de diamanten gelijk is aan \$ 4000,-. Hiervoor gebruiken de \term{functie} \func{t.test} op de volgende manier:
+<<label="DiamantenPrijsTtest", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+t.test(x=diamanten$price, mu=4000)
+@
+
+De gemiddelde waarde is dus niet gelijk aan \$ 4000,-. In dit geval is er gebruik gemaakt van een tweezijdige toets met een \textalpha van 5\%. Om andere toetsingscriteria te gebruiken kunnen de standaard waardes worden aangepast (\texttt{?t.test}). Zo kan het \term{element} \texttt{alternative} de waardes \texttt{''two.sided''} (standaard waarde), \texttt{''less''}, of \texttt{''greater''} krijgen, om de richten van de hypothese aan te geven. Om het significantieniveau aan te passen kan de standaard waarde van het \term{element} \texttt{conf.level} worden aangepast. Deze waarde is gelijk aan 1 - \textalpha en geeft dus het percentage van het betrouwbaarheidsinterval van de t-waarde aan. Als we dus een rechtszijdige \term{t-toets} willen uitvoeren met \textalpha = .01 dan kan dat als volgt:
+<<label="DiamantenPrijsTtest01", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+t.test(x=diamanten$price, mu=4000, alternative="greater", 
+       conf.level=1-.01)
+@
+
+Zoals je ziet is er voor gekozen om het percentage van het betrouwbaarheidsinterval niet direct te geven maar door \term{R} te laten uitrekenen. Ook al was dat in dit geval natuurlijk net zo eenvoudig om zelf te doen, het geeft aan dat de waarde van een element ook ''indirect'' kan worden gegeven. 
+
+Na de \term{t-toets} voor \'e\'en steekproef volgt logischerwijs de \term{t-toets} voor twee steekproeven. De dataset bevat momenteel echter nog geen variabele die uit twee groepen bestaat. Daarom gaan we eerst een dichotome variabele aanmaken. Laten we bijvoorbeeld het aantal karaat waaruit de diamanten bestaan categoriseren in een hoge en lage groep. Eerst voegen we een nieuwe, lege, variabele toe aan het dataframe:
+<<label="DiamantenNewVariable", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+diamanten$caratC <- NA
+@
+
+Nu is er nieuwe variabele toegevoegd aan het dataframe. Momenteel bestaat deze variabele echter uitsluitend uit missende waardes, \texttt{NA}\footnote{NA staat voor \textit{Not Available}, niet aanwezig}. Nu willen we alle diamanten die beneden gemiddeld scoren m.b.t. het aantal karaats aan de groep ''laag'' toewijzen, dit kan (onder andere) als volgt:
+<<label="DiamantenNewVariableLaag", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+gem_karaat <- mean(x=diamanten$carat, na.rm=TRUE)
+diamanten[diamanten$carat < gem_karaat,"caratC"] <- "laag"
+@
+
+Te snel? Dan lopen we de bewerkingen nog even stap voor stap door. Eerst berekenen we het gemiddelde karaat-niveau en wijzen we deze waarde toe aan het \term{object} \texttt{gem\_karaat}. Als we dit dus opvragen krijgen we het gemiddelde karaat-niveau (\Sexpr{gem_karaat}). Vervolgens selecteren we alle rijen van het dataframe waarvan het aantal karaats lager ligt dan dit gemiddelde (\texttt{diamanten\$carat < gem\_karaat}). Daarnaast selecteren we de variabele waaraan we nieuwe waardes willen toevoegen (\texttt{''caratC''}). Eigenlijk worden alleen de cellen geselecteerd van de kolom met als variabele naam ''caratC'' waarvan de rijen een waarde hebben onder het gemiddelde karaats-niveau. Tot slot wordt de waarde toegewezen die deze cellen moeten krijgen (\texttt{''laag''}). Nu rest ons alleen nog om de andere, hoge, groep toe te wijzen:
+<<label="DiamantenNewVariableHoog", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+diamanten[diamanten$carat >= gem_karaat,"caratC"] <- "hoog"
+@
+
+Zoals je ziet wordt er in plaats van \keys{>}, \keys{>=} gebruikt. Hiervoor is gekozen omdat anders diamanten met een waarde die exact gelijk ligt aan het gemiddelde geen waarde krijgen toegewezen. 
+
+Ok, terug naar waar we mee bezig waren, een \term{t-toets} voor twee steekproeven:
+<<label="DiamantenTtest", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+t.test(formula=price~caratC, data=diamanten)
+@
+
+Zoals verwacht ligt de gemiddelde waarde van diamanten met een hoog karaats gehalte een stuk hoger. Het \term{formula} element is een bijzonder element binnen \term{R}, en we zullen dit dan ook nog vaker tegenkomen (voor wie niet kan wachten; \texttt{?formula}). In dit geval betekent het, dat \texttt{price} wordt opgesplitst voor de verschillende waardes van \texttt{caratC}. 
+
+Zoals we echter van SPSS(-handboeken) leren, is het van belang om te kijken of de varianties van de twee groepen wel gelijk zijn. Als dit immers niet het geval is moet er een gecorigeerde \term{t-toets} worden uitgevoerd. Als we echter kijken naar het aantal vrijheidsgraden dan zien we dat dit geen rond getal is, oftewel er is al sprake van een gecorigeerde \term{t-toets}. Om te controleren of dit terecht is, is de bekende Levene's test nodig om de homogeniteit van varianties te toetsen. Deze zit, vreemd genoeg, echter niet standaard in \term{R} en daarom moeten we hier een additioneel pakket (\term{car}) voor installeren, in dit voorbeeld via de syntax:
+
+<<label="InstallSyntaxCar", tidy=FALSE, highlight=TRUE, warning=FALSE,  eval=FALSE>>=
+install.packages("car")
+@
+
+Daarna moeten we dit pakket natuurlijk ook nog activeren:
+<<label="RequireSyntaxCar", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+require(car)
+@
+
+Nu kunnen we kijken of de varianties aangaande de karaats-niveaus van de lage en hoge groep gelijk zijn:
+<<label="DLevenesTtest", tidy=FALSE, highlight=TRUE>>=
+leveneTest(y=price~caratC, data=diamanten)
+@
+
+De \texttt[newred]{Warning message} kunnen we negeren, deze wordt aangemaakt omdat de groep variabele niet een \term{factor} is (t.b.v. deze bewerking is wel als zodanig behandeld). Het blijkt dat het terecht is dat er een gecorigeerde \term{t-toets} is uitgvoerd aangezien de Levene's test significant is, \emph{p} < .05. Mocht dit niet het geval zijn geweest, dan hadden we een ''normale'' \term{t-toets} kunnen uitvoeren:
+<<label="DiamantenTtestCorrect", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+t.test(formula=price~caratC, data=diamanten, var.equal=TRUE)
+@
+
+\subsection{AN(C)OVA}
+Maar wat nu als we niet twee maar meerdere groepen hebben, dan komen we natuurlijk uit op de \term{ANOVA}. \term{R} heeft een ingebouwde \term{ANOVA} \term{functie}, maar deze zullen we hier niet behandelen. De reden hiervoor is dat de standaard\footnote{Een \term{functie} die standaard in \term{R} zit noemen we ook wel een \term{base}-\term{functie}. \term{base} zou je eigenlijk kunnen zien als een \term{pakket} dat automatisch geladen wordt.} \term{functie} moeilijk te gebruiken is in combinatie met de gebruikelelijke type II of III kwadratensom (zoals gebruikelijk in bijvoorbeeld SPSS). Daarom gebruiken we de \term{ANOVA} \term{functie} uit het \term{car} \term{pakket}; \func{Anova}. Stel bijvoorbeeld dat we nogmaals naar de waarde van de diamanten willen kijken maar nu in relatie met de kwalitiet van de stenen:
+<<label="DiamantenAnova", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+model <- lm(formula=price~cut, data=diamanten)
+Anova(mod=model)
+@
+
+Voor de overzichtelijkheid is de bewerking hier in twee stappen uitgevoerd. Eerst wordt het model gespecificeerd, in dit geval dus de prijs als functie van de kwalieit van de steen en het bijbehorende dataframe. Daarna wijzen we dit model toe aan \func{Anova}, welke als standaard type II gebruikt. Als we dit willen aanpassen kan dat als volgt:
+<<label="DiamantenAnovaType3", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+Anova(mod=model, type="3")
+@
+
+Ook hier is er een significant verschil tussen de groepen. Om te kijken welke groepen precies verschillen voeren we een post-hoc toets uit.
 
 \section{Kijkje in de keuken}
 

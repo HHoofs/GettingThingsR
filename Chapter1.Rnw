@@ -1106,7 +1106,73 @@ t.test(formula=price~caratC, data=diamanten, var.equal=TRUE)
 @
 
 \subsection{AN(C)OVA}
-Maar wat nu als we niet twee maar meerdere groepen hebben, dan komen we natuurlijk uit op de \term{ANOVA}. \term{R} heeft een ingebouwde \term{ANOVA} \term{functie}, maar deze zullen we hier niet behandelen. De reden hiervoor is dat de standaard\footnote{Een \term{functie} die standaard in \term{R} zit noemen we ook wel een \term{base}-\term{functie}. \term{base} zou je eigenlijk kunnen zien als een \term{pakket} dat automatisch geladen wordt.} \term{functie} moeilijk te gebruiken is in combinatie met de gebruikelelijke type II of III kwadratensom (zoals gebruikelijk in bijvoorbeeld SPSS). Daarom gebruiken we de \term{ANOVA} \term{functie} uit het \term{car} \term{pakket}; \func{Anova}. Stel bijvoorbeeld dat we nogmaals naar de waarde van de diamanten willen kijken maar nu in relatie met de kwalitiet van de stenen:
+Maar wat nu als we niet twee maar meerdere groepen hebben, dan komen we natuurlijk uit op de \term{ANOVA}. \term{R} heeft, uiteraard een ingebouwde \term{ANOVA} \term{functie}. Deze zullen we nu in twee stappen uitwerken. De eerste stap bestaat uit het  defineren van het model\footnote{het werken met dergelijke modellen is ook mogelijk bij de \func{t.test}, aangezien deze per definitie slechts twee varialen bevat werd er in dat geval gekozen voor de versimpelde versie. Daar waar AN(C)OVA's meestal echter een stuk complexer van aard zijn wordt hier wel voor de meer stapsgewijze methode gekozen}:
+<<label="AnovaModel", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+model_anova <- lm(formula=price~cut, data=diamanten)
+@
+
+Het belangrijkste gedeelte bij het defineren van het model is de formule. Hier kan je namelijk specificeren wat de onafhankelijke en afhankelijke variabelen zijn, maar ook of er sprake is van een interactie effect en dergelijke. Alle variabelen voor de \keys{~} zijn de afhankelijke variabelen (in dit geval de prijs van de diamanten) en alle variabelen achter de \keys{~} zijn de onafhankelijke variabelen (in dit geval de kwaliteit van de diamanten). Tot slot wordt onder \texttt{data} aangegeven uit welk dataframe de variabelen komen.
+
+De volgende stap bestaat uit het defineren van de bewerking die we willen uitvoeren over dit model. Zoals we later zullen zien is immers ook mogelijk dit model te gebruiken voor een regressie-analyse. Om een anova uit te voeren gebruiken we de \term{functie} \func{aov}, als volgt:
+<<label="AnovaAov", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+out_anova <- aov(formula=model_anova)
+out_anova
+@
+
+Nu hebben we echter slechts de helft van het verhaal. Naast deze algemene duiding van het model in de vorm van de kwadratensommen en vrijheidsgraden, willen we namelijk ook de statistieken die bij de F-verdeling van een ANOVa horen. Om deze te vekrijgen gebruiken we de functie \func{summary}, die we ook al eerder zijn tegen gekomen bij de beschrijvende statstiek:
+<<label="AnovaAov", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+summary(out_anova)
+@
+
+\begin{tip}[\'E\'en functie, oneindig veel bewerkingen]
+Zoals we hebben kunnen zien in hoofdstuk XXX geeft de \term{functie} \func{summary} een beknopte beschrijving weer van de variabelen in een bepaald dataframe (\texttt{summary(diamanten)}). In dit huidige hoofdsstuk aangaande XXX, blijkt echter dat deze zelfde functie ook gebruikt kan worden om de resultaten te verkijgen van een ANOVA model (\texttt{summary(out_anova)}). In al deze syntax hebben echter niet aangegeven wat de invoer dan wel de gewenste uitvoer er precies uitzag. 
+
+Dit hoeven we echter bij deze functie niet te vertellen, omdat de \term{functie} \func{summary} een van de vele functies is die zelf ''herkend'' wat voor een soort invoer er wordt gegeven. Al naar gelang deze invoer verschilt te bewerking van de \term{functie} en dus ook de daarop volgende uitvoer. Het is echter niet zo dat alle functies als haarlemmer wonderolie werken. Sommige kunnen bijna alle  soorten objecten verwerken (bijv. \func{summary}), andere enkele soorten (\func{head}), terwijl de meeste functies slechts \'e\'en soort opbject kunnen verwerken.
+\end{tip}
+
+Conclusie; er is een significant effect van de kwaliteit van de diamanten op de prijs van de diamanten. Om echter te conclusie te vervolledigen is het belangrijk om een post-hoc test uit te voeren om te kijken welke groepen nu precies van elkaar verschillen:
+<<label="AnovaHSD", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+TukeyHSD(out_anova)
+@
+
+Het blijkt dat bijna alle groepen van elkaar verschillen op enkele combinaties na. Bij dit alles is het echter van belang te vermelden dat \term{R} als standaard methode bij ANOVA Type I gebruikt. Dit in tegenstelling tot de Type II \& III die veelal bij andere statistiek programma's worden gebruikt. Deze Type's zijn ook te gebruiken in \term{R}, wat verder beschreven wordt bij het kijkje in de keuken. 
+
+Omdat de mogelijkheden bij een ANOVA natuurlijk eindeloos zijn maar het aantal pagina's van dit boek niet, zal er ter illustratie nog paar modellen worden getoond. Een veel voorkomende toepassing is natuurlijk het gebruik van covariaten:
+<<label="Ancova", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+model_ancova <- lm(formula=price~cut+carat, data=diamanten)
+out_ancova <- aov(formula=model_ancova)
+summary(out_ancova)
+@
+
+Hierbij wordt het aantal karaat van de diamant automatisch als covariaat gepakt, omdat het een continue maat is. Dit laat ook meteen zien dat als dit \textbf{niet} het geval is, dit ook duidelijk gespecificeerd moet worden. Voor de zekerheid is het daarom verstandig om factoren, zeker als ze numeriek zijn, altijd (nogmaals) als zodanig te specificeren in het model:
+<<label="Ancova_F", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+model_ancova <- lm(formula=price~factor(cut)+carat, data=diamanten)
+out_ancova <- aov(formula=model_ancova)
+summary(model_ancova)
+@
+
+Tot slot zullen nog twee modellen worden geilustreerd waarin twee onafhankelijek variabelen worden opgenomen. Waarbij de eerste alleen de twee directe effecten toetst, terwijl de tweede ook het interactie effect toevoegd:
+<<label="Anova2", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+# # Zonder interactie
+model_anova2 <- 
+  lm(formula=price~factor(cut)+factor(color),
+     data=diamanten)
+
+out_anova2 <- aov(formula=model_anova2)
+summary(out_anova2)
+
+# # Met interactie (* i.p.v. +)
+model_anova2int <- 
+  lm(formula=price~factor(cut)*factor(color),
+     data=diamanten)
+out_anova2int <- aov(formula=model_anova2int)
+summary(out_anova2int)
+@
+
+
+\section{Kijkje in de keuken}
+\subsection{AN(C)OVA}
+ maar deze zullen we hier niet behandelen. De reden hiervoor is dat de standaard\footnote{Een \term{functie} die standaard in \term{R} zit noemen we ook wel een \term{base}-\term{functie}. \term{base} zou je eigenlijk kunnen zien als een \term{pakket} dat automatisch geladen wordt.} \term{functie} moeilijk te gebruiken is in combinatie met de gebruikelelijke type II of III kwadratensom (zoals gebruikelijk in bijvoorbeeld SPSS). Daarom gebruiken we de \term{ANOVA} \term{functie} uit het \term{car} \term{pakket}; \func{Anova}. Stel bijvoorbeeld dat we nogmaals naar de waarde van de diamanten willen kijken maar nu in relatie met de kwalitiet van de stenen:
 <<label="DiamantenAnova", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 model <- lm(formula=price~cut, data=diamanten)
 Anova(mod=model)
@@ -1119,7 +1185,6 @@ Anova(mod=model, type="3")
 
 Ook hier is er een significant verschil tussen de groepen. Om te kijken welke groepen precies verschillen voeren we een post-hoc toets uit.
 
-\section{Kijkje in de keuken}
 
 \printindex*
 

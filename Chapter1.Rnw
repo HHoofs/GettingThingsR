@@ -1108,7 +1108,7 @@ t.test(formula=price~caratC, data=diamanten, var.equal=TRUE)
 \subsection{AN(C)OVA}
 Maar wat nu als we niet twee maar meerdere groepen hebben, dan komen we natuurlijk uit op de \term{ANOVA}. \term{R} heeft, uiteraard een ingebouwde \term{ANOVA} \term{functie}. Deze zullen we nu in twee stappen uitwerken. De eerste stap bestaat uit het  defineren van het model\footnote{het werken met dergelijke modellen is ook mogelijk bij de \func{t.test}, aangezien deze per definitie slechts twee varialen bevat werd er in dat geval gekozen voor de versimpelde versie. Daar waar AN(C)OVA's meestal echter een stuk complexer van aard zijn wordt hier wel voor de meer stapsgewijze methode gekozen}:
 <<label="AnovaModel", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
-model_anova <- lm(formula=price~cut, data=diamanten)
+model_anova <- lm(formula=price ~ cut, data=diamanten)
 @
 
 Het belangrijkste gedeelte bij het defineren van het model is de formule. Hier kan je namelijk specificeren wat de onafhankelijke en afhankelijke variabelen zijn, maar ook of er sprake is van een interactie effect en dergelijke. Alle variabelen voor de \keys{~} zijn de afhankelijke variabelen (in dit geval de prijs van de diamanten) en alle variabelen achter de \keys{~} zijn de onafhankelijke variabelen (in dit geval de kwaliteit van de diamanten). Tot slot wordt onder \texttt{data} aangegeven uit welk dataframe de variabelen komen.
@@ -1120,12 +1120,12 @@ out_anova
 @
 
 Nu hebben we echter slechts de helft van het verhaal. Naast deze algemene duiding van het model in de vorm van de kwadratensommen en vrijheidsgraden, willen we namelijk ook de statistieken die bij de F-verdeling van een ANOVa horen. Om deze te vekrijgen gebruiken we de functie \func{summary}, die we ook al eerder zijn tegen gekomen bij de beschrijvende statstiek:
-<<label="AnovaAov", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+<<label="AnovaAovSum", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 summary(out_anova)
 @
 
 \begin{tip}[\'E\'en functie, oneindig veel bewerkingen]
-Zoals we hebben kunnen zien in hoofdstuk XXX geeft de \term{functie} \func{summary} een beknopte beschrijving weer van de variabelen in een bepaald dataframe (\texttt{summary(diamanten)}). In dit huidige hoofdsstuk aangaande XXX, blijkt echter dat deze zelfde functie ook gebruikt kan worden om de resultaten te verkijgen van een ANOVA model (\texttt{summary(out_anova)}). In al deze syntax hebben echter niet aangegeven wat de invoer dan wel de gewenste uitvoer er precies uitzag. 
+Zoals we hebben kunnen zien in hoofdstuk XXX geeft de \term{functie} \func{summary} een beknopte beschrijving weer van de variabelen in een bepaald dataframe (\texttt{summary(diamanten)}). In dit huidige hoofdsstuk aangaande XXX, blijkt echter dat deze zelfde functie ook gebruikt kan worden om de resultaten te verkijgen van een ANOVA model (\texttt{summary(out\_anova)}). In al deze syntax hebben echter niet aangegeven wat de invoer dan wel de gewenste uitvoer er precies uitzag. 
 
 Dit hoeven we echter bij deze functie niet te vertellen, omdat de \term{functie} \func{summary} een van de vele functies is die zelf ''herkend'' wat voor een soort invoer er wordt gegeven. Al naar gelang deze invoer verschilt te bewerking van de \term{functie} en dus ook de daarop volgende uitvoer. Het is echter niet zo dat alle functies als haarlemmer wonderolie werken. Sommige kunnen bijna alle  soorten objecten verwerken (bijv. \func{summary}), andere enkele soorten (\func{head}), terwijl de meeste functies slechts \'e\'en soort opbject kunnen verwerken.
 \end{tip}
@@ -1139,14 +1139,14 @@ Het blijkt dat bijna alle groepen van elkaar verschillen op enkele combinaties n
 
 Omdat de mogelijkheden bij een ANOVA natuurlijk eindeloos zijn maar het aantal pagina's van dit boek niet, zal er ter illustratie nog paar modellen worden getoond. Een veel voorkomende toepassing is natuurlijk het gebruik van covariaten:
 <<label="Ancova", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
-model_ancova <- lm(formula=price~cut+carat, data=diamanten)
+model_ancova <- lm(formula=price ~ cut + carat, data=diamanten)
 out_ancova <- aov(formula=model_ancova)
 summary(out_ancova)
 @
 
 Hierbij wordt het aantal karaat van de diamant automatisch als covariaat gepakt, omdat het een continue maat is. Dit laat ook meteen zien dat als dit \textbf{niet} het geval is, dit ook duidelijk gespecificeerd moet worden. Voor de zekerheid is het daarom verstandig om factoren, zeker als ze numeriek zijn, altijd (nogmaals) als zodanig te specificeren in het model:
 <<label="Ancova_F", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
-model_ancova <- lm(formula=price~factor(cut)+carat, data=diamanten)
+model_ancova <- lm(formula=price ~ factor(cut) + carat, data=diamanten)
 out_ancova <- aov(formula=model_ancova)
 summary(model_ancova)
 @
@@ -1155,7 +1155,7 @@ Tot slot zullen nog twee modellen worden geilustreerd waarin twee onafhankelijek
 <<label="Anova2", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
 # # Zonder interactie
 model_anova2 <- 
-  lm(formula=price~factor(cut)+factor(color),
+  lm(formula=price ~ factor(cut) + factor(color),
      data=diamanten)
 
 out_anova2 <- aov(formula=model_anova2)
@@ -1163,12 +1163,29 @@ summary(out_anova2)
 
 # # Met interactie (* i.p.v. +)
 model_anova2int <- 
-  lm(formula=price~factor(cut)*factor(color),
+  lm(formula=price ~ factor(cut) * factor(color),
      data=diamanten)
 out_anova2int <- aov(formula=model_anova2int)
 summary(out_anova2int)
 @
 
+\subsection{Regressie}
+Het verschil tussen een ANOVA en een regressie analyse is miniem. Dit wordt mooi ge\"ilustreerd in \term{R} aangezien we precies dezelfde modellen kunnen gebruiken als we hebben gebruikt bij de ANOVA analyses. In plaats van de bewerking \func{aov} gebruiken we nu echter direct \func{summary}. Eerst moeten we echter er voor zorgen dat de factor niet langer als geordend wordt gezien, anders wordt deze alsnog linear gemodelleerd (zie pagina XXX voor verdere uitleg). Daarom maken we een nieuwe variabele aan om te gebruiken voor de lineaire regressie om deze vervolgend te gebruiken in een regressie-model:
+
+<<label="Regressie", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+diamanten$cut_reg <- factor(diamanten$cut,ordered=FALSE)
+model_reg <- lm(formula=price ~ cut_reg, data=diamanten)
+summary(model_reg)
+@
+
+Hierbij wordt de variabele automatische gehercodeerd in dummy variabelen, waarbij het eerste level van de factor (''Fair'') wordt gebruikt als referentie categorie. Het blijkt dus dat alleen een ''Premium'' kwaliteit gerelateerd is aan duurdere diamanten t.o.v. van een ''Fair'' kwaliteit. Terwijl alle andere effecten juist de andere kant opgaan. Uiteraard is het niet echt zinvol om een regressie te draaien op enkel een ordinale variabele, dus laten we daarom ook nog wat continue variablen toe voegen:
+
+<<label="Regressie2", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+model_reg2 <- lm(formula=price ~ cut_reg + carat + depth, data=diamanten)
+summary(model_reg2)
+@
+
+Als we dus het aantal karaat alswel de ''diepte'' van de diamant meenemen als controle variabelen dan zien we dat de effecten meer de richting op gaan die we verwachten. Net als bij de ANOVA modellen worden ook hier continue variabelen automatisch als zodanig behandeld, als is het ook heir verstandig om dit altijd nog eens extra toe tevoegen aan de formule. Daarnaast is het ook bij regressie analyse mogelijk om interactie effecten toe te voegen, middels het gebruik van \keys{*}. 
 
 \section{Kijkje in de keuken}
 \subsection{AN(C)OVA}
@@ -1184,6 +1201,67 @@ Anova(mod=model, type="3")
 @
 
 Ook hier is er een significant verschil tussen de groepen. Om te kijken welke groepen precies verschillen voeren we een post-hoc toets uit.
+
+\chapter{Intermezzo: Op naar de sterren, en daarvoorbij}
+Uiteraard is er nog veel meer mogelijk naast deze elementaire statistische toetsen. Zo is het uiteraard ook mogelijk een MANOVA te doen:
+<<label="MANOVA", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+# # Afhankelijke variabelen samenvoegen
+DV  <- cbind(x=diamanten$x,y=diamanten$y,z=diamanten$z)
+
+# # MANOVA model
+fit <- manova(IV ~ diamanten$cut + diamanten$color)
+
+# # MANOVA output
+summary(fit)
+
+# # Aparte ANOVA voor iedere afhankelijke variabele
+summary.aov(fit)
+@
+
+Of logistische regressie:
+<<label="Log regressie", tidy=FALSE, highlight=TRUE, warning=FALSE>>=
+# # Hercoderen naar numerieke 0 en 1
+diamanten$caratC[diamanten$caratC=="laag"] <- 0
+diamanten$caratC[diamanten$caratC=="hoog"] <- 1
+diamanten$caratC <- as.numeric(diamanten$caratC)
+
+# # Regressie uit de binominale (logistische) familie
+model_log <-
+  glm(caratC ~ price + table, data=diamanten, family=binomial())
+
+# # Output
+summary(model_log)
+
+# # Odd Ratios
+exp(coef(model_log))
+@
+
+enzovoort... 
+
+Aangezien dit boek echter is bedoeld om een introductie te geven in \term{R} zijn dergelijke analyses al te specifiek aangezien ze waarschijnlijk niet voor iedereen van toepassing. De bedoeling van dit boek is, zoals in de introductie is vermeld, te leren fietsen zonder zijwieltjes. Hopelijk komt dit moment steeds dichterbij, want een oud-Hollandse wijsheid leert immers: ''Fietsen verleer je nooit.'' Nou is dit meestal juist niet het geval bij \term{R} aangezien het, zeker in het begin, toch iedere keer weer even inkomen is. 
+
+Hopelijk doet dit boek in dergelijke momenten goed dienst om je snel weer op weg te helpen. Als je dan uiteindelijk weer op eigen benen staat (zonder zijwieltjes kan fietsen) is het internet en andere boeken de plek voor verder exploratie van de mogelijkheden en toepassing binnen \term{R}. 
+
+De volgende hoofdstukken zullen daarom nog enkele belangrijke bewerkingen laten zien binnen \term{R};
+\begin{itemize}
+  \item Loops and if-statements, aan de hand van een \term{survival}-analyse,
+  \item Het cre\"eren en inzien van functies,
+  \item Data herstructureren, en
+  \item Figuren ontwerpen.
+\end{itemize}
+
+Om vervolgens af te sluiten met een hoofdstuk waarin uiteen word gezet welke mogelijkheden erzijn binnen de \term{R}-gemeenschap om alledaagse en meer complexe problemen binnen enkele stappen opgelost te krijgen. Dit laatste hoofdstuk zal je dan ook, indirect, helpen om de meer complexe analyses uit te voeren.
+
+\chapter{Survival}
+
+\chapter{Functies nader bekeken}
+
+\chapter{Data herstructureren}
+
+\chapter{Figuren}
+
+\chapter{Verder met \term{R}}
+
 
 
 \printindex*
